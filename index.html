@@ -50,7 +50,7 @@
  .chat-body{height:calc(100dvh - 145px - var(--safe))}
 }
 /* Device-specific OLEN compositions */
-.desktop-sidebar,.desktop-context,.desktop-rail{display:none}
+.desktop-sidebar,.desktop-context,.desktop-rail,.live-context{display:none}
 .device-layout-badge{display:none}
 @media (pointer:fine) and (min-width:1100px){button,input{transition:background .16s ease,color .16s ease,transform .16s ease}.desk-nav:hover,.row:hover{background:#123126}.experience:hover,.event-thumb:hover{transform:translateY(-2px)}}
 @media (hover:none){button{min-height:44px}.nav{touch-action:manipulation}.round{min-width:48px;min-height:48px}}
@@ -104,7 +104,7 @@
  .screen[data-screen="home"] .rail{grid-area:exp;width:100%;max-width:none;margin:48px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;align-self:start}.screen[data-screen="home"] .experience{height:210px;width:100%}
  .screen[data-screen="map"].active{display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:auto 1fr;grid-template-areas:"title panel" "map panel";gap:20px 24px;height:100vh}
  .screen[data-screen="map"]>.title{grid-area:title;margin:0;max-width:none}.screen[data-screen="map"] .map{grid-area:map;margin:0;height:auto;min-height:0;border-radius:24px}
- .screen[data-screen="map"]:after{box-sizing:border-box;content:"Explorar agora\A\A Rotas sugeridas\A Sintra · Serra\A Arrábida · Costa\A Cascais · Guincho\A\A LIVE\A Sem alertas na tua experiência";white-space:pre;grid-area:panel;background:#0b2119;border-radius:22px;padding:24px;color:#b7c5c0;font-size:13px;line-height:1.8}
+ .screen[data-screen="map"]:after{box-sizing:border-box;content:"Explorar agora\A\A Rotas sugeridas\A Sintra · Serra\A Arrábida · Costa\A Cascais · Guincho";white-space:pre;grid-area:panel;background:#0b2119;border-radius:22px;padding:24px;color:#b7c5c0;font-size:13px;line-height:1.8}
  .screen[data-screen="chat"].active{display:grid;grid-template-columns:290px minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"side head" "side body";gap:18px 26px;height:100vh}
  .screen[data-screen="chat"]:before{content:"Conversas\A\A ＋ Nova conversa\A\A Hoje\A  Sintra · Trail\A  Aquário Vasco da Gama\A\A Esta semana\A  Gerês · Viagem\A  Praias de Sesimbra";white-space:pre;grid-area:side;background:#071a13;border:1px solid #ffffff0b;border-radius:22px;padding:24px;color:#9eb0aa;font-size:13px;line-height:1.8}
  .chat-head{grid-area:head;width:100%;max-width:none;margin:0}.chat-head .round{display:none}.chat-body{grid-area:body;width:100%;max-width:none;margin:0;height:auto;background:#07150f;border-radius:22px;padding:22px}.composer{position:sticky;bottom:0;background:#07150f;padding-top:14px}
@@ -112,7 +112,17 @@
  .screen[data-screen="agenda"]>.title{grid-area:title;width:100%;max-width:none;margin:0}.calendar{grid-area:calendar;width:100%;max-width:none;margin:0;padding:28px}.day{height:46px;font-size:13px}.new-event{grid-area:new;margin:0;max-width:520px}.agenda-preview{grid-area:events;width:100%;max-width:none;margin:0}.agenda-preview .rail{display:grid;gap:14px;overflow:visible}.event-thumb{width:100%;height:180px}
  .screen[data-screen="profile"].active{display:grid;min-height:100vh;grid-template-columns:minmax(300px,.65fr) minmax(480px,1.35fr);grid-template-areas:"title title" "profile menu" "premium menu";gap:18px 30px;align-content:start}
  .screen[data-screen="profile"]>.title{grid-area:title;width:100%;max-width:none;margin:0}.profile-card{grid-area:profile;width:100%;max-width:none;margin:0}.menu{grid-area:menu;width:100%;max-width:none;margin:0}.premium{grid-area:premium;width:100%;max-width:none;margin:0}
+ .screen[data-screen="profile"] .row{min-height:58px;align-items:center}
+ .screen[data-screen="profile"] .profile-card{padding:26px}
+ .screen[data-screen="profile"] .avatar{width:48px;height:48px}
  .events-pop{left:248px}.sheet{max-width:760px}
+ .screen[data-screen="agenda"] .agenda-preview .section-title{margin-top:0}
+ .screen[data-screen="chat"] .composer input{min-height:50px}
+ .screen[data-screen="map"] .go{width:210px}
+}
+@media (min-width:700px) and (max-width:1099px){
+ .screen[data-screen="map"] .go{width:210px}
+ .screen[data-screen="profile"] .menu{margin-top:18px}
 }
 @media (min-width:1100px) and (max-height:820px){
  .screen{padding-top:34px;padding-bottom:34px}
@@ -138,6 +148,7 @@
  <div class="desktop-user"><div class="avatar">FR</div><div><b>Filipe</b><small>OLEN Explorer</small></div></div>
 </aside>
 <div class="desktop-context"><b>OLEN</b><span>Explora · Vive · Partilha</span></div>
+<div class="live-context" id="liveContext" aria-hidden="true"><b>LIVE</b><span>Sem alertas nesta experiência</span></div>
 <section class="screen active" data-screen="home"><header class="top"><div class="hello">Bom dia,<strong>Filipe</strong></div><div class="top-icons"><div class="avatar">FR</div><button class="bell">♧</button></div></header><div class="hero"><h1>Que queres<br>fazer hoje?</h1><input class="search" placeholder="⌕  Explora destinos, atividades, trilhos..."></div><div class="categories"><div class="cat"><i>♒</i>Trilhos</div><div class="cat"><i>♨</i>Praias</div><div class="cat"><i>▥</i>Cidades</div><div class="cat"><i>⌂</i>Cultura</div></div><div class="section-title"><b>Experiências para ti</b><button>Ver todas ›</button></div><div class="rail"><div class="experience"><span class="heart">♡</span><b>Sintra</b><small>Natureza · História · Cultura</small></div><div class="experience"><span class="heart">♡</span><b>Arrábida</b><small>Mar · Trilhos · Paisagens</small></div></div></section>
 <section class="screen" data-screen="map"><div class="title"><h1>Mapa</h1><p>Explora o mundo à tua maneira.</p></div><div class="map"><div class="map-tools"><button class="round">▱</button><button class="round">➤</button><button class="round">◎</button></div><div class="go-wrap"><button class="go">▶ GO</button><div class="go-caption">Planear · Navegar · Viver</div></div></div></section>
 <section class="screen chat-screen" data-screen="chat"><div class="chat-head"><div class="title"><h1>Chat</h1><p>A OLEN contigo.</p></div><button class="round">☰</button></div><div class="chat-body"><div class="bubble">Olá Filipe. O que queres fazer hoje?</div><div class="bubble me">Quero um trail em Sintra.</div><div class="bubble">Perfeito. Posso preparar o percurso, transportes e pontos de interesse para hoje.</div><div class="composer"><input placeholder="Fala com a OLEN…"><button class="send">↑</button></div></div></section>
