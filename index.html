@@ -432,7 +432,17 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  .intro-splash .roll-item{width:100%!important}
  .intro-splash .roll-item{text-align:center!important}
 }
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* OLEN identity layer */
+.identity{display:none;position:fixed;z-index:102;inset:0;color:#fff;background:linear-gradient(180deg,rgba(2,13,10,.28),rgba(2,9,7,.78) 42%,rgba(1,6,5,.98)),url("./assets/olen-splash-bacground.png") center/cover no-repeat;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + var(--safe))}
+.identity.show{display:flex;animation:olenFadeUp .28s ease-out both}
+.identity-panel{width:min(100%,430px);text-align:center;padding:24px 20px;border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(5,24,18,.72);box-shadow:0 24px 70px rgba(0,0,0,.34);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.identity-wordmark{display:block;width:min(68%,250px);height:auto;margin:0 auto 18px}.identity h1{font-size:30px;line-height:1.05;margin:8px 0 9px;letter-spacing:-.03em}.identity-panel>p{font-size:12.5px;line-height:1.45;color:#d1ddd8;margin:0 auto 20px;max-width:340px}
+.identity-actions{display:grid;gap:9px}.identity-provider,.identity-email button{height:48px;border:1px solid rgba(255,255,255,.14);border-radius:24px;background:rgba(8,31,23,.88);color:#f2f6f4;font:800 13px inherit;display:flex;align-items:center;justify-content:center;gap:10px}.identity-provider span{width:20px;text-align:center;font-weight:900}
+.identity-email{display:grid;gap:9px;margin-top:10px}.identity-email input{height:46px;border:1px solid rgba(255,255,255,.14);border-radius:15px;background:rgba(4,18,14,.9);color:#fff;padding:0 14px;font:600 13px inherit;outline:none}.identity-email input:focus{border-color:var(--cyan)}.identity-email button{background:linear-gradient(100deg,var(--cyan),var(--violet));color:#04110d;border:0}
+.identity-guest{border:0;background:transparent;color:#dce7e2;font:750 12px inherit;padding:13px 10px 2px}.identity-back{position:absolute;left:20px;top:calc(18px + env(safe-area-inset-top,0px));height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(7,28,21,.78);color:#eef5f2;font:800 12px inherit;display:flex;align-items:center;gap:6px}.identity-back span{font-size:21px;line-height:1}
+@media(min-width:700px){.identity-panel{padding:30px 32px}.identity h1{font-size:35px}}
+.hello.guest strong{display:none}.hello.guest{gap:0}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
  <img class="official-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
@@ -449,7 +459,27 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
   </div>
  </div>
  <div class="dots roll-dots" id="rollDots"><button class="active" data-roll="0" aria-label="Explora"></button><button data-roll="1" aria-label="Planeia"></button><button data-roll="2" aria-label="Navega"></button><button data-roll="3" aria-label="Conversa"></button><button data-roll="4" aria-label="Guarda"></button><button data-roll="5" aria-label="Partilha"></button></div>
- <div class="splash-actions"><button class="start" id="start">Configurar a minha OLEN　›</button><button class="try-olen" id="tryOlen">Experimentar agora</button></div>
+ <div class="splash-actions"><button class="start" id="start">Entrar / Criar conta　›</button><button class="try-olen" id="tryOlen">Experimentar agora</button></div>
+</div>
+<div class="identity" id="identity" aria-hidden="true">
+ <div class="identity-panel">
+  <img src="./assets/olen-wordmark.png" class="identity-wordmark" alt="OLEN">
+  <div class="onboard-kicker">A TUA OLEN</div>
+  <h1>Entra na tua OLEN</h1>
+  <p>Guarda experiências, sincroniza a tua Agenda e leva as tuas preferências contigo.</p>
+  <div class="identity-actions">
+   <button class="identity-provider" data-provider="google"><span>G</span>Continuar com Google</button>
+   <button class="identity-provider" data-provider="apple"><span>●</span>Continuar com Apple</button>
+   <button class="identity-provider email" id="emailEntry"><span>@</span>Continuar com e-mail</button>
+  </div>
+  <div class="identity-email" id="identityEmail" hidden>
+   <input id="identityName" autocomplete="name" placeholder="O teu nome">
+   <input id="identityEmailInput" type="email" autocomplete="email" placeholder="E-mail">
+   <button id="identityContinue">Criar conta / Iniciar sessão</button>
+  </div>
+  <button class="identity-guest" id="identityGuest">Experimentar sem conta</button>
+ </div>
+ <button class="identity-back" id="identityBack"><span>‹</span> Voltar</button>
 </div>
 <div class="setup" id="setup" aria-hidden="true">
  <div class="setup-track">
@@ -514,7 +544,13 @@ function openSetup(){clearInterval(rollTimer);prefs.tone="";if(splash){splash.cl
 function closeSetup(){/* Only the explicit final "Concluir" action closes onboarding permanently. */savePrefs(true);setup.classList.remove("show");setup.setAttribute("aria-hidden","true");var done=document.getElementById("setupComplete");if(done){done.classList.add("show");done.setAttribute("aria-hidden","false");setTimeout(function(){done.classList.add("hidden");setTimeout(function(){done.style.display="none"},400)},1700)}}
 loadPrefs();syncSelections();
 if(setup){setup.querySelectorAll(".mobility-options button,.interest-grid button").forEach(function(b){b.onclick=function(){var key=b.closest(".mobility-options")?"mobility":"interests",a=prefs[key],v=b.dataset.value,i=a.indexOf(v);if(i<0)a.push(v);else a.splice(i,1);syncSelections();savePrefs(false)}});setup.querySelectorAll(".tone-options button").forEach(function(b){b.onclick=function(){prefs.tone=b.dataset.value;syncSelections();savePrefs(false)}})}
-var tryOlen=document.getElementById("tryOlen");if(start)start.onclick=openSetup;if(tryOlen)tryOlen.onclick=function(){clearInterval(rollTimer);if(splash){splash.classList.add("hidden");setTimeout(function(){splash.style.display="none"},350)}};if(setupBack)setupBack.onclick=function(){if(setupStep>0){showSetup(setupStep-1);return}setup.classList.remove("show");setup.setAttribute("aria-hidden","true");if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");showRoll(roll,false);restartRoll()}};if(setupForward)setupForward.onclick=function(){if(setupStep===2){if(!prefs.tone)return;closeSetup()}else showSetup(setupStep+1)};
+var identity=document.getElementById("identity"),identityBack=document.getElementById("identityBack"),identityGuest=document.getElementById("identityGuest"),emailEntry=document.getElementById("emailEntry"),identityEmail=document.getElementById("identityEmail"),identityContinue=document.getElementById("identityContinue"),identityName=document.getElementById("identityName");
+function hideSplash(){clearInterval(rollTimer);if(splash){splash.classList.add("hidden");setTimeout(function(){splash.style.display="none"},350)}}
+function openIdentity(){hideSplash();if(identity){identity.classList.add("show");identity.setAttribute("aria-hidden","false")}}
+function closeIdentity(){if(identity){identity.classList.remove("show");identity.setAttribute("aria-hidden","true")}if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");restartRoll()}}
+function enterGuest(){try{localStorage.setItem("olen.sessionMode","guest");localStorage.removeItem("olen.userName")}catch(e){}hideSplash();if(identity){identity.classList.remove("show");identity.setAttribute("aria-hidden","true")}applyIdentity()}
+function applyIdentity(){var mode="guest",name="";try{mode=localStorage.getItem("olen.sessionMode")||"guest";name=localStorage.getItem("olen.userName")||""}catch(e){}document.querySelectorAll(".hello strong").forEach(function(el){el.textContent=mode==="account"&&name?name:""});document.querySelectorAll(".hello").forEach(function(el){el.classList.toggle("guest",mode!=="account"||!name)})}
+var tryOlen=document.getElementById("tryOlen");if(start)start.onclick=openIdentity;if(tryOlen)tryOlen.onclick=enterGuest;if(identityBack)identityBack.onclick=closeIdentity;if(identityGuest)identityGuest.onclick=enterGuest;if(emailEntry)emailEntry.onclick=function(){identityEmail.hidden=!identityEmail.hidden};if(identityContinue)identityContinue.onclick=function(){var name=(identityName.value||"").trim();try{localStorage.setItem("olen.sessionMode","account");if(name)localStorage.setItem("olen.userName",name)}catch(e){}if(identity){identity.classList.remove("show");identity.setAttribute("aria-hidden","true")}applyIdentity();openSetup()};document.querySelectorAll(".identity-provider[data-provider='google'],.identity-provider[data-provider='apple']").forEach(function(b){b.onclick=function(){/* Visual prototype: real OAuth is connected later. */if(identityEmail)identityEmail.hidden=false;if(identityName)identityName.focus()}});applyIdentity();if(setupBack)setupBack.onclick=function(){if(setupStep>0){showSetup(setupStep-1);return}setup.classList.remove("show");setup.setAttribute("aria-hidden","true");if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");showRoll(roll,false);restartRoll()}};if(setupForward)setupForward.onclick=function(){if(setupStep===2){if(!prefs.tone)return;closeSetup()}else showSetup(setupStep+1)};
 /* Final startup behaviour:
    - not configured: full welcome splash with Configure / Try now
    - configured: branded short splash, then Home automatically
