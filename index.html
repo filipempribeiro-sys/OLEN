@@ -278,6 +278,21 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .setup .onboard-back .back-arrow{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:24px;line-height:18px;transform:translateY(-1px)}
 .setup .onboard-back .back-label{line-height:1}
 .ready-copy[hidden]{display:none!important}
+
+/* Setup navigation parity + completion splash */
+.setup .onboard-back,.setup .onboard-forward{
+ border:0;
+ background:linear-gradient(100deg,var(--cyan),var(--violet));
+ color:#04110d;
+ box-shadow:0 8px 28px rgba(39,190,191,.18);
+}
+.setup .onboard-back{padding:0 14px 0 11px}
+.setup-complete{display:none;position:fixed;z-index:103;inset:0;align-items:center;justify-content:flex-start;flex-direction:column;text-align:center;color:#fff;background:linear-gradient(180deg,rgba(3,15,12,.18),rgba(2,7,6,.08) 42%,rgba(1,5,4,.94)),url("./assets/olen-splash-bacground.png") center/cover no-repeat;opacity:1;transition:opacity .4s ease}
+.setup-complete.show{display:flex}.setup-complete.hidden{opacity:0;pointer-events:none}
+.complete-wordmark{display:block;width:min(76%,360px);height:auto;margin:clamp(68px,10.5vh,101px) 0 0;object-fit:contain}
+.setup-complete .tagline{margin:8px 0 auto;text-shadow:0 2px 10px #000}
+.complete-copy{margin:0 24px clamp(82px,13vh,126px);display:grid;gap:7px;text-shadow:0 2px 14px #000}
+.complete-copy b{font-size:24px;line-height:1.1}.complete-copy span{font-size:13px;font-weight:650;color:#e3ece8}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
@@ -301,9 +316,14 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  <div class="setup-track">
   <section class="setup-slide active" data-setup="0"><div class="onboard-kicker">A TUA OLEN</div><h1>Como costumas<br>navegar?</h1><p>Escolhe um ou vários. Podes alterar isto mais tarde.</p><div class="option-grid mobility-options"><button data-value="walk">🚶<span>A pé</span></button><button data-value="bike">🚲<span>Bicicleta</span></button><button data-value="scooter">🛴<span>Trotineta</span></button><button data-value="moto">🏍️<span>Moto</span></button><button data-value="car">🚗<span>Carro</span></button><button data-value="camper">🚐<span>Autocaravana</span></button><button data-value="transit">🚆<span>Transportes</span></button><button data-value="boat">⛵<span>Barco</span></button><button data-value="air">✈️<span>Aviação</span></button></div></section>
   <section class="setup-slide" data-setup="1"><div class="onboard-kicker">A TUA OLEN</div><h1>O que gostas<br>de viver?</h1><p>Seleciona os interesses que queres ver primeiro.</p><div class="interest-grid"><button data-value="trails">Trilhos</button><button data-value="nature">Natureza</button><button data-value="beaches">Praias</button><button data-value="camping">Campismo</button><button data-value="cycling">Ciclismo</button><button data-value="culture">Cultura</button><button data-value="food">Gastronomia</button><button data-value="music">Música</button><button data-value="photo">Fotografia</button><button data-value="adventure">Aventura</button><button data-value="wellness">Bem-estar</button><button data-value="family">Família</button><button data-value="romantic">Romântico</button><button data-value="pet">Pet</button><button data-value="travel">Viagens</button></div></section>
-  <section class="setup-slide" data-setup="2"><div class="onboard-kicker">ÚLTIMO PASSO</div><h1>Como queres que<br>a OLEN fale contigo?</h1><p>Define o nível de detalhe. Podes mudar quando quiseres.</p><div class="tone-options"><button data-value="direct"><b>DIRETO</b><small>Rápido, essencial e objetivo.</small></button><button data-value="balanced"><b>EQUILIBRADO</b><small>Contexto suficiente sem complicar.</small></button><button data-value="explore"><b>EXPLORAR</b><small>Mais ideias, alternativas e descoberta.</small></button></div><div class="ready-copy" id="readyCopy" hidden>A tua OLEN está pronta.</div></section>
+  <section class="setup-slide" data-setup="2"><div class="onboard-kicker">ÚLTIMO PASSO</div><h1>Como queres que<br>a OLEN fale contigo?</h1><p>Define o nível de detalhe. Podes mudar quando quiseres.</p><div class="tone-options"><button data-value="direct"><b>DIRETO</b><small>Rápido, essencial e objetivo.</small></button><button data-value="balanced"><b>EQUILIBRADO</b><small>Contexto suficiente sem complicar.</small></button><button data-value="explore"><b>EXPLORAR</b><small>Mais ideias, alternativas e descoberta.</small></button></div></section>
  </div>
  <div class="setup-controls"><button class="onboard-back" id="setupBack"><span class="back-arrow">‹</span><span class="back-label">Voltar</span></button><div class="dots" id="setupDots"><i class="active"></i><i></i><i></i></div><button class="onboard-forward" id="setupForward">Seguinte　›</button></div>
+</div>
+<div class="setup-complete" id="setupComplete" aria-hidden="true">
+ <img src="./assets/olen-wordmark.png" class="complete-wordmark" alt="OLEN">
+ <div class="tagline">EXPLORA · VIVE · PARTILHA</div>
+ <div class="complete-copy"><b>A tua OLEN está pronta.</b><span>Vamos explorar?</span></div>
 </div>
 <div class="app">
 <aside class="desktop-sidebar" aria-label="Navegação OLEN">
@@ -349,10 +369,10 @@ function savePrefs(done){try{localStorage.setItem("olen.preferences",JSON.string
 function showRoll(n,user){roll=(n+rollItems.length)%rollItems.length;if(rollTrack)rollTrack.style.transform="translateX("+(-roll*100)+"%)";rollItems.forEach(function(x,i){x.classList.toggle("active",i===roll)});rollDots.forEach(function(x,i){x.classList.toggle("active",i===roll)});if(user)restartRoll()}
 function restartRoll(){clearInterval(rollTimer);rollTimer=setInterval(function(){showRoll(roll+1,false)},4200)}
 var rollEl=document.getElementById("splashRoll"),sx=0,dx=0;if(rollEl){rollEl.addEventListener("touchstart",function(e){sx=e.touches[0].clientX;dx=0;clearInterval(rollTimer)},{passive:true});rollEl.addEventListener("touchmove",function(e){dx=e.touches[0].clientX-sx},{passive:true});rollEl.addEventListener("touchend",function(){if(Math.abs(dx)>35)showRoll(roll+(dx<0?1:-1),true);else restartRoll()})}rollDots.forEach(function(b){b.onclick=function(){showRoll(Number(b.dataset.roll),true)}});restartRoll();
-function syncSelections(){if(!setup)return;setup.querySelectorAll(".mobility-options button").forEach(function(b){b.classList.toggle("selected",prefs.mobility.indexOf(b.dataset.value)>-1)});setup.querySelectorAll(".interest-grid button").forEach(function(b){b.classList.toggle("selected",prefs.interests.indexOf(b.dataset.value)>-1)});setup.querySelectorAll(".tone-options button").forEach(function(b){b.classList.toggle("selected",!!prefs.tone&&prefs.tone===b.dataset.value)});var ready=document.getElementById("readyCopy");if(ready)ready.hidden=!prefs.tone}
+function syncSelections(){if(!setup)return;setup.querySelectorAll(".mobility-options button").forEach(function(b){b.classList.toggle("selected",prefs.mobility.indexOf(b.dataset.value)>-1)});setup.querySelectorAll(".interest-grid button").forEach(function(b){b.classList.toggle("selected",prefs.interests.indexOf(b.dataset.value)>-1)});setup.querySelectorAll(".tone-options button").forEach(function(b){b.classList.toggle("selected",!!prefs.tone&&prefs.tone===b.dataset.value)})}
 function showSetup(n){setupStep=Math.max(0,Math.min(2,n));setupSlides.forEach(function(x,i){x.classList.toggle("active",i===setupStep)});setupDots.forEach(function(x,i){x.classList.toggle("active",i===setupStep)});var bl=setupBack&&setupBack.querySelector(".back-label");if(bl)bl.textContent=setupStep===0?"Voltar":"Anterior";setupForward.textContent=setupStep===2?"Concluir　✓":"Seguinte　›"}
-function openSetup(){clearInterval(rollTimer);if(splash){splash.classList.add("hidden");setTimeout(function(){splash.style.display="none"},350)}setup.classList.add("show");setup.setAttribute("aria-hidden","false");syncSelections();showSetup(0)}
-function closeSetup(){/* Only the explicit final "Concluir" action closes onboarding permanently. */savePrefs(true);setup.classList.remove("show");setup.setAttribute("aria-hidden","true")}
+function openSetup(){clearInterval(rollTimer);prefs.tone="";if(splash){splash.classList.add("hidden");setTimeout(function(){splash.style.display="none"},350)}setup.classList.add("show");setup.setAttribute("aria-hidden","false");syncSelections();showSetup(0)}
+function closeSetup(){/* Only the explicit final "Concluir" action closes onboarding permanently. */savePrefs(true);setup.classList.remove("show");setup.setAttribute("aria-hidden","true");var done=document.getElementById("setupComplete");if(done){done.classList.add("show");done.setAttribute("aria-hidden","false");setTimeout(function(){done.classList.add("hidden");setTimeout(function(){done.style.display="none"},400)},1700)}}
 loadPrefs();syncSelections();
 if(setup){setup.querySelectorAll(".mobility-options button,.interest-grid button").forEach(function(b){b.onclick=function(){var key=b.closest(".mobility-options")?"mobility":"interests",a=prefs[key],v=b.dataset.value,i=a.indexOf(v);if(i<0)a.push(v);else a.splice(i,1);syncSelections();savePrefs(false)}});setup.querySelectorAll(".tone-options button").forEach(function(b){b.onclick=function(){prefs.tone=b.dataset.value;syncSelections();savePrefs(false)}})}
 var tryOlen=document.getElementById("tryOlen");if(start)start.onclick=openSetup;if(tryOlen)tryOlen.onclick=function(){clearInterval(rollTimer);if(splash){splash.classList.add("hidden");setTimeout(function(){splash.style.display="none"},350)}};if(setupBack)setupBack.onclick=function(){if(setupStep>0){showSetup(setupStep-1);return}setup.classList.remove("show");setup.setAttribute("aria-hidden","true");if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");showRoll(roll,false);restartRoll()}};if(setupForward)setupForward.onclick=function(){if(setupStep===2){if(!prefs.tone)return;closeSetup()}else showSetup(setupStep+1)};
