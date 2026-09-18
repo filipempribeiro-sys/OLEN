@@ -374,6 +374,40 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  .intro-splash .splash-roll{width:min(58vw,520px)!important}
  .intro-splash .roll-dots{width:max-content!important;max-width:none!important}
 }
+
+/* Splash lower stack: one shared axis at every viewport size.
+   Copy, carousel, progress, CTA and secondary action are always centered together. */
+.intro-splash .splash-copy,
+.intro-splash .splash-roll,
+.intro-splash .roll-dots,
+.intro-splash .splash-actions{
+ position:relative!important;
+ left:auto!important;
+ right:auto!important;
+ transform:none!important;
+ align-self:center!important;
+ margin-left:auto!important;
+ margin-right:auto!important;
+ text-align:center!important;
+}
+.intro-splash .splash-roll{width:min(88vw,520px)!important;max-width:520px!important}
+.intro-splash .roll-dots{width:max-content!important;max-width:none!important;justify-content:center!important}
+.intro-splash .splash-actions{width:min(88vw,520px)!important;max-width:520px!important}
+.intro-splash .splash-actions .start{width:100%!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important}
+.intro-splash .try-olen{width:100%;text-align:center}
+@media(min-width:1200px){
+ .intro-splash .splash-copy,
+ .intro-splash .splash-roll,
+ .intro-splash .roll-dots,
+ .intro-splash .splash-actions{
+   align-self:flex-start!important;
+   margin-left:0!important;
+   margin-right:auto!important;
+ }
+ .intro-splash .splash-roll,
+ .intro-splash .splash-actions{width:min(31vw,520px)!important}
+ .intro-splash .roll-dots{margin-left:calc((min(31vw,520px) - max-content)/2)!important}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
