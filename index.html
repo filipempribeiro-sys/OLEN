@@ -219,6 +219,58 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 @media(min-width:700px){.intro-splash .roll-item b{font-size:17px}.intro-splash .roll-item span{font-size:14px}}
 .intro-splash.returning .splash-roll,.intro-splash.returning .roll-dots,.intro-splash.returning .splash-actions{display:none}
 .intro-splash.returning .splash-copy{margin-bottom:clamp(56px,10vh,96px)}
+
+/* OLEN Aurora setup — visual language aligned with the approved splash */
+.setup{
+ background:
+  linear-gradient(180deg,rgba(2,13,10,.18),rgba(2,9,7,.72) 38%,rgba(1,6,5,.98)),
+  url("./assets/olen-splash-bacground.png") center/cover no-repeat;
+}
+.setup:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 14%,rgba(70,235,201,.10),transparent 30%)}
+.setup-track,.setup-controls{position:relative;z-index:1}
+.setup-slide{padding:calc(46px + env(safe-area-inset-top,0px)) 22px calc(104px + var(--safe));justify-content:flex-start}
+.onboard-kicker{font-size:10px;font-weight:850;letter-spacing:.22em;color:#9cefd0;text-shadow:0 1px 8px #000;margin-top:4px}
+.setup-slide h1{font-size:32px;line-height:1.04;letter-spacing:-.035em;margin:10px 0 8px;text-shadow:0 2px 18px rgba(0,0,0,.58)}
+.setup-slide>p{font-size:13px;line-height:1.45;color:#d4dfda;max-width:345px;margin:0 0 20px;text-shadow:0 1px 8px #000}
+.option-grid,.interest-grid,.tone-options{width:100%;max-width:400px}
+.option-grid{gap:10px}
+.option-grid button,.interest-grid button,.tone-options button{
+ border:1px solid rgba(255,255,255,.13);
+ background:linear-gradient(145deg,rgba(13,39,30,.88),rgba(5,21,16,.90));
+ color:#eef5f2;
+ box-shadow:0 10px 28px rgba(0,0,0,.20),inset 0 1px 0 rgba(255,255,255,.035);
+ backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+ transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease;
+}
+.option-grid button{min-height:78px;border-radius:20px;font-size:24px;gap:6px}
+.option-grid span{font-size:11px;font-weight:800}
+.interest-grid{gap:9px}.interest-grid button{min-height:46px;border-radius:17px;font-size:11.5px;font-weight:780;padding:9px 6px}
+.tone-options{gap:11px;margin-top:5px}.tone-options button{border-radius:20px;padding:16px 18px}
+.tone-options b{font-size:13px;letter-spacing:.09em}.tone-options small{font-size:11.5px;line-height:1.35;color:#c5d2cd;margin-top:5px}
+.option-grid button.selected,.interest-grid button.selected,.tone-options button.selected{
+ border-color:#64edb3;
+ background:linear-gradient(145deg,rgba(23,75,56,.96),rgba(9,43,32,.96));
+ box-shadow:0 0 0 1px rgba(100,237,179,.16),0 10px 30px rgba(0,0,0,.24),inset 0 0 22px rgba(73,232,173,.08);
+}
+.option-grid button.selected:after,.interest-grid button.selected:after{content:"✓";position:absolute;right:8px;top:6px;font-size:10px;color:#8ff2c9;font-weight:900}
+.option-grid button,.interest-grid button{position:relative}
+.ready-copy{margin-top:18px;color:#8ff2c9;font-size:14px;font-weight:850;text-shadow:0 1px 9px #000}
+.setup-controls{position:absolute;left:20px;right:20px;bottom:calc(20px + var(--safe));grid-template-columns:46px 1fr auto;gap:12px}
+.setup-controls .dots{gap:7px}.setup-controls .dots i,.setup-controls .dots i.active{width:20px;height:5px;border-radius:9px;background:#202723;transition:.22s}.setup-controls .dots i.active{background:#f3dfac}
+.setup .onboard-back{width:44px;height:44px;border:1px solid rgba(255,255,255,.16);background:rgba(7,28,21,.80);color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.24);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.setup .onboard-forward{min-width:126px;border-radius:24px;padding:13px 17px;background:linear-gradient(100deg,var(--cyan),var(--violet));color:#04110d;font-weight:900;box-shadow:0 8px 28px rgba(39,190,191,.18)}
+@media(max-width:699px){
+ .setup-slide{padding-left:18px;padding-right:18px;padding-top:calc(40px + env(safe-area-inset-top,0px))}
+ .setup-slide h1{font-size:30px}
+ .option-grid{gap:8px}.option-grid button{min-height:70px;border-radius:18px;font-size:22px}
+ .interest-grid{gap:7px}.interest-grid button{min-height:43px;border-radius:15px;font-size:11px}
+ .tone-options button{padding:14px 16px}
+}
+@media(min-width:700px){
+ .setup-slide{padding-left:max(9vw,60px);padding-right:max(9vw,60px)}
+ .option-grid,.interest-grid,.tone-options{max-width:520px}
+ .setup-slide h1{font-size:38px}.setup-slide>p{font-size:14px}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
