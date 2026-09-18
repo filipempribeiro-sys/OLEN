@@ -360,6 +360,20 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  }
  .intro-splash .roll-item{text-align:center}
 }
+
+/* Intermediate splash: center the carousel on the viewport, not on the action/content column */
+@media(min-width:700px) and (max-width:1199px){
+ .intro-splash .splash-roll,
+ .intro-splash .roll-dots{
+   position:relative;
+   left:50%;
+   transform:translateX(-50%);
+   margin-left:0!important;
+   margin-right:0!important;
+ }
+ .intro-splash .splash-roll{width:min(58vw,520px)!important}
+ .intro-splash .roll-dots{width:max-content!important;max-width:none!important}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
