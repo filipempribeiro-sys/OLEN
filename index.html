@@ -408,6 +408,30 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  .intro-splash .splash-actions{width:min(31vw,520px)!important}
  .intro-splash .roll-dots{margin-left:calc((min(31vw,520px) - max-content)/2)!important}
 }
+
+/* Desktop fullscreen: preserve the shared center axis inside the left composition column */
+@media(min-width:1200px){
+ .intro-splash .splash-copy,
+ .intro-splash .splash-roll,
+ .intro-splash .roll-dots,
+ .intro-splash .splash-actions{
+   width:min(31vw,520px)!important;
+   max-width:520px!important;
+   align-self:flex-start!important;
+   margin-left:0!important;
+   margin-right:auto!important;
+   text-align:center!important;
+ }
+ .intro-splash .roll-dots{
+   display:flex!important;
+   width:min(31vw,520px)!important;
+   max-width:520px!important;
+   justify-content:center!important;
+ }
+ .intro-splash .roll-track,
+ .intro-splash .roll-item{width:100%!important}
+ .intro-splash .roll-item{text-align:center!important}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
