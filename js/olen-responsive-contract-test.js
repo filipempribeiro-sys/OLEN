@@ -21,15 +21,24 @@ const footer=document.querySelector('.footer'),composer=document.querySelector('
 ok('footer fixed',getComputedStyle(footer).position==='fixed');
 ok('composer exists',!!composer);
 const width=innerWidth;
-const expected=width<700?'mobile':width<1024?'tablet':'desktop';
+const expected=width<700?'mobile':width<1100?'tablet':'desktop';
+const declared=getComputedStyle(document.documentElement).getPropertyValue('--layout').trim();
+ok('declared device composition',declared===expected,declared+' / '+expected);
 const screen=document.querySelector('.screen.active');
 const cs=screen?getComputedStyle(screen):null;
 ok('responsive width',document.documentElement.scrollWidth<=innerWidth+1,document.documentElement.scrollWidth+' / '+innerWidth);
 ok('active screen bounded',!!screen&&screen.getBoundingClientRect().width<=innerWidth+1);
 const sidebar=document.querySelector('.desktop-sidebar'),footer=document.querySelector('.footer');
-if(width>=1100){ok('desktop sidebar visible',getComputedStyle(sidebar).display!=='none');ok('desktop footer replaced',getComputedStyle(footer).display==='none')}
-else if(width>=700){ok('tablet keeps touch footer',getComputedStyle(footer).display!=='none');ok('tablet no desktop sidebar',getComputedStyle(sidebar).display==='none')}
-else{ok('mobile footer visible',getComputedStyle(footer).display!=='none');ok('mobile no desktop sidebar',getComputedStyle(sidebar).display==='none')}
+if(width>=1100){
+ ok('desktop body rail',parseFloat(getComputedStyle(document.body).paddingLeft)>=240);
+ ok('desktop home composition',getComputedStyle(document.querySelector('[data-screen="home"]')).gridTemplateColumns!=='none');ok('desktop sidebar visible',getComputedStyle(sidebar).display!=='none');ok('desktop footer replaced',getComputedStyle(footer).display==='none')}
+else if(width>=700){
+ window.OLEN5.router.enter('agenda',{history:false,reason:'tablet-contract'});
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+ ok('tablet agenda split',getComputedStyle(document.querySelector('[data-screen="agenda"]')).gridTemplateColumns!=='none');ok('tablet keeps touch footer',getComputedStyle(footer).display!=='none');ok('tablet no desktop sidebar',getComputedStyle(sidebar).display==='none')}
+else{
+ ok('mobile body no desktop rail',parseFloat(getComputedStyle(document.body).paddingLeft)===0);
+ ok('mobile footer visible',getComputedStyle(footer).display!=='none');ok('mobile no desktop sidebar',getComputedStyle(sidebar).display==='none')}
 ok('safe responsive layout',!!cs&&parseFloat(cs.paddingLeft)>=0&&parseFloat(cs.paddingRight)>=0);
 const report={pass:results.every(x=>x.pass),profile:expected,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},results};
 window.__OLEN_RESPONSIVE_TEST__=report;
