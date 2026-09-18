@@ -17,7 +17,14 @@ try{
  const report=await page.evaluate(()=>window.__OLEN_RESPONSIVE_TEST__);
  const routes=['home','map','chat','agenda','profile'];
  for(const route of routes){
-   await page.locator('[data-view="'+route+'"]').first().click();
+   const selector='[data-view="'+route+'"]';
+   const candidates=page.locator(selector);
+   let clicked=false;
+   for(let i=0;i<await candidates.count();i++){
+     const candidate=candidates.nth(i);
+     if(await candidate.isVisible()){await candidate.click();clicked=true;break}
+   }
+   if(!clicked)throw new Error('No visible navigation control for '+route);
    await page.waitForTimeout(120);
    await page.screenshot({path:dir+'/'+route+'.png',fullPage:true});
  }
