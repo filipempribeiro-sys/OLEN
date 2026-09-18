@@ -28,7 +28,7 @@ const screen=document.querySelector('.screen.active');
 const cs=screen?getComputedStyle(screen):null;
 ok('responsive width',document.documentElement.scrollWidth<=innerWidth+1,document.documentElement.scrollWidth+' / '+innerWidth);
 ok('active screen bounded',!!screen&&screen.getBoundingClientRect().width<=innerWidth+1);
-const sidebar=document.querySelector('.desktop-sidebar'),footer=document.querySelector('.footer');
+const sidebar=document.querySelector('.desktop-sidebar');
 if(width>=1100){
  ok('desktop body rail',parseFloat(getComputedStyle(document.body).paddingLeft)>=240);
  ok('desktop home composition',getComputedStyle(document.querySelector('[data-screen="home"]')).gridTemplateColumns!=='none');ok('desktop sidebar visible',getComputedStyle(sidebar).display!=='none');ok('desktop footer replaced',getComputedStyle(footer).display==='none')}
