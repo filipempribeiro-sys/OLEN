@@ -48,6 +48,26 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  .hero{height:540px}.experience{flex-basis:380px;height:210px}
 }
 @media (max-width:699px){
+ /* MOBILE 5/5 FIT PASS — intentionally isolated from tablet/desktop */
+ .screen{max-width:none}
+ .screen[data-screen="home"]{padding-left:18px;padding-right:18px}
+ .screen[data-screen="home"] .top{min-height:58px}
+ .screen[data-screen="home"] .hero{border-radius:20px}
+ .screen[data-screen="home"] .hero h1{line-height:1.02}
+ .screen[data-screen="home"] .categories{gap:8px}
+ .screen[data-screen="home"] .cat-circle{width:48px;height:48px}
+ .screen[data-screen="home"] .rail{gap:10px}
+ .screen[data-screen="home"] .experience{flex-basis:calc(50% - 5px);border-radius:17px}
+ .screen[data-screen="agenda"]{padding-left:18px;padding-right:18px}
+ .screen[data-screen="agenda"] .title h2{line-height:1}
+ .screen[data-screen="agenda"] .calendar{border-radius:20px}
+ .screen[data-screen="agenda"] .event-thumb{flex-basis:calc(50% - 5px);border-radius:16px}
+ .screen[data-screen="agenda"] .rail{gap:10px}
+ .footer{padding-left:12px;padding-right:12px}
+ .collection-pop .sheet{width:calc(100% - 24px);border-radius:24px 24px 0 0}
+ .collection-grid{gap:10px}
+}
+@media (max-width:699px){
  .screen[data-screen="home"]{height:100dvh;min-height:0;overflow:hidden;padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(78px + var(--safe))}.screen[data-screen="home"] .top{margin-bottom:10px}.screen[data-screen="home"] .hero{height:min(31dvh,245px)}.screen[data-screen="home"] .hero h1{font-size:29px}.screen[data-screen="home"] .categories{margin:12px 5px}.screen[data-screen="home"] .section-title{margin:10px 2px 6px}.screen[data-screen="home"] .rail{margin-bottom:2px}.screen[data-screen="home"] .experience{height:min(17dvh,138px)}
  .screen[data-screen="agenda"]{padding-top:calc(18px + env(safe-area-inset-top,0px));padding-bottom:calc(82px + var(--safe))}
  .screen[data-screen="agenda"] .title p{margin-bottom:8px}
