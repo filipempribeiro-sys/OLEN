@@ -480,6 +480,24 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .experience-action b,.experience-action small{position:relative!important;z-index:2!important;width:100%!important;text-align:left!important}.experience-action b{margin:0!important;line-height:1.05!important}.experience-action small{margin-top:3px!important;line-height:1.15!important}
 #experiencesPop .experience-action:after{display:none!important}
 .experience-action .heart{z-index:4}
+
+/* Modal close control: exact circle, never an oval on mobile browser UA styles. */
+.events-pop .close,.collection-pop .close{
+  appearance:none!important;-webkit-appearance:none!important;
+  box-sizing:border-box!important;
+  width:44px!important;height:44px!important;min-width:44px!important;max-width:44px!important;
+  min-height:44px!important;max-height:44px!important;
+  flex:0 0 44px!important;
+  padding:0!important;margin:0!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.055)!important;
+  color:#fff!important;
+  display:grid!important;place-items:center!important;
+  line-height:1!important;font-size:22px!important;font-weight:500!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+.events-pop .close:active,.collection-pop .close:active{background:rgba(255,255,255,.055)!important;transform:none!important}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
@@ -644,7 +662,7 @@ function swipeBlocked(target){if(!target)return true;
  return false
 }
 function goSwipe(dir){var current=activeSwipeView(),idx=swipeViews.indexOf(current);if(idx<0)return;var next=idx+dir;if(next<0||next>=swipeViews.length)return;var view=swipeViews[next],route=view==="profile"?"account":view;try{window.OLEN5.router.enter(route,{reason:"swipe"})}catch(e){paint(view)}}
-function beginSwipe(x,y,target,id){if(window.innerWidth>=700||swipeBlocked(target)){swipeTracking=false;return}
+function beginSwipe(x,y,target,id){/* temporarily disabled during mobile UX validation */swipeTracking=false;return;if(window.innerWidth>=700||swipeBlocked(target)){swipeTracking=false;return}
  var active=document.querySelector(".screen.active");if(!active){swipeTracking=false;return}
  var view=active.getAttribute("data-screen");if(swipeViews.indexOf(view)<0){swipeTracking=false;return}
  swipeStartX=x;swipeStartY=y;swipeDX=swipeDY=0;swipeTracking=true;swipePointer=id}
