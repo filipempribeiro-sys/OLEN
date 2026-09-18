@@ -13,8 +13,8 @@ if(!ROOT?.core) throw new Error('OLEN 5.0 bootstrap requires olen-core.js');
 if(ROOT.bootstrap?.version==='5.0.1') return;
 
 const VERSION='5.0.1';
-const REQUIRED=Object.freeze(['router','home','chat','mapGo','live','media','account']);
-const DOMAIN_ORDER=Object.freeze(['home','chat','mapGo','live','media','account']);
+const REQUIRED=Object.freeze(['router','home','chat','mapGo','live','media','agenda','account']);
+const DOMAIN_ORDER=Object.freeze(['home','chat','mapGo','live','media','agenda','account']);
 let started=false;
 let starting=false;
 
