@@ -20,7 +20,14 @@ for(const view of ['home','map','chat','agenda','account']){
 const footer=document.querySelector('.footer'),composer=document.querySelector('.composer');
 ok('footer fixed',getComputedStyle(footer).position==='fixed');
 ok('composer exists',!!composer);
-const report={pass:results.every(x=>x.pass),viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},results};
+const width=innerWidth;
+const expected=width<700?'mobile':width<1024?'tablet':'desktop';
+const screen=document.querySelector('.screen.active');
+const cs=screen?getComputedStyle(screen):null;
+ok('responsive width',document.documentElement.scrollWidth<=innerWidth+1,document.documentElement.scrollWidth+' / '+innerWidth);
+ok('active screen bounded',!!screen&&screen.getBoundingClientRect().width<=innerWidth+1);
+ok('safe responsive layout',!!cs&&parseFloat(cs.paddingLeft)>=0&&parseFloat(cs.paddingRight)>=0);
+const report={pass:results.every(x=>x.pass),profile:expected,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},results};
 window.__OLEN_RESPONSIVE_TEST__=report;
 console.table(results);console.log('OLEN RESPONSIVE CONTRACT',report);
 })();
