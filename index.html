@@ -467,6 +467,13 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .categories .cat i{pointer-events:none}.categories .cat span{pointer-events:none}
 .experience-action,.event-action{appearance:none;-webkit-appearance:none;color:inherit;font:inherit;text-align:left;border:0;-webkit-tap-highlight-color:transparent;cursor:pointer}.experience-action{padding:0}.event-action{width:100%}.preloaded-plan{display:grid;gap:8px;margin-top:16px}.preloaded-plan>small{font-size:10px;letter-spacing:.12em;color:#9cefd0;font-weight:850}.preloaded-plan>div{padding:11px 12px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:#0b2119;font-size:12px;color:#dbe5e1}.event-detail-meta{display:grid;gap:4px;margin:4px 0 13px}.event-detail-meta b{font-size:13px;color:#9cefd0}.event-detail-meta span{font-size:12px;color:#aebbb6}.content-detail-pop .detail-actions{position:static;display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:18px;padding:0;border:0;background:none;backdrop-filter:none}.content-detail-pop .detail-actions button{height:44px;border:1px solid rgba(255,255,255,.13);border-radius:22px;background:#102a20;color:#fff;font-weight:800;font-size:12px}.content-detail-pop .detail-actions .detail-olen{grid-column:1/-1;border:0;background:linear-gradient(100deg,var(--cyan),var(--violet));color:#04110d}
 .category-location::first-letter{text-transform:none}
+
+/* Experience collection cards: preserve Home/master overlay composition after div→button migration. */
+#experiencesPop .experience-action{position:relative!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-items:flex-start!important;padding:14px!important;overflow:hidden!important;text-align:left!important;background-position:center!important;background-size:cover!important}
+#experiencesPop .experience-action b,#experiencesPop .experience-action small{position:relative!important;z-index:2!important;width:100%!important;text-align:left!important}
+#experiencesPop .experience-action b{margin:0!important;line-height:1.05!important}
+#experiencesPop .experience-action small{margin-top:3px!important;line-height:1.15!important}
+#experiencesPop .experience-action:after{content:"";position:absolute;z-index:1;inset:42% 0 0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.82));pointer-events:none}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
