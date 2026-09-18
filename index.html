@@ -317,6 +317,36 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .setup-controls .dots i:not(.active),.intro-splash .roll-dots button:not(.active){
  background:#202723!important;opacity:.9;
 }
+
+/* Splash alignment: actions follow the same responsive content column as copy/roll */
+.intro-splash .splash-copy,
+.intro-splash .splash-roll,
+.intro-splash .roll-dots,
+.intro-splash .splash-actions{box-sizing:border-box}
+@media(min-width:700px) and (max-width:1199px){
+ .intro-splash .splash-copy,
+ .intro-splash .splash-roll,
+ .intro-splash .roll-dots,
+ .intro-splash .splash-actions{
+   width:min(58vw,520px);
+   max-width:520px;
+   margin-left:auto;
+   margin-right:auto;
+ }
+ .intro-splash .splash-actions .start{width:100%;max-width:none}
+}
+@media(min-width:1200px){
+ .intro-splash .splash-copy,
+ .intro-splash .splash-roll,
+ .intro-splash .roll-dots,
+ .intro-splash .splash-actions{
+   width:min(31vw,520px);
+   max-width:520px;
+   margin-left:0;
+   margin-right:auto;
+ }
+ .intro-splash .splash-actions .start{width:100%;max-width:none}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
