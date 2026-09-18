@@ -207,6 +207,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .splash-roll{width:100%;max-width:390px;overflow:hidden;touch-action:pan-y;margin:0 0 11px}.roll-track{display:flex;width:100%;transition:transform .42s cubic-bezier(.2,.8,.2,1)}.roll-item{flex:0 0 100%;min-width:100%;text-align:center;padding:2px 10px;opacity:.72}.roll-item b{display:block;font-size:14px;color:#fff;margin-bottom:3px}.roll-item span{display:block;font-size:11px;line-height:1.35;color:#d7e0dc}.roll-item.active{opacity:1}
 .roll-dots{margin-bottom:13px}.roll-dots button{border:0;padding:0;width:17px;height:5px;border-radius:9px;background:#303a36;transition:.2s}.roll-dots button.active{width:24px;background:#f3dfac}
 .setup{display:none;position:fixed;z-index:101;inset:0;background:radial-gradient(circle at 82% 8%,#12392d 0,transparent 34%),linear-gradient(180deg,#061a14,#020806);color:#fff}.setup.show{display:block}.setup-track{height:100%}.setup-slide{display:none;height:100%;padding:calc(38px + env(safe-area-inset-top,0px)) 28px calc(100px + var(--safe));flex-direction:column;align-items:center;text-align:center;overflow:auto}.setup-slide.active{display:flex;animation:olenFadeUp .28s ease-out both}.setup-slide h1{font-size:31px;line-height:1.02;margin:13px 0 8px}.setup-slide>p{color:var(--muted);font-size:13px;line-height:1.4;max-width:330px;margin:0 0 22px}.setup-controls{position:absolute;left:20px;right:20px;bottom:calc(22px + var(--safe));display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:12px}.setup-controls .dots{margin:0;justify-content:center}.setup-controls .dots i{width:18px}.setup-controls .dots i.active{background:#f3dfac;width:26px}
+.splash-actions{width:100%;display:grid;gap:7px}.try-olen{border:0;background:transparent;color:#e4ece8;font-size:12px;font-weight:750;padding:8px 10px;text-shadow:0 1px 7px #000}.try-olen:active{opacity:.72}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
@@ -223,7 +224,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
   </div>
  </div>
  <div class="dots roll-dots" id="rollDots"><button class="active" data-roll="0" aria-label="Explora"></button><button data-roll="1" aria-label="Planeia"></button><button data-roll="2" aria-label="Navega"></button><button data-roll="3" aria-label="Conversa"></button><button data-roll="4" aria-label="Guarda"></button></div>
- <button class="start" id="start">Começar　›</button>
+ <div class="splash-actions"><button class="start" id="start">Configurar a minha OLEN　›</button><button class="try-olen" id="tryOlen">Experimentar agora</button></div>
 </div>
 <div class="setup" id="setup" aria-hidden="true">
  <div class="setup-track">
@@ -283,7 +284,7 @@ function openSetup(){clearInterval(rollTimer);if(splash){splash.classList.add("h
 function closeSetup(){savePrefs(true);setup.classList.remove("show");setup.setAttribute("aria-hidden","true")}
 loadPrefs();syncSelections();
 if(setup){setup.querySelectorAll(".mobility-options button,.interest-grid button").forEach(function(b){b.onclick=function(){var key=b.closest(".mobility-options")?"mobility":"interests",a=prefs[key],v=b.dataset.value,i=a.indexOf(v);if(i<0)a.push(v);else a.splice(i,1);syncSelections();savePrefs(false)}});setup.querySelectorAll(".tone-options button").forEach(function(b){b.onclick=function(){prefs.tone=b.dataset.value;syncSelections();savePrefs(false)}})}
-if(start)start.onclick=openSetup;if(setupBack)setupBack.onclick=function(){if(setupStep>0)showSetup(setupStep-1)};if(setupForward)setupForward.onclick=function(){if(setupStep===2)closeSetup();else showSetup(setupStep+1)};
+var tryOlen=document.getElementById("tryOlen");if(start)start.onclick=openSetup;if(tryOlen)tryOlen.onclick=function(){clearInterval(rollTimer);if(splash){splash.classList.add("hidden");setTimeout(function(){splash.style.display="none"},350)}};if(setupBack)setupBack.onclick=function(){if(setupStep>0)showSetup(setupStep-1)};if(setupForward)setupForward.onclick=function(){if(setupStep===2)closeSetup();else showSetup(setupStep+1)};
 var completed=false;try{completed=localStorage.getItem("olen.onboardingCompleted")==="1"}catch(e){}if(completed&&!new URLSearchParams(location.search).has("onboarding")){if(splash)splash.style.display="none";clearInterval(rollTimer)}
 var navs=document.querySelectorAll(".nav,.desk-nav"),screens=document.querySelectorAll(".screen");
 function paint(v){for(var n=0;n<navs.length;n++)navs[n].classList.toggle("active",navs[n].getAttribute("data-view")===v);for(var s=0;s<screens.length;s++)screens[s].classList.toggle("active",screens[s].getAttribute("data-screen")===v);window.scrollTo(0,0)}
