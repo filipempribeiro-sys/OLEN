@@ -76,8 +76,11 @@
 }
 @media (min-width:700px) and (max-width:1099px) and (orientation:portrait){
  .screen[data-screen="home"].active{grid-template-columns:1fr;grid-template-areas:"top" "hero" "cats" "exp"}
- .screen[data-screen="home"] .hero{height:min(48vh,500px)}
+ .screen[data-screen="home"] .hero{height:min(46vh,470px)}
  .screen[data-screen="home"] .categories{grid-template-columns:repeat(4,1fr)}
+ .screen[data-screen="home"] .section-title{margin-top:4px}
+ .screen[data-screen="home"] .rail{margin-top:42px}
+ .screen[data-screen="home"] .experience{height:164px}
  .screen[data-screen="agenda"].active{grid-template-columns:1fr;grid-template-areas:"title" "calendar" "new" "events"}
  .screen[data-screen="chat"].active{grid-template-columns:180px minmax(0,1fr)}
 }
@@ -94,11 +97,11 @@
  .screen{max-width:none;padding:48px clamp(34px,4vw,72px) 48px;min-height:100vh}
  .screen[data-screen="home"].active{display:grid;grid-template-columns:minmax(480px,1.4fr) minmax(340px,.75fr);grid-template-areas:"top top" "hero cats" "hero exp";gap:22px 34px;align-content:start}
  .screen[data-screen="home"] .top{grid-area:top;width:100%;max-width:none;margin:0}
- .screen[data-screen="home"] .hero{grid-area:hero;width:100%;max-width:none;height:calc(100vh - 155px);min-height:590px;margin:0}
+ .screen[data-screen="home"] .hero{grid-area:hero;width:100%;max-width:none;height:min(720px,calc(100vh - 155px));min-height:520px;margin:0}
  .screen[data-screen="home"] .categories{grid-area:cats;width:100%;max-width:none;grid-template-columns:repeat(2,1fr);margin:0;gap:16px}
  .screen[data-screen="home"] .cat{background:#0b2119;border-radius:18px;padding:20px 10px;text-align:left;display:flex;align-items:center;gap:12px;font-size:13px}.screen[data-screen="home"] .cat i{margin:0;width:48px;height:48px;flex:none}
  .screen[data-screen="home"] .section-title{grid-area:exp;width:100%;max-width:none;margin:4px 0 0;align-self:start}
- .screen[data-screen="home"] .rail{grid-area:exp;width:100%;max-width:none;margin:48px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;align-self:start}.experience{height:210px;width:100%}
+ .screen[data-screen="home"] .rail{grid-area:exp;width:100%;max-width:none;margin:48px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;align-self:start}.screen[data-screen="home"] .experience{height:210px;width:100%}
  .screen[data-screen="map"].active{display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:auto 1fr;grid-template-areas:"title panel" "map panel";gap:20px 24px;height:100vh}
  .screen[data-screen="map"]>.title{grid-area:title;margin:0;max-width:none}.screen[data-screen="map"] .map{grid-area:map;margin:0;height:auto;min-height:0;border-radius:24px}
  .screen[data-screen="map"]:after{box-sizing:border-box;content:"Explorar agora\A\A Rotas sugeridas\A Sintra · Serra\A Arrábida · Costa\A Cascais · Guincho\A\A LIVE\A Sem alertas na tua experiência";white-space:pre;grid-area:panel;background:#0b2119;border-radius:22px;padding:24px;color:#b7c5c0;font-size:13px;line-height:1.8}
@@ -110,6 +113,14 @@
  .screen[data-screen="profile"].active{display:grid;min-height:100vh;grid-template-columns:minmax(300px,.65fr) minmax(480px,1.35fr);grid-template-areas:"title title" "profile menu" "premium menu";gap:18px 30px;align-content:start}
  .screen[data-screen="profile"]>.title{grid-area:title;width:100%;max-width:none;margin:0}.profile-card{grid-area:profile;width:100%;max-width:none;margin:0}.menu{grid-area:menu;width:100%;max-width:none;margin:0}.premium{grid-area:premium;width:100%;max-width:none;margin:0}
  .events-pop{left:248px}.sheet{max-width:760px}
+}
+@media (min-width:1100px) and (max-height:820px){
+ .screen{padding-top:34px;padding-bottom:34px}
+ .screen[data-screen="home"] .hero{height:calc(100vh - 125px);min-height:500px}
+ .screen[data-screen="home"] .cat{padding:14px 10px}
+ .screen[data-screen="home"] .experience{height:170px}
+ .screen[data-screen="agenda"] .calendar{padding:22px}
+ .screen[data-screen="agenda"] .day{height:38px}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style></head><body>
