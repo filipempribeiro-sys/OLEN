@@ -15,6 +15,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .nav,.desk-nav,.round,.go,.start,.new-event,.row,.send,.section-title button{cursor:pointer}
 @media (hover:hover){.start:hover,.new-event:hover{filter:brightness(1.06)}.go:hover{background:#10392b}.nav:hover{color:#bfeeda}}
 @media (min-width:700px){
+ .splash{padding-left:clamp(52px,8vw,110px);padding-right:clamp(52px,8vw,110px)}
+
  .screen{padding-left:clamp(28px,5vw,72px);padding-right:clamp(28px,5vw,72px)}
  .top,.title,.calendar,.agenda-preview,.profile-card,.menu,.premium,.chat-head,.chat-body{max-width:1100px;margin-left:auto;margin-right:auto}
  .hero{height:clamp(300px,43vw,520px);max-width:1100px;margin-left:auto;margin-right:auto}
@@ -89,6 +91,13 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 }
 @media (min-width:1100px){
  :root{--layout:desktop}
+ .splash{align-items:flex-start;padding-left:clamp(90px,10vw,170px);padding-right:52%;background-position:center}
+ .splash .official-wordmark{width:min(34vw,430px);margin:auto 0 0}
+ .splash .tagline{text-align:left;margin-left:4px}
+ .splash-copy{text-align:left;font-size:clamp(28px,2.7vw,42px);margin-bottom:24px}
+ .splash .dots{justify-content:flex-start}
+ .splash .start{max-width:420px}
+
  body{padding-left:248px}
  .app{overflow:visible}
  .footer{display:none}
