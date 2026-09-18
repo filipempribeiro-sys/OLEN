@@ -442,7 +442,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .identity-email{display:grid;gap:9px;margin-top:10px}.identity-email input{height:46px;border:1px solid rgba(255,255,255,.14);border-radius:15px;background:rgba(4,18,14,.9);color:#fff;padding:0 14px;font:600 13px inherit;outline:none}.identity-email input:focus{border-color:var(--cyan)}.identity-email button{background:linear-gradient(100deg,var(--cyan),var(--violet));color:#04110d;border:0}
 .identity-guest{border:0;background:transparent;color:#dce7e2;font:750 12px inherit;padding:13px 10px 2px}.identity-back{position:absolute;left:20px;top:calc(18px + env(safe-area-inset-top,0px));height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(7,28,21,.78);color:#eef5f2;font:800 12px inherit;display:flex;align-items:center;gap:6px}.identity-back span{font-size:21px;line-height:1}
 @media(min-width:700px){.identity-panel{padding:30px 32px}.identity h1{font-size:35px}}
-.hello.guest strong{display:none}.hello.guest{gap:0}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+.hello.guest strong{display:none}.hello.guest{gap:0}
+.identity-note{display:grid;gap:4px;margin:0 auto 18px;padding:12px 14px;max-width:360px;border:1px solid rgba(95,230,180,.18);border-radius:16px;background:rgba(7,35,26,.62);text-align:left}
+.identity-note b{font-size:11.5px;color:#9cefd0}.identity-note span{font-size:10.5px;line-height:1.4;color:#cbd7d2}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
  <img class="official-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
@@ -459,14 +462,15 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
   </div>
  </div>
  <div class="dots roll-dots" id="rollDots"><button class="active" data-roll="0" aria-label="Explora"></button><button data-roll="1" aria-label="Planeia"></button><button data-roll="2" aria-label="Navega"></button><button data-roll="3" aria-label="Conversa"></button><button data-roll="4" aria-label="Guarda"></button><button data-roll="5" aria-label="Partilha"></button></div>
- <div class="splash-actions"><button class="start" id="start">Entrar / Criar conta　›</button><button class="try-olen" id="tryOlen">Experimentar agora</button></div>
+ <div class="splash-actions"><button class="start" id="start">Configurar a minha OLEN　›</button><button class="try-olen" id="tryOlen">Experimentar agora</button></div>
 </div>
 <div class="identity" id="identity" aria-hidden="true">
  <div class="identity-panel">
   <img src="./assets/olen-wordmark.png" class="identity-wordmark" alt="OLEN">
-  <div class="onboard-kicker">A TUA OLEN</div>
-  <h1>Entra na tua OLEN</h1>
-  <p>Guarda experiências, sincroniza a tua Agenda e leva as tuas preferências contigo.</p>
+  <div class="onboard-kicker">CONFIGURAR A TUA OLEN</div>
+  <h1>Primeiro, identifica-te</h1>
+  <p>Para criares a tua OLEN pessoal precisas de iniciar sessão ou criar conta.</p>
+  <div class="identity-note"><b>Sem conta podes experimentar a OLEN</b><span>mas não podes criar uma OLEN à tua medida, guardar preferências, estados anteriores, Agenda ou experiências.</span></div>
   <div class="identity-actions">
    <button class="identity-provider" data-provider="google"><span>G</span>Continuar com Google</button>
    <button class="identity-provider" data-provider="apple"><span>●</span>Continuar com Apple</button>
@@ -477,7 +481,7 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
    <input id="identityEmailInput" type="email" autocomplete="email" placeholder="E-mail">
    <button id="identityContinue">Criar conta / Iniciar sessão</button>
   </div>
-  <button class="identity-guest" id="identityGuest">Experimentar sem conta</button>
+  <button class="identity-guest" id="identityGuest">Experimentar a app sem conta</button>
  </div>
  <button class="identity-back" id="identityBack"><span>‹</span> Voltar</button>
 </div>
