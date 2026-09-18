@@ -361,7 +361,7 @@ var tryOlen=document.getElementById("tryOlen");if(start)start.onclick=openSetup;
    - configured: branded short splash, then Home automatically
    - Try now never marks configuration complete, so full welcome returns next launch */
 var completed=false;try{completed=localStorage.getItem("olen.onboardingCompleted")==="1"}catch(e){}
-var SPLASH_VALIDATION_MODE=false;
+var SPLASH_VALIDATION_MODE=true;
 if(completed&&splash&&!SPLASH_VALIDATION_MODE){
  clearInterval(rollTimer);
  splash.classList.add("returning");
