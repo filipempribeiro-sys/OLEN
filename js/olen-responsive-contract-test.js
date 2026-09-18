@@ -39,6 +39,15 @@ else if(width>=700){
 else{
  ok('mobile body no desktop rail',parseFloat(getComputedStyle(document.body).paddingLeft)===0);
  ok('mobile footer visible',getComputedStyle(footer).display!=='none');ok('mobile no desktop sidebar',getComputedStyle(sidebar).display==='none')}
+ok('no horizontal document overflow',document.body.scrollWidth<=innerWidth+1,document.body.scrollWidth+' / '+innerWidth);
+if(width>=700&&width<1100){
+ const portrait=innerHeight>=innerWidth;
+ const home=document.querySelector('[data-screen="home"]');
+ window.OLEN5.router.enter('home',{history:false,reason:'tablet-orientation-contract'});
+ await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
+ const cols=getComputedStyle(home).gridTemplateColumns.split(' ').filter(Boolean).length;
+ ok('tablet orientation composition',portrait?cols===1:cols>=2,'columns='+cols+', portrait='+portrait);
+}
 ok('safe responsive layout',!!cs&&parseFloat(cs.paddingLeft)>=0&&parseFloat(cs.paddingRight)>=0);
 const report={pass:results.every(x=>x.pass),profile:expected,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},results};
 window.__OLEN_RESPONSIVE_TEST__=report;
