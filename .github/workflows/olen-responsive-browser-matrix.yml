@@ -1,0 +1,40 @@
+name: OLEN responsive browser matrix
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        viewport:
+          - { name: mobile-360x800, width: 360, height: 800 }
+          - { name: mobile-390x844, width: 390, height: 844 }
+          - { name: tablet-portrait-768x1024, width: 768, height: 1024 }
+          - { name: tablet-landscape-1024x768, width: 1024, height: 768 }
+          - { name: desktop-1366x768, width: 1366, height: 768 }
+          - { name: desktop-1440x900, width: 1440, height: 900 }
+          - { name: desktop-1920x1080, width: 1920, height: 1080 }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm install --no-save playwright@1.55.0
+      - run: npx playwright install --with-deps chromium
+      - name: Run OLEN responsive contract
+        env:
+          VP_WIDTH: ${{ matrix.viewport.width }}
+          VP_HEIGHT: ${{ matrix.viewport.height }}
+          VP_NAME: ${{ matrix.viewport.name }}
+        run: node tests/responsive-browser.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: olen-${{ matrix.viewport.name }}
+          path: artifacts/${{ matrix.viewport.name }}
