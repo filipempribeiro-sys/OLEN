@@ -13,7 +13,7 @@ if(!core)throw new Error('OLEN 5.0 router requires olen-core.js');
 if(ROOT.router?.version==='5.0.1')return;
 
 const VERSION='5.0.1';
-const VALID_VIEWS=new Set(['intro','home','chat','map','go','live','account']);
+const VALID_VIEWS=new Set(['intro','home','chat','map','go','live','agenda','account']);
 const HISTORY_KEY='__olen5';
 const viewHandlers=new Map();
 let initialized=false;
