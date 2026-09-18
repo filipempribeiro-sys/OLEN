@@ -26,6 +26,10 @@ const screen=document.querySelector('.screen.active');
 const cs=screen?getComputedStyle(screen):null;
 ok('responsive width',document.documentElement.scrollWidth<=innerWidth+1,document.documentElement.scrollWidth+' / '+innerWidth);
 ok('active screen bounded',!!screen&&screen.getBoundingClientRect().width<=innerWidth+1);
+const sidebar=document.querySelector('.desktop-sidebar'),footer=document.querySelector('.footer');
+if(width>=1100){ok('desktop sidebar visible',getComputedStyle(sidebar).display!=='none');ok('desktop footer replaced',getComputedStyle(footer).display==='none')}
+else if(width>=700){ok('tablet keeps touch footer',getComputedStyle(footer).display!=='none');ok('tablet no desktop sidebar',getComputedStyle(sidebar).display==='none')}
+else{ok('mobile footer visible',getComputedStyle(footer).display!=='none');ok('mobile no desktop sidebar',getComputedStyle(sidebar).display==='none')}
 ok('safe responsive layout',!!cs&&parseFloat(cs.paddingLeft)>=0&&parseFloat(cs.paddingRight)>=0);
 const report={pass:results.every(x=>x.pass),profile:expected,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},results};
 window.__OLEN_RESPONSIVE_TEST__=report;
