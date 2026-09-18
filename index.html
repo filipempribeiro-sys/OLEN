@@ -347,6 +347,19 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  }
  .intro-splash .splash-actions .start{width:100%;max-width:none}
 }
+
+/* Tablet/intermediate: keep roll/dots centered independently from the action column */
+@media(min-width:700px) and (max-width:1199px){
+ .intro-splash .splash-roll,
+ .intro-splash .roll-dots{
+   width:min(58vw,520px);
+   max-width:520px;
+   margin-left:auto!important;
+   margin-right:auto!important;
+   align-self:center;
+ }
+ .intro-splash .roll-item{text-align:center}
+}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
