@@ -31,7 +31,7 @@ ok('active screen bounded',!!screen&&screen.getBoundingClientRect().width<=inner
 const sidebar=document.querySelector('.desktop-sidebar');
 if(width>=1100){
  ok('desktop body rail',parseFloat(getComputedStyle(document.body).paddingLeft)>=240);
- ok('desktop home composition',getComputedStyle(document.querySelector('[data-screen="home"]')).gridTemplateColumns!=='none');ok('desktop sidebar visible',getComputedStyle(sidebar).display!=='none');ok('desktop footer replaced',getComputedStyle(footer).display==='none')}
+ const home=document.querySelector('[data-screen="home"]'); window.OLEN5.router.enter('home',{history:false,reason:'desktop-contract'}); await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))); ok('desktop home composition',getComputedStyle(home).display==='grid'&&getComputedStyle(home).gridTemplateColumns!=='none',getComputedStyle(home).display+' / '+getComputedStyle(home).gridTemplateColumns);ok('desktop sidebar visible',getComputedStyle(sidebar).display!=='none');ok('desktop footer replaced',getComputedStyle(footer).display==='none')}
 else if(width>=700){
  window.OLEN5.router.enter('agenda',{history:false,reason:'tablet-contract'});
  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
@@ -41,12 +41,12 @@ else{
  ok('mobile footer visible',getComputedStyle(footer).display!=='none');ok('mobile no desktop sidebar',getComputedStyle(sidebar).display==='none')}
 ok('no horizontal document overflow',document.body.scrollWidth<=innerWidth+1,document.body.scrollWidth+' / '+innerWidth);
 if(width>=700&&width<1100){
- const portrait=innerHeight>=innerWidth;
+ const portrait=matchMedia('(orientation: portrait)').matches;
  const home=document.querySelector('[data-screen="home"]');
  window.OLEN5.router.enter('home',{history:false,reason:'tablet-orientation-contract'});
  await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
- const cols=getComputedStyle(home).gridTemplateColumns.split(' ').filter(Boolean).length;
- ok('tablet orientation composition',portrait?cols===1:cols>=2,'columns='+cols+', portrait='+portrait);
+ const style=getComputedStyle(home); const cols=style.gridTemplateColumns.split(' ').filter(Boolean).length;
+ ok('tablet orientation composition',portrait?(style.display==='grid'&&cols===1):(style.display==='grid'&&cols>=2),'display='+style.display+', columns='+cols+', portrait='+portrait);
 }
 ok('safe responsive layout',!!cs&&parseFloat(cs.paddingLeft)>=0&&parseFloat(cs.paddingRight)>=0);
 const report={pass:results.every(x=>x.pass),profile:expected,viewport:{width:innerWidth,height:innerHeight,dpr:devicePixelRatio},results};
