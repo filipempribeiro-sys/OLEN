@@ -644,8 +644,11 @@ function beginSwipe(x,y,target,id){if(window.innerWidth>=700||swipeBlocked(targe
  swipeStartX=x;swipeStartY=y;swipeDX=swipeDY=0;swipeTracking=true;swipePointer=id}
 function moveSwipe(x,y,id){if(!swipeTracking||(swipePointer!==null&&id!==swipePointer))return;swipeDX=x-swipeStartX;swipeDY=y-swipeStartY}
 function finishSwipe(id){if(!swipeTracking||(swipePointer!==null&&id!==swipePointer))return;swipeTracking=false;swipePointer=null;var ax=Math.abs(swipeDX),ay=Math.abs(swipeDY),view=activeSwipeView();
- if(view==="map"){var fromLeft=swipeStartX<=28&&swipeDX>0,fromRight=swipeStartX>=window.innerWidth-28&&swipeDX<0;if(!(fromLeft||fromRight)||ax<58||ax<=ay*1.2)return}
- else if(ax<42||ax<=ay*1.15)return;
+ if(ax<42||ax<=ay*1.15)return;
+ /* Strict linear navigation only: left advances, right goes back. No wrap at either end.
+    Map uses the same full-screen swipe contract; map gesture arbitration will be handled by the real map layer. */
+ if(view==="home"&&swipeDX>0)return;
+ if(view==="profile"&&swipeDX<0)return;
  goSwipe(swipeDX<0?1:-1)}
 if(window.PointerEvent){document.addEventListener("pointerdown",function(e){if(e.pointerType==="touch")beginSwipe(e.clientX,e.clientY,e.target,e.pointerId)},{passive:true});document.addEventListener("pointermove",function(e){if(e.pointerType==="touch")moveSwipe(e.clientX,e.clientY,e.pointerId)},{passive:true});document.addEventListener("pointerup",function(e){if(e.pointerType==="touch")finishSwipe(e.pointerId)},{passive:true});document.addEventListener("pointercancel",function(e){if(e.pointerType==="touch"){swipeTracking=false;swipePointer=null}},{passive:true})}else{document.addEventListener("touchstart",function(e){if(e.touches.length===1)beginSwipe(e.touches[0].clientX,e.touches[0].clientY,e.target,null)},{passive:true});document.addEventListener("touchmove",function(e){if(e.touches.length===1)moveSwipe(e.touches[0].clientX,e.touches[0].clientY,null)},{passive:true});document.addEventListener("touchend",function(){finishSwipe(null)},{passive:true})}
 
