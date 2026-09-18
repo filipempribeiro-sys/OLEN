@@ -40,6 +40,16 @@
  .categories{gap:7px;margin-left:0;margin-right:0}.cat i{width:46px;height:46px}
  .nav{font-size:9px}.chat-ring{width:50px;height:50px}.experience{flex-basis:76%}
 }
+@media (min-width:700px) and (max-width:1099px) and (orientation:portrait){
+ .screen[data-screen="home"].active{grid-template-columns:1fr;grid-template-areas:"top" "hero" "cats" "exp"}
+ .screen[data-screen="home"] .hero{height:min(48vh,500px)}
+ .screen[data-screen="home"] .categories{grid-template-columns:repeat(4,1fr)}
+ .screen[data-screen="agenda"].active{grid-template-columns:1fr;grid-template-areas:"title" "calendar" "new" "events"}
+ .screen[data-screen="chat"].active{grid-template-columns:180px minmax(0,1fr)}
+}
+@media (min-width:700px) and (max-width:1099px) and (orientation:landscape){
+ .map{min-height:430px;height:calc(100dvh - 150px - var(--safe))}
+}
 @media (orientation:landscape) and (max-height:600px){
  .splash{padding-top:18px;padding-bottom:18px;background-position:center 45%}.official-wordmark{width:min(34vw,300px)}
  .splash-copy{font-size:17px;margin-bottom:10px}.dots{margin-bottom:10px}.start{max-width:420px;padding:11px}
@@ -60,15 +70,15 @@
  .screen[data-screen="home"] .top{grid-area:top;width:100%;max-width:none}
  .screen[data-screen="home"] .hero{grid-area:hero;width:100%;height:min(62vh,580px)}
  .screen[data-screen="home"] .categories{grid-area:cats;width:100%;grid-template-columns:repeat(2,1fr);margin:0;gap:12px}
- .screen[data-screen="home"] .section-title{grid-area:exp;width:100%;margin:0;align-self:end}
- .screen[data-screen="home"] .rail{grid-area:exp;width:100%;margin-top:44px;align-self:start}
+ .screen[data-screen="home"] .section-title{grid-area:exp;width:100%;margin:0;align-self:start}
+ .screen[data-screen="home"] .rail{grid-area:exp;width:100%;margin-top:48px;align-self:start}
  .experience{flex-basis:78%;height:170px}
  .screen[data-screen="agenda"].active{display:grid;grid-template-columns:minmax(380px,1fr) minmax(280px,.72fr);grid-template-areas:"title title" "calendar events" "new events";gap:14px 22px;align-content:start}
- .screen[data-screen="agenda"]>.title{grid-area:title;width:100%;max-width:none}
+ .screen[data-screen="agenda"]>.title{grid-area:title;width:100%;max-width:none;margin:0}
  .calendar{grid-area:calendar;width:100%;max-width:none;margin:0}.new-event{grid-area:new;margin:0}.agenda-preview{grid-area:events;width:100%;max-width:none;margin:0}
  .agenda-preview .rail{display:grid;overflow:visible}.event-thumb{width:100%;height:150px}
  .screen[data-screen="chat"].active{display:grid;grid-template-columns:220px minmax(0,1fr);grid-template-areas:"head head" "side body";column-gap:20px}
- .screen[data-screen="chat"]:before{content:"Conversas\A\A Hoje\A  Sintra · Trail\A\A Ontem\A  Lisboa · Cultura";white-space:pre;grid-area:side;background:#0b2119;border-radius:20px;padding:20px;color:#aebbb6;font-size:12px;line-height:1.7}
+ .screen[data-screen="chat"]:before{box-sizing:border-box;content:"Conversas\A\A Hoje\A  Sintra · Trail\A\A Ontem\A  Lisboa · Cultura";white-space:pre;grid-area:side;background:#0b2119;border-radius:20px;padding:20px;color:#aebbb6;font-size:12px;line-height:1.7}
  .chat-head{grid-area:head;width:100%;max-width:none}.chat-body{grid-area:body;width:100%;max-width:none}
 }
 @media (min-width:1100px){
@@ -76,7 +86,7 @@
  body{padding-left:248px}
  .app{overflow:visible}
  .footer{display:none}
- .desktop-sidebar{display:flex;position:fixed;z-index:70;left:0;top:0;bottom:0;width:248px;padding:30px 20px;flex-direction:column;background:linear-gradient(180deg,#061710,#020906);border-right:1px solid #ffffff0b}
+ .desktop-sidebar{display:flex;position:fixed;overflow:auto;z-index:70;left:0;top:0;bottom:0;width:248px;padding:30px 20px;flex-direction:column;background:linear-gradient(180deg,#061710,#020906);border-right:1px solid #ffffff0b}
  .desktop-logo{width:155px;height:auto;margin:4px 10px 42px}
  .desktop-nav{display:grid;gap:8px}.desk-nav{border:0;background:transparent;color:#aebbb6;border-radius:14px;padding:14px 16px;display:flex;gap:14px;align-items:center;text-align:left;font-size:14px}.desk-nav.active{background:#0e2b20;color:var(--green)}.desk-nav span{font-weight:650}
  .desktop-user{margin-top:auto;display:flex;gap:12px;align-items:center;padding:14px 10px;border-top:1px solid #ffffff0b}.desktop-user small{display:block;color:#82958e;margin-top:2px}
@@ -91,13 +101,13 @@
  .screen[data-screen="home"] .rail{grid-area:exp;width:100%;max-width:none;margin:48px 0 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));overflow:visible;align-self:start}.experience{height:210px;width:100%}
  .screen[data-screen="map"].active{display:grid;grid-template-columns:minmax(0,1fr) 320px;grid-template-rows:auto 1fr;grid-template-areas:"title panel" "map panel";gap:20px 24px;height:100vh}
  .screen[data-screen="map"]>.title{grid-area:title;margin:0;max-width:none}.screen[data-screen="map"] .map{grid-area:map;margin:0;height:auto;min-height:0;border-radius:24px}
- .screen[data-screen="map"]:after{content:"Explorar agora\A\A Rotas sugeridas\A Sintra · Serra\A Arrábida · Costa\A Cascais · Guincho\A\A LIVE\A Sem alertas na tua experiência";white-space:pre;grid-area:panel;background:#0b2119;border-radius:22px;padding:24px;color:#b7c5c0;font-size:13px;line-height:1.8}
+ .screen[data-screen="map"]:after{box-sizing:border-box;content:"Explorar agora\A\A Rotas sugeridas\A Sintra · Serra\A Arrábida · Costa\A Cascais · Guincho\A\A LIVE\A Sem alertas na tua experiência";white-space:pre;grid-area:panel;background:#0b2119;border-radius:22px;padding:24px;color:#b7c5c0;font-size:13px;line-height:1.8}
  .screen[data-screen="chat"].active{display:grid;grid-template-columns:290px minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"side head" "side body";gap:18px 26px;height:100vh}
  .screen[data-screen="chat"]:before{content:"Conversas\A\A ＋ Nova conversa\A\A Hoje\A  Sintra · Trail\A  Aquário Vasco da Gama\A\A Esta semana\A  Gerês · Viagem\A  Praias de Sesimbra";white-space:pre;grid-area:side;background:#071a13;border:1px solid #ffffff0b;border-radius:22px;padding:24px;color:#9eb0aa;font-size:13px;line-height:1.8}
  .chat-head{grid-area:head;width:100%;max-width:none;margin:0}.chat-head .round{display:none}.chat-body{grid-area:body;width:100%;max-width:none;margin:0;height:auto;background:#07150f;border-radius:22px;padding:22px}.composer{position:sticky;bottom:0;background:#07150f;padding-top:14px}
  .screen[data-screen="agenda"].active{display:grid;grid-template-columns:minmax(520px,1.25fr) minmax(330px,.75fr);grid-template-areas:"title title" "calendar events" "new events";gap:16px 30px;align-content:start}
  .screen[data-screen="agenda"]>.title{grid-area:title;width:100%;max-width:none;margin:0}.calendar{grid-area:calendar;width:100%;max-width:none;margin:0;padding:28px}.day{height:46px;font-size:13px}.new-event{grid-area:new;margin:0;max-width:520px}.agenda-preview{grid-area:events;width:100%;max-width:none;margin:0}.agenda-preview .rail{display:grid;gap:14px;overflow:visible}.event-thumb{width:100%;height:180px}
- .screen[data-screen="profile"].active{display:grid;grid-template-columns:minmax(300px,.65fr) minmax(480px,1.35fr);grid-template-areas:"title title" "profile menu" "premium menu";gap:18px 30px;align-content:start}
+ .screen[data-screen="profile"].active{display:grid;min-height:100vh;grid-template-columns:minmax(300px,.65fr) minmax(480px,1.35fr);grid-template-areas:"title title" "profile menu" "premium menu";gap:18px 30px;align-content:start}
  .screen[data-screen="profile"]>.title{grid-area:title;width:100%;max-width:none;margin:0}.profile-card{grid-area:profile;width:100%;max-width:none;margin:0}.menu{grid-area:menu;width:100%;max-width:none;margin:0}.premium{grid-area:premium;width:100%;max-width:none;margin:0}
  .events-pop{left:248px}.sheet{max-width:760px}
 }
