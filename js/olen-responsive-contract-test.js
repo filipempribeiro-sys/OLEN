@@ -2,7 +2,7 @@
 (async()=>{
 'use strict';
 const results=[];
-function ok(name,pass,detail=''){results.push({name,pass:!!pass,detail});if(!pass)throw new Error(name+(detail?': '+detail:''))}
+function ok(name,pass,detail=''){results.push({name,pass:!!pass,detail});return !!pass}
 ok('runtime core',!!window.OLEN5?.core);
 ok('runtime router',!!window.OLEN5?.router);
 ok('runtime bootstrap',!!window.OLEN5?.bootstrap?.started);
