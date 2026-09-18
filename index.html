@@ -445,6 +445,15 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .hello.guest strong{display:none}.hello.guest{gap:0}
 .identity-note{display:grid;gap:4px;margin:0 auto 18px;padding:12px 14px;max-width:360px;border:1px solid rgba(95,230,180,.18);border-radius:16px;background:rgba(7,35,26,.62);text-align:left}
 .identity-note b{font-size:11.5px;color:#9cefd0}.identity-note span{font-size:10.5px;line-height:1.4;color:#cbd7d2}
+
+/* Guest trial information splash */
+.guest-gate{display:none;position:fixed;z-index:102;inset:0;color:#fff;background:linear-gradient(180deg,rgba(2,13,10,.24),rgba(2,9,7,.76) 42%,rgba(1,6,5,.98)),url("./assets/olen-splash-bacground.png") center/cover no-repeat;align-items:center;justify-content:center;padding:calc(24px + env(safe-area-inset-top,0px)) 20px calc(24px + var(--safe))}
+.guest-gate.show{display:flex;animation:olenFadeUp .28s ease-out both}
+.guest-gate-panel{width:min(100%,430px);text-align:center;padding:25px 20px;border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(5,24,18,.74);box-shadow:0 24px 70px rgba(0,0,0,.34);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.guest-gate-wordmark{display:block;width:min(68%,250px);height:auto;margin:0 auto 18px}.guest-gate h1{font-size:30px;line-height:1.05;margin:8px 0 8px;letter-spacing:-.03em}.guest-gate-panel>p{font-size:13px;color:#d6e1dc;margin:0 0 17px}
+.guest-limit{display:grid;gap:6px;text-align:left;padding:14px 15px;margin:0 0 17px;border:1px solid rgba(95,230,180,.18);border-radius:17px;background:rgba(7,35,26,.66)}.guest-limit b{font-size:11.5px;color:#9cefd0}.guest-limit span{font-size:10.8px;line-height:1.45;color:#cbd7d2}
+.guest-continue{width:100%;height:48px;border:0;border-radius:24px;background:linear-gradient(100deg,var(--cyan),var(--violet));color:#04110d;font:900 13px inherit}.guest-configure{border:0;background:transparent;color:#e3ece8;font:780 12px inherit;padding:13px 10px 2px}
+.guest-back{position:absolute;left:20px;top:calc(18px + env(safe-area-inset-top,0px));height:42px;padding:0 14px;border:1px solid rgba(255,255,255,.14);border-radius:22px;background:rgba(7,28,21,.78);color:#eef5f2;font:800 12px inherit;display:flex;align-items:center;gap:6px}.guest-back span{font-size:21px;line-height:1}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
@@ -463,6 +472,21 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
  </div>
  <div class="dots roll-dots" id="rollDots"><button class="active" data-roll="0" aria-label="Explora"></button><button data-roll="1" aria-label="Planeia"></button><button data-roll="2" aria-label="Navega"></button><button data-roll="3" aria-label="Conversa"></button><button data-roll="4" aria-label="Guarda"></button><button data-roll="5" aria-label="Partilha"></button></div>
  <div class="splash-actions"><button class="start" id="start">Configurar a minha OLEN　›</button><button class="try-olen" id="tryOlen">Experimentar agora</button></div>
+</div>
+<div class="guest-gate" id="guestGate" aria-hidden="true">
+ <div class="guest-gate-panel">
+  <img src="./assets/olen-wordmark.png" class="guest-gate-wordmark" alt="OLEN">
+  <div class="onboard-kicker">MODO EXPERIÊNCIA</div>
+  <h1>Experimenta primeiro.</h1>
+  <p>Podes explorar a OLEN sem criar conta.</p>
+  <div class="guest-limit">
+   <b>Sem registo, algumas coisas ficam apenas nesta experiência.</b>
+   <span>Não podes criar uma OLEN à tua medida, guardar preferências, recuperar estados anteriores, sincronizar a Agenda ou guardar experiências.</span>
+  </div>
+  <button class="guest-continue" id="guestContinue">Continuar sem conta　›</button>
+  <button class="guest-configure" id="guestConfigure">Configurar a minha OLEN</button>
+ </div>
+ <button class="guest-back" id="guestBack"><span>‹</span> Voltar</button>
 </div>
 <div class="identity" id="identity" aria-hidden="true">
  <div class="identity-panel">
@@ -554,7 +578,10 @@ function openIdentity(){hideSplash();if(identity){identity.classList.add("show")
 function closeIdentity(){if(identity){identity.classList.remove("show");identity.setAttribute("aria-hidden","true")}if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");restartRoll()}}
 function enterGuest(){try{localStorage.setItem("olen.sessionMode","guest");localStorage.removeItem("olen.userName")}catch(e){}hideSplash();if(identity){identity.classList.remove("show");identity.setAttribute("aria-hidden","true")}applyIdentity()}
 function applyIdentity(){var mode="guest",name="";try{mode=localStorage.getItem("olen.sessionMode")||"guest";name=localStorage.getItem("olen.userName")||""}catch(e){}document.querySelectorAll(".hello strong").forEach(function(el){el.textContent=mode==="account"&&name?name:""});document.querySelectorAll(".hello").forEach(function(el){el.classList.toggle("guest",mode!=="account"||!name)})}
-var tryOlen=document.getElementById("tryOlen");if(start)start.onclick=openIdentity;if(tryOlen)tryOlen.onclick=enterGuest;if(identityBack)identityBack.onclick=closeIdentity;if(identityGuest)identityGuest.onclick=enterGuest;if(emailEntry)emailEntry.onclick=function(){identityEmail.hidden=!identityEmail.hidden};if(identityContinue)identityContinue.onclick=function(){var name=(identityName.value||"").trim();try{localStorage.setItem("olen.sessionMode","account");if(name)localStorage.setItem("olen.userName",name)}catch(e){}if(identity){identity.classList.remove("show");identity.setAttribute("aria-hidden","true")}applyIdentity();openSetup()};document.querySelectorAll(".identity-provider[data-provider='google'],.identity-provider[data-provider='apple']").forEach(function(b){b.onclick=function(){/* Visual prototype: real OAuth is connected later. */if(identityEmail)identityEmail.hidden=false;if(identityName)identityName.focus()}});applyIdentity();if(setupBack)setupBack.onclick=function(){if(setupStep>0){showSetup(setupStep-1);return}setup.classList.remove("show");setup.setAttribute("aria-hidden","true");if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");showRoll(roll,false);restartRoll()}};if(setupForward)setupForward.onclick=function(){if(setupStep===2){if(!prefs.tone)return;closeSetup()}else showSetup(setupStep+1)};
+var guestGate=document.getElementById("guestGate"),guestContinue=document.getElementById("guestContinue"),guestConfigure=document.getElementById("guestConfigure"),guestBack=document.getElementById("guestBack");
+function openGuestGate(){hideSplash();if(guestGate){guestGate.classList.add("show");guestGate.setAttribute("aria-hidden","false")}}
+function closeGuestGate(){if(guestGate){guestGate.classList.remove("show");guestGate.setAttribute("aria-hidden","true")}if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");restartRoll()}}
+var tryOlen=document.getElementById("tryOlen");if(start)start.onclick=openIdentity;if(tryOlen)tryOlen.onclick=openGuestGate;if(guestBack)guestBack.onclick=closeGuestGate;if(guestContinue)guestContinue.onclick=function(){if(guestGate){guestGate.classList.remove("show");guestGate.setAttribute("aria-hidden","true")}enterGuest()};if(guestConfigure)guestConfigure.onclick=function(){if(guestGate){guestGate.classList.remove("show");guestGate.setAttribute("aria-hidden","true")}openIdentity()};if(identityBack)identityBack.onclick=closeIdentity;if(identityGuest)identityGuest.onclick=enterGuest;if(emailEntry)emailEntry.onclick=function(){identityEmail.hidden=!identityEmail.hidden};if(identityContinue)identityContinue.onclick=function(){var name=(identityName.value||"").trim();try{localStorage.setItem("olen.sessionMode","account");if(name)localStorage.setItem("olen.userName",name)}catch(e){}if(identity){identity.classList.remove("show");identity.setAttribute("aria-hidden","true")}applyIdentity();openSetup()};document.querySelectorAll(".identity-provider[data-provider='google'],.identity-provider[data-provider='apple']").forEach(function(b){b.onclick=function(){/* Visual prototype: real OAuth is connected later. */if(identityEmail)identityEmail.hidden=false;if(identityName)identityName.focus()}});applyIdentity();if(setupBack)setupBack.onclick=function(){if(setupStep>0){showSetup(setupStep-1);return}setup.classList.remove("show");setup.setAttribute("aria-hidden","true");if(splash){splash.style.display="flex";splash.classList.remove("hidden","returning");showRoll(roll,false);restartRoll()}};if(setupForward)setupForward.onclick=function(){if(setupStep===2){if(!prefs.tone)return;closeSetup()}else showSetup(setupStep+1)};
 /* Final startup behaviour:
    - not configured: full welcome splash with Configure / Try now
    - configured: branded short splash, then Home automatically
