@@ -629,6 +629,10 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .points-pop.capabilities-open .points-balance-head{padding-right:100px}
 .points-pop.capabilities-open #pointsClose{display:none!important}
 .points-pop.capabilities-open .sheet{max-height:min(88dvh,790px);padding-top:15px}
+/* OLEN global popup rule: scroll remains functional, scrollbar is never visible */
+.events-pop .sheet,.events-pop .sheet *{scrollbar-width:none!important;-ms-overflow-style:none!important}
+.events-pop .sheet::-webkit-scrollbar,.events-pop .sheet *::-webkit-scrollbar{width:0!important;height:0!important;display:none!important;background:transparent!important}
+.events-pop .sheet{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
  <img class="official-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
