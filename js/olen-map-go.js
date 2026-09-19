@@ -10,7 +10,7 @@ const ROOT=window.OLEN5,core=ROOT?.core,router=ROOT?.router;
 if(!core||!router)throw new Error('OLEN 5.0 Map/GO requires core and router');
 if(ROOT.mapGo?.version==='5.0.0')return;
 const VERSION='5.0.0',VIEWS=Object.freeze(['map','go']);
-let initialized=false,mountedView=null,unregister=[],viewportOff=[],provider=null;
+let initialized=false,mountedView=null,unregister=[],viewportOff=[],provider=null,travelMode=null,mapLayer='standard';
 let selectors={mapRoot:'#field',goRoot:'#field',mapCanvas:'#realMap'};
 let model=freshModel();
 function freshModel(){return{mapReady:false,location:null,destination:null,selectedTrail:null,route:null,navigation:{active:false,following:true,mode:null,startedAt:null},remoteVisible:false}}
@@ -29,7 +29,9 @@ function render(reason='render'){
 function clearPresentation(view=mountedView){const h=host(view);h?.removeAttribute('data-olen-mounted');h?.removeAttribute('data-olen-map-go-owner');h?.removeAttribute('data-olen-map-go-view');h?.removeAttribute('data-olen-navigation-active');h?.removeAttribute('data-olen-remote-visible');canvas()?.removeAttribute('data-olen-map-canvas')}
 function mount(view,context={}){mountedView=view;provider?.mount?.({view,host:host(view),canvas:canvas(),state:snapshot(),context});core.raf2(()=>render(context.reason||`enter-${view}`));emit('mounted',{context});return true}
 function unmount(view,context={}){if(mountedView!==view)return;provider?.unmount?.({view,host:host(view),canvas:canvas(),state:snapshot(),context});clearPresentation(view);mountedView=null;emit('unmounted',{context,view})}
-function setProvider(adapter){if(adapter!=null&&typeof adapter!=='object')throw new TypeError('Map provider must be an adapter object');provider=adapter||null;emit('provider',{connected:!!provider});return!!provider}
+function setProvider(adapter){if(adapter!=null&&typeof adapter!=='object')throw new TypeError('Map provider must be an adapter object');provider=adapter||null;if(provider){provider.setTravelMode?.(clone(travelMode));provider.setMapLayer?.(mapLayer);if(model.location)provider.setLocation?.(clone(model.location));if(model.destination)provider.setDestination?.(clone(model.destination));if(model.route)provider.setRoute?.(clone(model.route))}emit('provider',{connected:!!provider});return!!provider}
+function setTravelMode(mode){travelMode=mode?clone(mode):null;provider?.setTravelMode?.(clone(travelMode));emit('travel-mode',{travelMode:clone(travelMode)});return clone(travelMode)}
+function setMapLayer(layer='standard'){const allowed=['standard','terrain','satellite'];mapLayer=allowed.includes(layer)?layer:'standard';provider?.setMapLayer?.(mapLayer);emit('map-layer',{layer:mapLayer});return mapLayer}
 function setLocation(location){
   if(location==null){setModel(draft=>{draft.location=null},'location-clear');return null}
   const latitude=Number(location.latitude??location.lat),longitude=Number(location.longitude??location.lon??location.lng);
@@ -53,7 +55,7 @@ function init(options={}){
   if(window.visualViewport)viewportOff.push(core.listen(window.visualViewport,'resize',onViewport,{passive:true}));
   syncCoreNavigation();emit('registered',{version:VERSION});return ROOT.mapGo;
 }
-function destroy(){viewportOff.forEach(off=>off?.());viewportOff=[];unregister.forEach(off=>off?.());unregister=[];if(mountedView)unmount(mountedView,{reason:'destroy'});provider?.destroy?.();provider=null;model=freshModel();syncCoreNavigation();initialized=false}
-ROOT.mapGo=Object.freeze({version:VERSION,init,destroy,render,setProvider,setLocation,setDestination,selectTrail,setRoute,clearRoute,startNavigation,stopNavigation,setFollowing,setRemoteVisible,get mountedView(){return mountedView},get state(){return snapshot()},get navigationActive(){return!!model.navigation.active}});
+function destroy(){viewportOff.forEach(off=>off?.());viewportOff=[];unregister.forEach(off=>off?.());unregister=[];if(mountedView)unmount(mountedView,{reason:'destroy'});provider?.destroy?.();provider=null;travelMode=null;mapLayer='standard';model=freshModel();syncCoreNavigation();initialized=false}
+ROOT.mapGo=Object.freeze({version:VERSION,init,destroy,render,setProvider,setTravelMode,setMapLayer,setLocation,setDestination,selectTrail,setRoute,clearRoute,startNavigation,stopNavigation,setFollowing,setRemoteVisible,get mountedView(){return mountedView},get state(){return snapshot()},get travelMode(){return clone(travelMode)},get mapLayer(){return mapLayer},get navigationActive(){return!!model.navigation.active}});
 core.register('map-go',ROOT.mapGo);
 })();
