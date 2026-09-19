@@ -736,6 +736,13 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .map-next-distance b{display:block!important;font-size:16px!important;font-weight:800!important;color:#fff!important}
 .map-next-distance small{display:block!important;font-size:7px!important;line-height:1.1!important;color:#b8c5c0!important}
 }
+/* OLEN TURN GLYPH — no generic green tile */
+@media (max-width:699px){
+.map.navigating .map-turn-card{grid-template-columns:54px minmax(0,1fr) 76px!important}
+.map.navigating .map-turn-icon{width:54px!important;height:54px!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;border:0!important;color:transparent!important;overflow:visible!important}
+.map.navigating .map-turn-icon:before{content:""!important;width:31px!important;height:42px!important;background:linear-gradient(180deg,var(--cyan),var(--green))!important;clip-path:polygon(42% 100%,42% 31%,17% 49%,5% 36%,50% 0,95% 36%,83% 49%,58% 31%,58% 100%)!important;filter:drop-shadow(0 3px 5px rgba(0,0,0,.42)) drop-shadow(0 0 7px rgba(86,230,167,.18))!important}
+.map.navigating .map-turn-icon:after{content:""!important;position:absolute!important;inset:7px 8px!important;border-radius:50%!important;border:1px solid rgba(95,240,220,.18)!important;transform:rotate(-18deg)!important;pointer-events:none!important}
+}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
  <img class="official-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
