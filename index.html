@@ -750,6 +750,41 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-o
 .map.navigating .map-speed-circle b{font-size:17px;font-weight:800;color:#fff}
 .map.navigating .map-speed-circle small{font-size:7px;margin-top:3px;color:#b8c5c0}
 }
+/* OLEN MAP/GO — visual polish pass */
+@media (max-width:699px){
+.map.navigating .map-turn-card{
+ border-color:rgba(95,240,220,.24)!important;
+ background:linear-gradient(105deg,rgba(3,16,12,.42),rgba(7,35,27,.28))!important;
+ box-shadow:0 12px 32px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.035)!important
+}
+.map.navigating .map-turn-icon{
+ width:54px!important;height:54px!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;overflow:visible!important
+}
+.map.navigating .map-turn-icon:before{
+ width:29px!important;height:41px!important;
+ background:linear-gradient(180deg,#8af7df 0%,var(--green) 58%,#42d99a 100%)!important;
+ filter:drop-shadow(0 3px 5px rgba(0,0,0,.38)) drop-shadow(0 0 5px rgba(86,230,167,.20))!important
+}
+.map.navigating .map-turn-icon:after{display:none!important;content:none!important}
+.map.navigating .map-turn-copy small{color:#a8bbb4!important}
+.map-next-distance{border-left-color:rgba(95,240,220,.25)!important}
+.map-next-distance b{font-size:17px!important}
+.map.navigating .map-trip-card{
+ background:linear-gradient(105deg,rgba(3,16,12,.36),rgba(7,35,27,.24))!important;
+ border-color:rgba(95,240,220,.22)!important;
+ box-shadow:0 10px 28px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.03)!important
+}
+.map.navigating .map-speed-circle{
+ width:52px!important;height:52px!important;
+ background:radial-gradient(circle at 50% 38%,rgba(21,66,52,.54),rgba(3,16,12,.44) 72%)!important;
+ border:1px solid rgba(95,240,220,.26)!important;
+ box-shadow:0 9px 24px rgba(0,0,0,.24),inset 0 0 0 1px rgba(255,255,255,.025)!important
+}
+.map.navigating .map-speed-circle b{font-size:16px!important}
+.map.navigating .map-speed-circle small{color:#9fb6ae!important}
+}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
  <img class="official-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
