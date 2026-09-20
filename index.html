@@ -598,11 +598,7 @@
 .screen[data-screen="agenda"]{padding-top:calc(18px + env(safe-area-inset-top,0px))!important}
 .screen[data-screen="agenda"] .agenda-premium-head{height:82px;display:flex;flex-direction:column;justify-content:center;margin:0 -18px 0;padding:2px 22px 0;border-bottom:1px solid rgba(255,255,255,.055);background:linear-gradient(180deg,rgba(7,28,21,.72),rgba(3,16,12,.18))}
 .screen[data-screen="agenda"] .agenda-premium-head .cal-head{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;margin:0}
-.screen[data-screen="agenda"] .agenda-premium-head .cal-label{display:grid;grid-template-columns:58% 42%;align-items:center;width:100%;min-width:0;height:24px;background:transparent;border:0;padding:0}
-.screen[data-screen="agenda"] .agenda-premium-head .olen-month-slot{height:24px;min-width:0;display:flex;align-items:center;justify-content:flex-end;padding-right:4px;box-sizing:border-box;overflow:hidden}
-.screen[data-screen="agenda"] .agenda-premium-head .olen-year-slot{height:24px;min-width:0;display:flex;align-items:center;justify-content:flex-start;gap:1px;padding-left:4px;box-sizing:border-box;overflow:hidden}
-.screen[data-screen="agenda"] .agenda-premium-head .olen-month-slot img{display:block;height:14px;width:auto;max-width:100%}
-.screen[data-screen="agenda"] .agenda-premium-head .olen-year-slot img{display:block;height:10px;width:auto}
+.screen[data-screen="agenda"] .agenda-premium-head .cal-label{display:flex;align-items:center;justify-content:center;gap:9px;font-size:21px;font-weight:750;letter-spacing:.075em;text-transform:uppercase;background:transparent;border:0;text-align:center;padding:0}
 .screen[data-screen="agenda"] .agenda-premium-head .olen-month-word{display:inline-flex;align-items:center;gap:.01em}
 .screen[data-screen="agenda"] .agenda-premium-head .olen-year{font-weight:520;letter-spacing:.12em;opacity:.82}
 .screen[data-screen="agenda"] .agenda-premium-head .olen-o-mark{position:relative;display:inline-block;width:.9em;height:.9em;margin:0 .02em;border:1.9px solid transparent;border-left-color:#52f6dc;border-top-color:#5ba8ff;border-right-color:#b16cff;border-bottom-color:#b16cff;border-radius:50%;vertical-align:-.08em;transform:rotate(-12deg)}
@@ -927,7 +923,7 @@ function agendaCustomDetail(id){var ev=agendaLoad().find(function(x){return x.id
 var calView=new Date(),calSelected=null;calView=new Date(calView.getFullYear(),calView.getMonth(),1);
 function renderCalendar(){
  var days=document.getElementById("calendarDays"),label=document.getElementById("calLabel");if(!days||!label)return;
- var monthName=new Intl.DateTimeFormat("pt-PT",{month:"long"}).format(calView).toUpperCase(),yearText=String(calView.getFullYear()),monthNo=String(calView.getMonth()+1).padStart(2,"0");label.innerHTML='<span class="olen-month-slot"><img src="./assets/lettering/'+monthNo+'_'+monthName+'.png" alt="'+monthName+'"></span><span class="olen-year-slot">'+yearText.split("").map(function(d){return '<img src="./assets/lettering/'+d+'.png" alt="'+d+'">'}).join("")+'</span>';
+ var monthName=new Intl.DateTimeFormat("pt-PT",{month:"long"}).format(calView).toUpperCase(),yearText=String(calView.getFullYear()),monthNo=String(calView.getMonth()+1).padStart(2,"0");label.innerHTML='<img src="./assets/lettering/'+monthNo+'_'+monthName+'.png" alt="'+monthName+'" style="display:block;height:14px;width:auto">';
  var y=calView.getFullYear(),m=calView.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,startDate=new Date(y,m,1-offset),today=new Date(),html="",cells=Math.ceil((offset+new Date(y,m+1,0).getDate())/7)*7;
  var events=agendaLoad();
  for(var i=0;i<cells;i++){var d=new Date(startDate);d.setDate(startDate.getDate()+i);var iso=agendaIso(d),isToday=agendaIso(today)===iso,outside=d.getMonth()!==m,selected=calSelected===iso,hasEvent=events.some(function(ev){var a=ev.startDate||ev.date,z=ev.endDate||a;return iso>=a&&iso<=z});html+='<button class="day'+(isToday?' today':'')+(outside?' outside':'')+(selected?' selected':'')+(hasEvent?' has-event':'')+'" data-date="'+iso+'">'+d.getDate()+'</button>'}
