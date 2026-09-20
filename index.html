@@ -596,13 +596,15 @@
 <style id="olen-agenda-premium-trial">
 @media (max-width:699px){
 .screen[data-screen="agenda"]{padding-top:calc(18px + env(safe-area-inset-top,0px))!important}
-.screen[data-screen="agenda"] .agenda-premium-head{height:82px;min-height:82px;max-height:82px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:center;margin:0 -18px;padding:2px 22px 0;overflow:hidden;border-bottom:1px solid rgba(255,255,255,.055);background:linear-gradient(180deg,rgba(7,28,21,.72),rgba(3,16,12,.18))}
-.screen[data-screen="agenda"] .agenda-premium-head .cal-head{height:30px;display:grid;grid-template-columns:42px minmax(0,1fr) 42px;align-items:center;margin:0}
-.screen[data-screen="agenda"] .agenda-premium-head .cal-label{height:18px;min-width:0;display:flex;align-items:center;justify-content:center;gap:5px;overflow:hidden;padding:0;border:0;background:transparent}
-.screen[data-screen="agenda"] .agenda-premium-head .olen-cal-month{display:block;height:8px;width:auto;max-width:calc(100% - 40px);object-fit:contain;flex:0 1 auto}
-.screen[data-screen="agenda"] .agenda-premium-head .olen-cal-year{height:4px;display:flex;align-items:center;gap:1px;flex:0 0 auto}
-.screen[data-screen="agenda"] .agenda-premium-head .olen-cal-year img{display:block;height:4px;width:auto}
-.screen[data-screen="agenda"] .agenda-premium-head .cal-nav{position:relative;width:38px;height:38px;border:0;outline:0;background:transparent;border-radius:0;box-shadow:none;appearance:none;-webkit-appearance:none;padding:0;font-size:0}
+.screen[data-screen="agenda"] .agenda-premium-head{height:82px;display:flex;flex-direction:column;justify-content:center;margin:0 -18px 0;padding:2px 22px 0;border-bottom:1px solid rgba(255,255,255,.055);background:linear-gradient(180deg,rgba(7,28,21,.72),rgba(3,16,12,.18))}
+.screen[data-screen="agenda"] .agenda-premium-head .cal-head{display:grid;grid-template-columns:42px 1fr 42px;align-items:center;margin:0}
+.screen[data-screen="agenda"] .agenda-premium-head .cal-label{display:flex;align-items:center;justify-content:center;gap:9px;font-size:21px;font-weight:750;letter-spacing:.075em;text-transform:uppercase;background:transparent;border:0;text-align:center;padding:0}
+.screen[data-screen="agenda"] .agenda-premium-head .olen-month-word{display:inline-flex;align-items:center;gap:.01em}
+.screen[data-screen="agenda"] .agenda-premium-head .olen-year{font-weight:520;letter-spacing:.12em;opacity:.82}
+.screen[data-screen="agenda"] .agenda-premium-head .olen-o-mark{position:relative;display:inline-block;width:.9em;height:.9em;margin:0 .02em;border:1.9px solid transparent;border-left-color:#52f6dc;border-top-color:#5ba8ff;border-right-color:#b16cff;border-bottom-color:#b16cff;border-radius:50%;vertical-align:-.08em;transform:rotate(-12deg)}
+.screen[data-screen="agenda"] .agenda-premium-head .olen-o-chevron{position:absolute;left:32%;top:28%;width:36%;height:44%;background:linear-gradient(145deg,#52f6dc,#b16cff);clip-path:polygon(0 0,100% 50%,0 100%,35% 50%);transform:rotate(12deg)}
+.screen[data-screen="agenda"] .agenda-premium-head .olen-o-star{position:absolute;right:-.34em;top:-.48em;font-size:.47em;line-height:1;color:#b16cff;transform:rotate(12deg)}
+.screen[data-screen="agenda"] .agenda-premium-head .cal-nav{position:relative;width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;border:0!important;outline:0;background:none!important;background-color:transparent!important;border-radius:0!important;box-shadow:none!important;appearance:none;-webkit-appearance:none;font-size:0;line-height:1;padding:0!important}
 .screen[data-screen="agenda"] .agenda-premium-head .cal-nav::before{content:"";position:absolute;left:50%;top:50%;width:13px;height:13px;border-left:2.4px solid #f7fbff;border-bottom:2.4px solid #f7fbff;filter:drop-shadow(0 0 5px rgba(82,246,220,.22));transform:translate(-36%,-50%) rotate(45deg);border-radius:1px}
 .screen[data-screen="agenda"] .agenda-premium-head #calNext::before{transform:translate(-64%,-50%) rotate(225deg)}
 .screen[data-screen="agenda"] .agenda-premium-head .cal-nav::after{content:"";position:absolute;left:50%;top:50%;width:16px;height:2.4px;border-radius:999px;background:linear-gradient(90deg,#52f6dc 0%,#5ba8ff 48%,#b16cff 100%);transform:translate(-38%,-50%)}
@@ -921,7 +923,7 @@ function agendaCustomDetail(id){var ev=agendaLoad().find(function(x){return x.id
 var calView=new Date(),calSelected=null;calView=new Date(calView.getFullYear(),calView.getMonth(),1);
 function renderCalendar(){
  var days=document.getElementById("calendarDays"),label=document.getElementById("calLabel");if(!days||!label)return;
- var monthName=new Intl.DateTimeFormat("pt-PT",{month:"long"}).format(calView).toUpperCase(),yearText=String(calView.getFullYear()),monthNo=String(calView.getMonth()+1).padStart(2,"0");label.innerHTML='<img class="olen-cal-month" src="./assets/lettering/'+monthNo+'_'+monthName+'.png" alt="'+monthName+'"><span class="olen-cal-year">'+yearText.split("").map(function(d){return '<img src="./assets/lettering/'+d+'.png" alt="'+d+'">'}).join("")+'</span>';
+ var monthName=new Intl.DateTimeFormat("pt-PT",{month:"long"}).format(calView).toUpperCase(),yearText=String(calView.getFullYear());label.innerHTML='<span class="olen-month-word">'+monthName.replace(/O/g,'<span class="olen-o-mark" aria-label="O"><span class="olen-o-chevron"></span><span class="olen-o-star">✦</span></span>')+'</span><span class="olen-year">'+yearText+'</span>';
  var y=calView.getFullYear(),m=calView.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,startDate=new Date(y,m,1-offset),today=new Date(),html="",cells=Math.ceil((offset+new Date(y,m+1,0).getDate())/7)*7;
  var events=agendaLoad();
  for(var i=0;i<cells;i++){var d=new Date(startDate);d.setDate(startDate.getDate()+i);var iso=agendaIso(d),isToday=agendaIso(today)===iso,outside=d.getMonth()!==m,selected=calSelected===iso,hasEvent=events.some(function(ev){var a=ev.startDate||ev.date,z=ev.endDate||a;return iso>=a&&iso<=z});html+='<button class="day'+(isToday?' today':'')+(outside?' outside':'')+(selected?' selected':'')+(hasEvent?' has-event':'')+'" data-date="'+iso+'">'+d.getDate()+'</button>'}
