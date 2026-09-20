@@ -641,13 +641,17 @@
   letter-spacing:.025em!important;
   opacity:.8!important;
 }
-.screen[data-screen="agenda"] .days{row-gap:5px!important}
+.screen[data-screen="agenda"] .days{row-gap:4px!important;grid-auto-rows:42px!important}
 .screen[data-screen="agenda"] .day{
   position:relative!important;
   display:grid!important;
   place-items:center!important;
-  aspect-ratio:1/1!important;
-  min-height:0!important;
+  width:42px!important;
+  height:42px!important;
+  min-width:42px!important;
+  min-height:42px!important;
+  aspect-ratio:auto!important;
+  justify-self:center!important;
   padding:0!important;
   border:0!important;
   border-radius:50%!important;
@@ -1001,7 +1005,7 @@ function renderCalendar(){
  var y=calView.getFullYear(),m=calView.getMonth(),first=new Date(y,m,1),offset=(first.getDay()+6)%7,startDate=new Date(y,m,1-offset),today=new Date(),html="",cells=Math.ceil((offset+new Date(y,m+1,0).getDate())/7)*7;
  var events=agendaLoad();
  for(var i=0;i<cells;i++){var d=new Date(startDate);d.setDate(startDate.getDate()+i);var iso=agendaIso(d),isToday=agendaIso(today)===iso,outside=d.getMonth()!==m,selected=calSelected===iso,hasEvent=events.some(function(ev){var a=ev.startDate||ev.date,z=ev.endDate||a;return iso>=a&&iso<=z});html+='<button class="day'+(isToday?' today':'')+(outside?' outside':'')+(selected?' selected':'')+(hasEvent?' has-event':'')+'" data-date="'+iso+'">'+d.getDate()+'</button>'}
- days.innerHTML=html;days.querySelectorAll("[data-date]").forEach(function(b){b.onclick=function(){calSelected=b.dataset.date;renderCalendar()}});
+ days.innerHTML=html;days.querySelectorAll(".day").forEach(function(b){b.classList.remove("olen-aurora-white-text")});days.querySelectorAll("[data-date]").forEach(function(b){b.onclick=function(){calSelected=b.dataset.date;renderCalendar()}});
 }
 document.getElementById("calPrev")?.addEventListener("click",function(){calView=new Date(calView.getFullYear(),calView.getMonth()-1,1);renderCalendar()});
 document.getElementById("calNext")?.addEventListener("click",function(){calView=new Date(calView.getFullYear(),calView.getMonth()+1,1);renderCalendar()});
@@ -1136,7 +1140,7 @@ document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(btn
   var SKIP=new Set(["SCRIPT","STYLE","SVG","PATH","RECT","CIRCLE","LINE","POLYLINE","POLYGON","INPUT","TEXTAREA","SELECT","OPTION"]);
   function directText(el){return Array.prototype.some.call(el.childNodes,function(n){return n.nodeType===3&&n.nodeValue.trim()})}
   function whiteText(el){
-    if(!el||el.nodeType!==1||SKIP.has(el.tagName)||el.classList.contains("close")||el.closest(".close"))return false;
+    if(!el||el.nodeType!==1||SKIP.has(el.tagName)||el.classList.contains("close")||el.closest(".close")||el.matches(".screen[data-screen=\"agenda\"] .day"))return false;
     if(el.closest(".footer .nav.active"))return false;
     if(!directText(el))return false;
     var c=getComputedStyle(el).color,m=c.match(/rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)/);if(!m)return false;
