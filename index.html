@@ -547,6 +547,24 @@
 }
 
 .rz-bottom[hidden]{display:none!important}
+
+/* OLEN GLOBAL AURORA-WHITE — identity layer for text that would otherwise render white.
+   Area accents keep precedence. Close controls are explicitly excluded/protected. */
+:root{--olen-aurora-white:linear-gradient(100deg,#bffaff 0%,#f9fbff 34%,#fff 52%,#f7d8ff 72%,#f1a6ff 100%)}
+.olen-aurora-white-text:not(.close){
+  background-image:var(--olen-aurora-white)!important;
+  -webkit-background-clip:text!important;
+  background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+  color:transparent!important;
+}
+.close{
+  -webkit-text-fill-color:#f7fbff!important;
+  color:#f7fbff!important;
+  background-image:none!important;
+  background-clip:border-box!important;
+  -webkit-background-clip:border-box!important;
+}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
  <img class="official-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
@@ -973,4 +991,29 @@ document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.da
  window.OLENNavigationGuide={set:set,paths:paths};
 })();
 document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(btn){btn.addEventListener("click",function(){var was=btn.classList.contains("selected");document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(b){b.classList.remove("selected")});if(!was)btn.classList.add("selected")})});
-</script></body></html>
+</script>
+<script id="olen-global-aurora-white">
+(function(){
+  var SKIP=new Set(["SCRIPT","STYLE","SVG","PATH","RECT","CIRCLE","LINE","POLYLINE","POLYGON","INPUT","TEXTAREA","SELECT","OPTION"]);
+  function directText(el){return Array.prototype.some.call(el.childNodes,function(n){return n.nodeType===3&&n.nodeValue.trim()})}
+  function whiteText(el){
+    if(!el||el.nodeType!==1||SKIP.has(el.tagName)||el.classList.contains("close")||el.closest(".close"))return false;
+    if(el.closest(".footer .nav.active"))return false;
+    if(!directText(el))return false;
+    var c=getComputedStyle(el).color,m=c.match(/rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)/);if(!m)return false;
+    return +m[1]>=238&&+m[2]>=238&&+m[3]>=238;
+  }
+  function paint(root){
+    if(root&&root.nodeType===1&&whiteText(root))root.classList.add("olen-aurora-white-text");
+    (root||document).querySelectorAll("*").forEach(function(el){if(whiteText(el))el.classList.add("olen-aurora-white-text")});
+  }
+  function protectClose(root){
+    if(root&&root.nodeType===1&&root.matches(".close"))root.classList.remove("olen-aurora-white-text");
+    (root||document).querySelectorAll(".close").forEach(function(el){el.classList.remove("olen-aurora-white-text")});
+  }
+  function apply(root){protectClose(root);paint(root);protectClose(root)}
+  if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",function(){apply(document)});else apply(document);
+  new MutationObserver(function(ms){ms.forEach(function(m){m.addedNodes.forEach(function(n){if(n.nodeType===1)apply(n)})});protectClose(document)}).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+</body></html>
