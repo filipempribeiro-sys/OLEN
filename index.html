@@ -295,17 +295,88 @@
 .rz-tools button:nth-child(2):not(.selected){color:#f5fffc!important;border-color:rgba(190,255,245,.26)!important;box-shadow:0 4px 14px rgba(0,0,0,.28)!important}
 </style>
 <style id="rz-guide-step3">
-/* STEP 3A — dynamic OLEN navigation guide */
-.rz-guide{height:86px!important;grid-template-columns:64px minmax(0,1fr) 96px!important;gap:10px!important;padding:9px 12px!important;border:1px solid rgba(89,237,182,.78)!important;border-radius:24px!important;background:linear-gradient(100deg,rgba(5,50,37,.94),rgba(4,38,31,.91))!important;box-shadow:0 0 0 1px rgba(89,237,182,.05),0 8px 24px rgba(0,0,0,.16),inset 0 0 18px rgba(89,237,182,.035)!important}
-.rz-maneuver{width:58px;height:70px;display:grid;place-items:center;filter:drop-shadow(0 0 6px rgba(67,235,211,.28))}
-.rz-maneuver svg{width:58px;height:70px;overflow:visible}
-.rz-guide-copy{min-width:0;display:grid!important;grid-template-rows:auto auto auto;align-content:center;gap:2px!important}
-.rz-guide-copy>small{font-size:8px!important;letter-spacing:.14em!important;color:#9bada6!important;font-weight:800!important;white-space:nowrap}
-.rz-guide-copy>b{font-size:15px!important;line-height:1.05!important;white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
-.rz-roadline{min-width:0;display:flex;align-items:center;gap:6px;color:#c8d7d1;font-size:10px;line-height:1.1;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rz-roadline svg{width:14px;height:14px;flex:0 0 14px;color:#69e9c3}.rz-roadline span{overflow:hidden;text-overflow:ellipsis}
-.rz-next{height:64px!important;padding-left:12px!important;border-left:1px solid rgba(255,255,255,.30)!important}.rz-next b{font-size:22px!important;line-height:1!important;color:#59edb6!important;white-space:nowrap}.rz-next small{font-size:8px!important;line-height:1.15!important;margin-top:5px;color:#b6c5bf!important}
-@media(max-width:380px){.rz-guide{grid-template-columns:56px minmax(0,1fr) 84px!important;gap:7px!important;padding-left:9px!important;padding-right:9px!important}.rz-maneuver,.rz-maneuver svg{width:52px}.rz-guide-copy>b{font-size:14px!important}.rz-next{padding-left:9px!important}.rz-next b{font-size:20px!important}}
+/* STEP 3A — reference-faithful OLEN navigation guide */
+.rz-guide{
+  left:10px!important;right:10px!important;top:16px!important;
+  height:112px!important;
+  grid-template-columns:112px minmax(0,1fr) 132px!important;
+  gap:0!important;align-items:center!important;
+  padding:12px 14px 12px 12px!important;
+  border:1.5px solid rgba(91,237,190,.78)!important;
+  border-radius:38px!important;
+  background:linear-gradient(100deg,rgba(5,47,35,.94),rgba(4,39,31,.93))!important;
+  box-shadow:0 0 8px rgba(75,236,190,.16),inset 0 0 22px rgba(74,222,181,.035)!important;
+  overflow:hidden!important;
+}
+.rz-maneuver{
+  width:98px!important;height:96px!important;
+  display:grid!important;place-items:center!important;
+  filter:drop-shadow(0 0 5px rgba(65,225,213,.20))!important;
+}
+.rz-maneuver svg{width:86px!important;height:94px!important;overflow:visible!important}
+.rz-maneuver path{stroke-width:8.5!important}
+.rz-guide-copy{
+  min-width:0!important;height:88px!important;
+  display:grid!important;
+  grid-template-rows:18px minmax(36px,auto) 25px!important;
+  align-content:center!important;align-items:center!important;
+  gap:0!important;padding:0 14px 0 2px!important;
+}
+.rz-guide-copy>small{
+  align-self:end!important;
+  font-size:11px!important;line-height:1!important;
+  letter-spacing:.10em!important;
+  color:#9ba9a4!important;font-weight:650!important;
+  white-space:nowrap!important;
+}
+.rz-guide-copy>b{
+  align-self:center!important;
+  font-size:20px!important;line-height:1.04!important;
+  font-weight:760!important;color:#fff!important;
+  white-space:normal!important;overflow:hidden!important;
+  display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;
+}
+.rz-roadline{
+  align-self:start!important;min-width:0!important;
+  display:flex!important;align-items:center!important;gap:9px!important;
+  margin:0!important;
+  color:#c5d1cd!important;font-size:15px!important;line-height:1!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+}
+.rz-roadline svg{width:22px!important;height:22px!important;flex:0 0 22px!important;color:#62dfb4!important}
+.rz-roadline span{overflow:hidden!important;text-overflow:ellipsis!important}
+.rz-next{
+  height:88px!important;min-width:0!important;
+  display:grid!important;grid-template-rows:48px auto!important;
+  align-content:center!important;align-items:center!important;
+  padding:0 0 0 18px!important;
+  border-left:1px solid rgba(220,235,229,.42)!important;
+}
+.rz-next b{
+  align-self:end!important;
+  font-size:34px!important;line-height:.96!important;
+  font-weight:780!important;color:#5be7bd!important;
+  white-space:nowrap!important;
+}
+.rz-next small{
+  align-self:start!important;
+  margin-top:8px!important;
+  font-size:12px!important;line-height:1.18!important;
+  color:#b9c6c1!important;font-weight:400!important;
+}
+@media(max-width:430px){
+ .rz-guide{left:7px!important;right:7px!important;height:102px!important;grid-template-columns:92px minmax(0,1fr) 108px!important;padding:9px 11px 9px 8px!important;border-radius:34px!important}
+ .rz-maneuver{width:84px!important;height:86px!important}.rz-maneuver svg{width:74px!important;height:84px!important}
+ .rz-guide-copy{height:82px!important;grid-template-rows:16px minmax(34px,auto) 22px!important;padding-right:9px!important}
+ .rz-guide-copy>small{font-size:9px!important}.rz-guide-copy>b{font-size:17px!important}.rz-roadline{font-size:12px!important;gap:6px!important}.rz-roadline svg{width:18px!important;height:18px!important;flex-basis:18px!important}
+ .rz-next{height:82px!important;grid-template-rows:43px auto!important;padding-left:12px!important}.rz-next b{font-size:27px!important}.rz-next small{font-size:9px!important;margin-top:7px!important}
+}
+@media(max-width:380px){
+ .rz-guide{grid-template-columns:82px minmax(0,1fr) 94px!important}
+ .rz-maneuver{width:74px!important}.rz-maneuver svg{width:66px!important}
+ .rz-guide-copy>b{font-size:15px!important}.rz-roadline{font-size:11px!important}
+ .rz-next{padding-left:9px!important}.rz-next b{font-size:24px!important}
+}
 </style>
 <style id="rz-lower-hud-step1">
 /* STEP 1 — only CHEGADA / RESTANTE / STOP + speed + report button */
@@ -697,7 +768,7 @@ more?.addEventListener('click',e=>{let a=e.target.closest('[data-chat-more]');if
 longScrim?.addEventListener('click',closeLong);longMenu?.addEventListener('click',e=>{let b=e.target.closest('[data-long]');if(!b||!longId)return;let a=load(),x=a.find(v=>v.id===longId);if(!x)return;if(b.dataset.long==='pin')x.pinned=!x.pinned;if(b.dataset.long==='rename'){let n=prompt('Novo nome da conversa',x.title);if(n?.trim())x.title=n.trim()}if(b.dataset.long==='delete'){if(confirm('Eliminar esta conversa?')){a=a.filter(v=>v.id!==longId);if(activeId()===longId)localStorage.setItem(ACTIVE,a[0]?.id||'')}}save(a);closeLong();renderChat()});
 document.querySelectorAll('[data-side-nav]').forEach(b=>b.onclick=()=>{closeSide();document.querySelector('.nav[data-go="'+b.dataset.sideNav+'"]')?.click()});ensureLongDemo();if(!localStorage.getItem('olen.chat.demo.long.seen.v1')){localStorage.setItem(ACTIVE,'demo-sintra-scroll-v1');localStorage.setItem('olen.chat.demo.long.seen.v1','1')}renderChat();renderSide();window.OLENChat={openSidebar:openSide,closeSidebar:closeSide,newConversation:newChat,render:renderChat};})();
 document.getElementById("newEventForm")?.addEventListener("submit",function(e){e.preventDefault();e.stopImmediatePropagation();var title=document.getElementById("newEventTitle").value.trim(),date=document.getElementById("newEventDate").value;if(!title||!date)return;var event={id:"olen_"+Date.now(),title:title,date:date,time:document.getElementById("newEventTime").value||"",endTime:document.getElementById("newEventEndTime").value||"",guests:document.getElementById("newEventGuests").value.trim(),location:document.getElementById("newEventPlace").value.trim(),notes:document.getElementById("newEventNotes").value.trim(),provider:(document.querySelector('input[name="newEventProvider"]:checked')||{}).value||"local",updatedAt:new Date().toISOString()};var key="olen.calendar.events";var events=[];try{events=JSON.parse(localStorage.getItem(key)||"[]");if(!Array.isArray(events))events=[]}catch(_){events=[]}events.push(event);localStorage.setItem(key,JSON.stringify(events.slice(-1000)));if(event.provider!=="local"){var start=(event.date+"T"+(event.time||"00:00")+":00"),end=(event.date+"T"+(event.endTime||event.time||"00:00")+":00"),pad=n=>String(n).padStart(2,"0"),icsDate=v=>{var d=new Date(v);return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+"T"+pad(d.getUTCHours())+pad(d.getUTCMinutes())+"00Z"},escI=v=>String(v||"").replace(/\\/g,"\\\\").replace(/\n/g,"\\n").replace(/,/g,"\\,").replace(/;/g,"\\;"),ics=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//OLEN//Calendar//PT","BEGIN:VEVENT","UID:"+event.id+"@olen","DTSTAMP:"+icsDate(new Date().toISOString()),"DTSTART:"+icsDate(start),"DTEND:"+icsDate(end),"SUMMARY:"+escI(event.title),"LOCATION:"+escI(event.location),"DESCRIPTION:"+escI([event.notes,event.guests?"Convidados: "+event.guests:""].filter(Boolean).join("\n")),"END:VEVENT","END:VCALENDAR"].join("\r\n");var blob=new Blob([ics+"\r\n"],{type:"text/calendar;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="olen-"+event.date+".ics";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1200)}document.getElementById("newEventPop").classList.remove("show");this.reset();["newEventDateBtn","newEventTimeBtn","newEventEndTimeBtn"].forEach(function(id){var b=document.getElementById(id);b.classList.remove("has-value")});document.getElementById("newEventDateBtn").textContent="Selecionar data";document.getElementById("newEventTimeBtn").textContent="Selecionar hora";document.getElementById("newEventEndTimeBtn").textContent="Selecionar hora";olenTimeDraft={start:"00:00",end:""};},true);
-</script><script id="rz-runtime">(()=>{"use strict";const $=x=>document.getElementById(x),show=(id,on)=>{const e=$(id);if(e)e.hidden=!on};let mode="walk",watch=null,last=null,total=0,t0=0,timer=null;const modes={walk:["A pé","🚶"],bike:["Bicicleta","🚲"],scooter:["Trotineta","🛴"],moto:["Moto","🏍️"],car:["Carro","🚗"],camper:["Autocaravana","🚐"],transit:["Transportes","🚆"],boat:["Barco","⛵"],air:["Aviação","✈️"]};function dist(a,b){const p=Math.PI/180,R=6371000,x=(b.latitude-a.latitude)*p,y=(b.longitude-a.longitude)*p,q=Math.sin(x/2)**2+Math.cos(a.latitude*p)*Math.cos(b.latitude*p)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(q))}function tick(){const n=Math.floor((Date.now()-t0)/1000);$("rzTime").textContent=[Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,"0")).join(":")}function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude};if(last)total+=dist(last,n);last=n;$("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzSpeed").textContent=Math.max(0,Math.round((c.speed||0)*3.6))}function start(){const name=($("rzDestination").value||"Destino").trim()||"Destino";show("rzGoPop",false);show("rzIdle",false);show("rzBottom",true);show("rzGuide",true);show("rzLive",true);show("rzWarn",true);show("rzDot",true);$("rzStatus").textContent="GO ativo · "+name+" · "+modes[mode][1];$("rzGuideText").textContent="Segue em frente para "+name;if(window.OLENNavigationGuide)window.OLENNavigationGuide.set({type:"straight",instruction:"Segue em frente para "+name,road:"R. Damião de Góis",distance:"--"});t0=Date.now();total=0;last=null;tick();clearInterval(timer);timer=setInterval(tick,1000);if(navigator.geolocation)watch=navigator.geolocation.watchPosition(gps,()=>{},{enableHighAccuracy:true,maximumAge:2000,timeout:8000})}function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);show("rzIdle",true);show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false)}$("rzGo").onclick=()=>show("rzGoPop",true);$("rzClose").onclick=()=>show("rzGoPop",false);$("rzPrepare").onclick=start;$("rzStop").onclick=stop;$("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$("rzModeLabel").textContent=modes[mode][0];document.querySelectorAll("#rzModes button").forEach(x=>x.classList.toggle("selected",x===b))});document.querySelector("#rzModes [data-mode=walk]").classList.add("selected")})();
+</script><script id="rz-runtime">(()=>{"use strict";const $=x=>document.getElementById(x),show=(id,on)=>{const e=$(id);if(e)e.hidden=!on};let mode="walk",watch=null,last=null,total=0,t0=0,timer=null;const modes={walk:["A pé","🚶"],bike:["Bicicleta","🚲"],scooter:["Trotineta","🛴"],moto:["Moto","🏍️"],car:["Carro","🚗"],camper:["Autocaravana","🚐"],transit:["Transportes","🚆"],boat:["Barco","⛵"],air:["Aviação","✈️"]};function dist(a,b){const p=Math.PI/180,R=6371000,x=(b.latitude-a.latitude)*p,y=(b.longitude-a.longitude)*p,q=Math.sin(x/2)**2+Math.cos(a.latitude*p)*Math.cos(b.latitude*p)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(q))}function tick(){const n=Math.floor((Date.now()-t0)/1000);$("rzTime").textContent=[Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,"0")).join(":")}function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude};if(last)total+=dist(last,n);last=n;$("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzSpeed").textContent=Math.max(0,Math.round((c.speed||0)*3.6))}function start(){const name=($("rzDestination").value||"Destino").trim()||"Destino";show("rzGoPop",false);show("rzIdle",false);show("rzBottom",true);show("rzGuide",true);show("rzLive",true);show("rzWarn",true);show("rzDot",true);$("rzStatus").textContent="GO ativo · "+name+" · "+modes[mode][1];$("rzGuideText").textContent="Segue em frente para "+name;if(window.OLENNavigationGuide)window.OLENNavigationGuide.set({type:"right",instruction:"Segue em frente para "+name,road:"R. Damião de Góis",distance:"31 m"});t0=Date.now();total=0;last=null;tick();clearInterval(timer);timer=setInterval(tick,1000);if(navigator.geolocation)watch=navigator.geolocation.watchPosition(gps,()=>{},{enableHighAccuracy:true,maximumAge:2000,timeout:8000})}function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);show("rzIdle",true);show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false)}$("rzGo").onclick=()=>show("rzGoPop",true);$("rzClose").onclick=()=>show("rzGoPop",false);$("rzPrepare").onclick=start;$("rzStop").onclick=stop;$("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$("rzModeLabel").textContent=modes[mode][0];document.querySelectorAll("#rzModes button").forEach(x=>x.classList.toggle("selected",x===b))});document.querySelector("#rzModes [data-mode=walk]").classList.add("selected")})();
 /* STEP 3A — adapter for the full maneuver library */
 (function(){
  var paths={straight:"M32 68V18M32 18L18 32M32 18l14 14",right:"M18 68V43Q18 25 36 25H49M49 25 38 14M49 25 38 36",left:"M46 68V43Q46 25 28 25H15M15 25 26 14M15 25l11 11",slightRight:"M18 68V48Q18 38 26 32L46 18M46 18H31M46 18v15",slightLeft:"M46 68V48Q46 38 38 32L18 18M18 18h15M18 18v15",sharpRight:"M18 68V38H46M46 38 35 27M46 38 35 49",sharpLeft:"M46 68V38H18M18 38l11-11M18 38l11 11",uturn:"M43 68V35Q43 18 30 18Q17 18 17 35v7M17 42 7 32M17 42l10-10"};
