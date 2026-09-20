@@ -257,7 +257,7 @@
 /* active navigation refinements: borderless header guide + vertically centered side controls */
 .rz-header.rz-navigating .rz-guide{border:0!important}
 .rz-map:has(.rz-header-placeholder){--unused:0}
-.rz-screen:has(.rz-header.rz-navigating) .rz-tools{top:50%!important;transform:translateY(-50%)!important}
+/* active centering override is intentionally declared after rz-right-tools-step2 */
 </style>
 <style id="rz-right-tools-step2">
 /* STEP 2 — only the five vertical controls on the right */
@@ -311,6 +311,13 @@
 .rz-tools button:nth-child(4).selected{color:#b16cff!important;border-color:#b16cff!important;box-shadow:0 0 14px rgba(177,108,255,.34)!important}
 .rz-tools button:nth-child(5).selected{color:#7d4ed8!important;border-color:#7d4ed8!important;box-shadow:0 0 14px rgba(125,78,216,.34)!important}
 .rz-tools button:nth-child(2):not(.selected){color:#f5fffc!important;border-color:rgba(190,255,245,.26)!important;box-shadow:0 4px 14px rgba(0,0,0,.28)!important}
+
+/* GO active: center the complete five-control stack vertically in the map */
+.rz-screen:has(.rz-header.rz-navigating) .rz-map>.rz-tools{
+  top:50%!important;
+  bottom:auto!important;
+  transform:translateY(-50%)!important;
+}
 </style>
 <style id="rz-guide-step3">
 /* STEP 3A — geometry pass measured against approved reference */
