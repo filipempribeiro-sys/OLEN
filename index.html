@@ -306,6 +306,27 @@
 
 /* Agenda section actions inherit Agenda purple (e.g. "Ver todos"). */
 .screen[data-screen="agenda"] .section-title button{color:#b16cff}
+
+/* Agenda refinement — area color identifies state/action without large purple fills. */
+.screen[data-screen="agenda"] .new-event{
+  background:#0c211a;
+  color:#f1f7f5;
+  border:1.5px solid #b16cff;
+  box-shadow:0 0 0 1px rgba(177,108,255,.06),0 8px 24px rgba(0,0,0,.16)
+}
+.screen[data-screen="agenda"] .new-event::first-letter{color:#b16cff}
+
+/* Agenda popup primary actions keep OLEN surfaces; purple is the functional accent. */
+#newEventPop .new-event-save{
+  background:#102a24;
+  color:#f1f7f5;
+  border:1.5px solid #b16cff
+}
+#olenTimePicker .olen-time-confirm{
+  background:#102a24;
+  color:#f1f7f5;
+  border:1.5px solid #b16cff
+}
 </style><style id="rz-css">
 /* OLEN MAP/GO V2 — clean rebuild from protected rollback c5ad0e9 */
 .rz-screen{padding:0!important;overflow:hidden!important;height:calc(100dvh - 76px)!important;min-height:0!important}.rz-screen.active{display:grid!important;grid-template-rows:82px minmax(0,1fr)!important}.rz-header{height:82px!important;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 34px!important;background:linear-gradient(90deg,#001d14,#063925)}.rz-header h1{font-size:24px!important;line-height:1!important;margin:0 0 6px!important}.rz-header p{font-size:12px!important;line-height:1.2!important;margin:0!important}.rz-live{text-align:right;font-size:11px;min-width:160px}.rz-live>div:first-child{font-size:12px}.rz-live>div:last-child{display:flex;justify-content:flex-end;align-items:flex-start;gap:17px;margin-top:7px}.rz-live span{display:grid;text-align:center}.rz-live b{font-size:12px}.rz-live small{font-size:7px;color:#91a59d}.rz-live i{font-style:normal;color:#59edb6;font-size:14px}
