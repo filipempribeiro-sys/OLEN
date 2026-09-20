@@ -729,6 +729,12 @@
 .screen[data-screen="agenda"] .agenda-preview{
   margin-top:30px!important;
 }
+.screen[data-screen="agenda"] .calendar.olen-month-swipe-left .week,
+.screen[data-screen="agenda"] .calendar.olen-month-swipe-left .days{animation:olenMonthFromRight .20s ease-out}
+.screen[data-screen="agenda"] .calendar.olen-month-swipe-right .week,
+.screen[data-screen="agenda"] .calendar.olen-month-swipe-right .days{animation:olenMonthFromLeft .20s ease-out}
+@keyframes olenMonthFromRight{from{transform:translateX(18px);opacity:.35}to{transform:translateX(0);opacity:1}}
+@keyframes olenMonthFromLeft{from{transform:translateX(-18px);opacity:.35}to{transform:translateX(0);opacity:1}}
 }
 
 <style id="olen-direction-language-v1">
@@ -1049,6 +1055,29 @@ function renderCalendar(){
 document.getElementById("calPrev")?.addEventListener("click",function(){calView=new Date(calView.getFullYear(),calView.getMonth()-1,1);renderCalendar()});
 document.getElementById("calNext")?.addEventListener("click",function(){calView=new Date(calView.getFullYear(),calView.getMonth()+1,1);renderCalendar()});
 document.getElementById("calLabel")?.addEventListener("click",function(){var v=prompt("Ir para mês/ano (MM/AAAA)",String(calView.getMonth()+1).padStart(2,"0")+"/"+calView.getFullYear());if(!v)return;var p=v.match(/^(0?[1-9]|1[0-2])\/(\d{4})$/);if(p){calView=new Date(Number(p[2]),Number(p[1])-1,1);renderCalendar()}});
+(function(){
+ var cal=document.querySelector('.screen[data-screen="agenda"] .calendar'),x0=null,y0=null;
+ if(!cal)return;
+ function animate(dir){
+  cal.classList.remove("olen-month-swipe-left","olen-month-swipe-right");
+  void cal.offsetWidth;
+  cal.classList.add(dir<0?"olen-month-swipe-left":"olen-month-swipe-right");
+  setTimeout(function(){cal.classList.remove("olen-month-swipe-left","olen-month-swipe-right")},230);
+ }
+ cal.addEventListener("touchstart",function(e){
+  if(e.touches.length!==1||e.target.closest("#newEventBtn"))return;
+  x0=e.touches[0].clientX;y0=e.touches[0].clientY;
+ },{passive:true});
+ cal.addEventListener("touchend",function(e){
+  if(x0===null||!e.changedTouches.length){x0=y0=null;return}
+  var dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;
+  x0=y0=null;
+  if(Math.abs(dx)<48||Math.abs(dx)<=Math.abs(dy)*1.25)return;
+  if(dx<0)calView=new Date(calView.getFullYear(),calView.getMonth()+1,1);
+  else calView=new Date(calView.getFullYear(),calView.getMonth()-1,1);
+  renderCalendar();animate(dx);
+ },{passive:true});
+})();
 
 var eventCalView=new Date(),eventDateMode="start",eventStartDate="",eventEndDate="";
 function renderEventCal(){
