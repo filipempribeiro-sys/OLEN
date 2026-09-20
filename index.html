@@ -689,7 +689,21 @@
   background:#b16cff!important;
   box-shadow:0 0 5px rgba(177,108,255,.32)!important;
 }
-.screen[data-screen="agenda"] .agenda-actions{margin-top:16px!important}
+/* Fixed calendar stage: reserves six week rows so controls never move between months. */
+.screen[data-screen="agenda"] .calendar{
+  height:318px!important;
+  box-sizing:border-box!important;
+}
+.screen[data-screen="agenda"] .agenda-actions{
+  margin-top:16px!important;
+  height:42px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.screen[data-screen="agenda"] .agenda-preview{
+  margin-top:20px!important;
+}
 }
 
 <style id="olen-direction-language-v1">
