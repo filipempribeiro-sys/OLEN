@@ -282,6 +282,27 @@
 .screen[data-screen="profile"] .points-use-actions button,
 .screen[data-screen="profile"] .points-cap-card{border-color:rgba(125,78,216,.34)}
 .screen[data-screen="profile"] .points-back{color:#7d4ed8}
+
+/* Agenda Aurora inheritance — every Agenda-owned overlay follows the Agenda purple accent.
+   Color only: popup geometry, spacing, typography and behavior are untouched. */
+#newEventPop,#olenDatePicker,#olenTimePicker,#eventsPop{--area-accent:#b16cff}
+#newEventPop .sheet-head>div>small,
+#olenDatePicker .sheet-head>div>small,
+#olenTimePicker .sheet-head>div>small,
+#eventsPop .sheet-head>div>small{color:#b16cff}
+#newEventPop .new-event-form input:focus,
+#newEventPop .new-event-form textarea:focus{border-color:#b16cff}
+#newEventPop .new-event-picker:focus,
+#newEventPop .new-event-picker:focus-visible{border-color:#b16cff!important;outline:none}
+#newEventPop .new-event-save{background:#b16cff}
+#newEventPop .olen-provider-grid input:checked+span{border-color:#b16cff;color:#fff;background:rgba(177,108,255,.16)}
+#newEventPop .olen-calendar-destination{border-color:rgba(177,108,255,.22)}
+#olenDatePicker .day.selected{border-color:#b16cff;box-shadow:inset 0 0 0 1px #b16cff}
+#olenDatePicker .day.today{border-color:#b16cff;box-shadow:inset 0 0 0 1px rgba(177,108,255,.18)}
+#olenDatePicker .cal-nav:focus-visible{outline:2px solid #b16cff;outline-offset:2px}
+#olenTimePicker .olen-time-confirm{background:#b16cff;color:#13091d}
+#olenTimePicker .time-digit:focus-within{border-color:rgba(177,108,255,.55)}
+#olenTimePicker .time-digit button.selected{color:#fff;text-shadow:0 0 16px rgba(177,108,255,.38)}
 </style><style id="rz-css">
 /* OLEN MAP/GO V2 — clean rebuild from protected rollback c5ad0e9 */
 .rz-screen{padding:0!important;overflow:hidden!important;height:calc(100dvh - 76px)!important;min-height:0!important}.rz-screen.active{display:grid!important;grid-template-rows:82px minmax(0,1fr)!important}.rz-header{height:82px!important;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 34px!important;background:linear-gradient(90deg,#001d14,#063925)}.rz-header h1{font-size:24px!important;line-height:1!important;margin:0 0 6px!important}.rz-header p{font-size:12px!important;line-height:1.2!important;margin:0!important}.rz-live{text-align:right;font-size:11px;min-width:160px}.rz-live>div:first-child{font-size:12px}.rz-live>div:last-child{display:flex;justify-content:flex-end;align-items:flex-start;gap:17px;margin-top:7px}.rz-live span{display:grid;text-align:center}.rz-live b{font-size:12px}.rz-live small{font-size:7px;color:#91a59d}.rz-live i{font-style:normal;color:#59edb6;font-size:14px}
