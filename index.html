@@ -312,9 +312,9 @@
 .rz-tools button:nth-child(5).selected{color:#7d4ed8!important;border-color:#7d4ed8!important;box-shadow:0 0 14px rgba(125,78,216,.34)!important}
 .rz-tools button:nth-child(2):not(.selected){color:#f5fffc!important;border-color:rgba(190,255,245,.26)!important;box-shadow:0 4px 14px rgba(0,0,0,.28)!important}
 
-/* GO active: center the complete five-control stack vertically in the map */
-.rz-screen:has(.rz-header.rz-navigating) .rz-map>.rz-tools{
-  top:50%!important;
+/* GO active: visually center controls in the usable navigation area (map above lower HUD) */
+.rz-map>.rz-tools.rz-tools-go-centered{
+  top:calc(50% - 55px)!important;
   bottom:auto!important;
   transform:translateY(-50%)!important;
 }
@@ -775,7 +775,7 @@ function elapsed(){return t0?Math.max(0,Math.floor((Date.now()-t0)/1000)):0}
 function fmt(n){return [Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,"0")).join(":")}
 function tick(){const e=$("rzTime");if(e)e.textContent=fmt(elapsed())}
 function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude};if(last)total+=dist(last,n);last=n;$("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzSpeed").textContent=Math.max(0,Math.round((c.speed||0)*3.6))}
-function navigationHeader(on){const h=$("rzHeader");if(!h||!guide)return;h.classList.toggle("rz-navigating",on);if(on&&host)host.appendChild(guide);else if(!on&&map)map.insertBefore(guide,map.querySelector(".rz-tools"))}
+function navigationHeader(on){const h=$("rzHeader"),tools=document.querySelector(".rz-map>.rz-tools");if(!h||!guide)return;h.classList.toggle("rz-navigating",on);if(tools)tools.classList.toggle("rz-tools-go-centered",on);if(on&&host)host.appendChild(guide);else if(!on&&map)map.insertBefore(guide,map.querySelector(".rz-tools"))}
 function start(){currentName=($("rzDestination").value||"Destino").trim()||"Destino";show("rzGoPop",false);show("rzIdle",false);show("rzBottom",true);show("rzGuide",true);show("rzLive",false);show("rzWarn",true);show("rzDot",true);navigationHeader(true);if(window.OLENNavigationGuide)window.OLENNavigationGuide.set({type:"right",instruction:"Segue em frente para "+currentName,road:"R. Damião de Góis",distance:"31 m"});t0=Date.now();total=0;last=null;rating=0;tick();clearInterval(timer);timer=setInterval(tick,1000);if(navigator.geolocation)watch=navigator.geolocation.watchPosition(gps,()=>{},{enableHighAccuracy:true,maximumAge:2000,timeout:8000})}
 function fillSummary(){const secs=elapsed(),distance=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzFinishTitle").textContent=currentName;$("rzFinishRoute").textContent="Ponto de partida → "+currentName;$("rzFinishTime").textContent=fmt(secs);$("rzFinishDistance").textContent=distance;$("rzFinishMode").textContent=modes[mode][1]+" "+modes[mode][0];$("rzFinishStars").querySelectorAll("button").forEach(b=>b.textContent=Number(b.dataset.star)<=rating?"★":"☆")}
 function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);fillSummary();show("rzBottom",false);show("rzGuide",false);show("rzWarn",false);show("rzDot",false);navigationHeader(false);show("rzIdle",true);show("rzFinishPop",true)}
