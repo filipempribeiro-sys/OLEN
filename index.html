@@ -566,33 +566,33 @@
   -webkit-background-clip:border-box!important;
 }
 
-/* AGENDA MOBILE FIXED VIEWPORT — no page scrollbar; all primary controls fit between browser viewport and footer. */
+/* AGENDA MOBILE FIXED VIEWPORT — preserve approved geometry; trim only the vertical excess.
+   Footer intentionally overlays the event-card zone, matching the Map/GO composition. */
 @media (max-width:699px){
   html,body{overscroll-behavior-y:none}
   .screen[data-screen="agenda"]{
     height:100dvh!important;min-height:0!important;overflow:hidden!important;
-    padding-top:calc(10px + env(safe-area-inset-top,0px))!important;
-    padding-bottom:calc(76px + var(--safe))!important;
+    padding-top:calc(16px + env(safe-area-inset-top,0px))!important;
+    padding-bottom:calc(58px + var(--safe))!important;
     display:none;
   }
-  .screen[data-screen="agenda"].active{display:flex!important;flex-direction:column!important}
-  .screen[data-screen="agenda"]>.title{flex:0 0 auto}
-  .screen[data-screen="agenda"] .title h1{font-size:clamp(24px,6.2vw,31px);line-height:1;margin:0}
-  .screen[data-screen="agenda"] .title p{font-size:clamp(11px,3.2vw,14px);margin:4px 0 7px!important}
-  .screen[data-screen="agenda"] .calendar{flex:0 1 auto;margin-top:4px!important;padding:10px 12px!important}
-  .screen[data-screen="agenda"] .cal-head{margin-bottom:6px!important}
+  .screen[data-screen="agenda"].active{display:block!important}
+  .screen[data-screen="agenda"] .title h1{font-size:25px!important;line-height:1!important;margin:0}
+  .screen[data-screen="agenda"] .title p{font-size:12px!important;margin:3px 0 8px!important}
+  .screen[data-screen="agenda"] .calendar{margin-top:8px!important;padding:12px!important}
+  .screen[data-screen="agenda"] .cal-head{margin-bottom:9px!important}
   .screen[data-screen="agenda"] .cal-nav{width:32px!important;height:32px!important}
-  .screen[data-screen="agenda"] .cal-label{font-size:clamp(16px,4.8vw,22px)}
-  .screen[data-screen="agenda"] .week{margin-bottom:3px!important}
+  .screen[data-screen="agenda"] .week{margin-bottom:4px!important}
   .screen[data-screen="agenda"] .days{gap:4px!important}
-  .screen[data-screen="agenda"] .day{aspect-ratio:auto!important;height:clamp(34px,7.6dvh,48px)!important}
-  .screen[data-screen="agenda"] .agenda-actions{flex:0 0 auto;margin-top:7px!important}
-  .screen[data-screen="agenda"] .new-event{height:40px!important;padding:8px 28px!important}
-  .screen[data-screen="agenda"] .agenda-preview{flex:0 0 auto;margin-top:8px!important;min-height:0}
-  .screen[data-screen="agenda"] .agenda-preview .section-title{margin:5px 2px 6px!important}
-  .screen[data-screen="agenda"] .agenda-preview .rail{overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none}
+  .screen[data-screen="agenda"] .day{aspect-ratio:1/1!important;height:auto!important}
+  .screen[data-screen="agenda"] .agenda-actions{margin-top:8px!important}
+  .screen[data-screen="agenda"] .new-event{height:42px!important;padding:0 18px!important}
+  .screen[data-screen="agenda"] .agenda-preview{margin-top:10px!important}
+  .screen[data-screen="agenda"] .agenda-preview .section-title{margin:8px 2px 6px!important}
+  .screen[data-screen="agenda"] .agenda-preview .rail{overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none;padding-bottom:0!important}
   .screen[data-screen="agenda"] .agenda-preview .rail::-webkit-scrollbar{display:none}
-  .screen[data-screen="agenda"] .event-thumb{height:clamp(82px,12dvh,106px)!important}
+  .screen[data-screen="agenda"] .event-thumb{height:108px!important}
+  .footer{z-index:60}
 }
 </style></head><body>
 <div class="splash intro-splash" id="splash">
