@@ -16,7 +16,11 @@
 .oc-search{position:fixed;z-index:280;inset:0;background:#071b15;padding:max(18px,env(safe-area-inset-top)) 18px calc(18px + var(--oc-safe));box-sizing:border-box}.oc-search-head{display:flex;gap:8px}.oc-search-head input{flex:1;min-width:0;border:1px solid #ffffff18;background:var(--oc-surface);color:inherit;border-radius:16px;padding:11px 13px}.oc-search-result{display:block;width:100%;border:0;background:transparent;color:inherit;text-align:left;padding:12px}.oc-search-result b,.oc-search-result small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.oc-search-result small{color:var(--oc-muted);margin-top:3px}.oc-search-empty{padding:22px 12px;text-align:center;color:var(--oc-muted)}
 .oc-useful{position:fixed;z-index:115;left:50%;bottom:150px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid #ffffff18;border-radius:16px;background:#0b2119;font-size:12px}.oc-useful button{border:0;background:transparent;color:inherit}
 [hidden]{display:none}
-@media(max-width:699px){.oc-tone,.oc-disclaimer,.oc-nav{display:none}}
+@media(max-width:699px){
+.oc-tone,.oc-disclaimer,.oc-nav{display:none}
+.oc-sidebar{display:flex;transform:translateX(-105%);visibility:hidden;pointer-events:none;transition:transform .22s ease,visibility 0s linear .22s}
+.oc-sidebar.mobile-open{transform:translateX(0);visibility:visible;pointer-events:auto;transition:transform .22s ease}
+}
 @media(min-width:700px){body.olen-chat-route .footer{display:none}.oc-chat{padding-left:var(--oc-rail)}.oc-mobile-menu,.oc-scrim{display:none}.oc-sidebar{width:var(--oc-rail);padding:14px 10px}.oc-sidebar.expanded{width:var(--oc-panel);padding:14px 16px}.oc-chat.expanded{padding-left:var(--oc-panel)}.oc-sidebar:not(.expanded) .oc-wordmark,.oc-sidebar:not(.expanded) .oc-side-actions,.oc-sidebar:not(.expanded) .oc-side-row span,.oc-sidebar:not(.expanded) .oc-side-row b,.oc-sidebar:not(.expanded) #ocSections,.oc-sidebar:not(.expanded) .oc-nav span{display:none}.oc-sidebar:not(.expanded) .oc-side-row,.oc-sidebar:not(.expanded) .oc-nav button{width:52px;padding:0;justify-content:center}.oc-stream{width:min(760px,calc(100vw - var(--oc-rail) - 48px));margin:auto;padding-left:0;padding-right:0;padding-bottom:100px}.oc-chat.expanded .oc-stream{width:min(760px,calc(100vw - var(--oc-panel) - 48px))}.oc-compose-zone{left:calc(var(--oc-rail) + (100vw - var(--oc-rail))/2);right:auto;bottom:18px;width:min(760px,calc(100vw - var(--oc-rail) - 48px));transform:translateX(-50%)}.oc-chat.expanded .oc-compose-zone{left:calc(var(--oc-panel) + (100vw - var(--oc-panel))/2);width:min(760px,calc(100vw - var(--oc-panel) - 48px))}.oc-sidebar:not(.expanded) [data-rail-tip]{position:relative;overflow:visible}.oc-sidebar:not(.expanded) [data-rail-tip]:hover:after{content:attr(data-rail-tip);position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);z-index:500;width:max-content;padding:7px 10px;border-radius:10px;background:#2b2b2b;color:#fff;font-size:12px;font-weight:700;white-space:nowrap;pointer-events:none}}
 @media(min-width:700px) and (max-width:1099px){.oc-sidebar.expanded{width:min(var(--oc-panel),42vw)}.oc-chat.expanded{padding-left:min(var(--oc-panel),42vw)}}
 @media(min-width:1100px){.oc-stream,.oc-compose-zone{max-width:768px}}
@@ -92,8 +96,26 @@ function drawChat(){const x=current(),out=$("ocStream");out.innerHTML=x.messages
 function useful(x){const n=$("ocUseful"),turns=x.messages.filter(m=>m.role==="user"||m.role==="assistant"&&!m.kind).length;n.hidden=turns<15||turns-Number(x.usefulLastTurn||0)<15}
 function section(name,list,limit,all){if(!list.length)return"";return '<div class="oc-section"><div class="oc-section-title">'+name+"</div>"+list.slice(0,limit).map(x=>'<div class="oc-conv-row"><button class="oc-conv '+(x.id===aid()?"active":"")+'" data-conv="'+safe(x.id)+'">'+safe(x.title)+'</button><button class="oc-conv-more" data-conv-more="'+safe(x.id)+'">⋮</button></div>').join("")+(all&&list.length>limit?'<button id="ocRecentAll" class="oc-side-more">Ver todas</button>':"")+"</div>"}
 function drawSide(){const a=read(),p=a.filter(x=>x.pinned).sort((a,b)=>b.updated-a.updated),r=a.filter(x=>!x.pinned).sort((a,b)=>b.updated-a.updated),out=$("ocSections");if(!out)return;out.innerHTML=section("Afixados",p,10,false)+section("Recentes",r,5,true);out.querySelectorAll("[data-conv]").forEach(b=>{b.onclick=()=>setActive(b.dataset.conv);b.onpointerdown=e=>{if(e.pointerType!=="mouse")timer=setTimeout(()=>openLong(b.dataset.conv),500)};["pointerup","pointercancel","pointerleave"].forEach(k=>b.addEventListener(k,()=>clearTimeout(timer)))});out.querySelectorAll("[data-conv-more]").forEach(b=>b.onclick=e=>{e.stopPropagation();openLong(b.dataset.convMore)});$("ocRecentAll")?.addEventListener("click",()=>openSearch(true))}
-function openSide(){$("ocSidebar").hidden=false;$("ocSidebar").classList.add("expanded");$("ocChat").classList.add("expanded");$("ocSidebar").setAttribute("aria-hidden","false");if(innerWidth<700)$("ocScrim").hidden=false}
-function closeSide(){if(innerWidth<700){$("ocSidebar").hidden=true;$("ocSidebar").setAttribute("aria-hidden","true")}else $("ocSidebar").setAttribute("aria-hidden","false");$("ocSidebar").classList.remove("expanded");$("ocChat").classList.remove("expanded");$("ocScrim").hidden=true}
+function applySidebarState(open){
+  const sidebar=$("ocSidebar"),chat=$("ocChat"),scrim=$("ocScrim"),mobile=innerWidth<700;
+  if(mobile){
+    sidebar.hidden=false;
+    sidebar.classList.toggle("mobile-open",open);
+    sidebar.classList.remove("expanded");
+    chat.classList.remove("expanded");
+    sidebar.setAttribute("aria-hidden",open?"false":"true");
+    scrim.hidden=!open;
+    return;
+  }
+  sidebar.hidden=false;
+  sidebar.classList.remove("mobile-open");
+  sidebar.classList.toggle("expanded",open);
+  chat.classList.toggle("expanded",open);
+  sidebar.setAttribute("aria-hidden","false");
+  scrim.hidden=true;
+}
+function openSide(){applySidebarState(true)}
+function closeSide(){applySidebarState(false)}
 function newConversation(){stop();files=[];drawFiles();const a=read(),id="c-"+Date.now();a.unshift({id,title:"Nova conversa",pinned:false,updated:Date.now(),messages:[{role:"assistant",text:"Olá. O que queres fazer hoje?"}]});write(a);setActive(id)}
 function resizeInput(){const n=$("ocInput");n.style.height="auto";n.style.height=Math.min(n.scrollHeight,132)+"px";n.style.overflowY=n.scrollHeight>132?"auto":"hidden";syncAction()}
 function syncAction(){const a=$("ocAction"),has=$("ocInput").value.trim()||files.length;if(a.dataset.mode==="stop"){a.querySelector("span").hidden=true;a.querySelector("img").hidden=false;a.querySelector("img").src="./assets/olen-stop-icon.png";$("ocMic").hidden=true;return}a.dataset.mode=has?"send":"voice";a.querySelector("span").hidden=!!has;a.querySelector("img").hidden=!has;if(has)a.querySelector("img").src="./assets/olen-send-msg-icon.png";$("ocMic").hidden=!!has}
@@ -112,7 +134,7 @@ function search(q){q=q.trim().toLowerCase();results(!q?[]:read().filter(x=>x.tit
 function openSearch(all=false){closeSide();$("ocSearch").hidden=false;$("ocSearchInput").value="";if(all)results(read().sort((a,b)=>b.updated-a.updated),"Sem conversas.");else search("");$("ocSearchInput").focus()}
 function shareText(title,text){if(navigator.share)navigator.share({title,text}).catch(()=>{});else navigator.clipboard?.writeText(text)}
 function retry(i){const a=read(),x=a.find(v=>v.id===aid());if(!x)return;x.messages.splice(i);x.updated=Date.now();write(a);drawChat();engine(x.id,i)}
-function init(){if(!$("ocChat"))return;seed();if(innerWidth<700){$("ocSidebar").hidden=true;$("ocSidebar").setAttribute("aria-hidden","true")}else $("ocSidebar").setAttribute("aria-hidden","false");drawChat();drawSide();resizeInput();setTone(prefTone());
+function init(){if(!$("ocChat"))return;seed();applySidebarState(false);drawChat();drawSide();resizeInput();setTone(prefTone());
 $("ocMenu").onclick=openSide;$("ocRail").onclick=()=>$("ocSidebar").classList.contains("expanded")?closeSide():openSide;$("ocSideCollapse").onclick=closeSide;$("ocScrim").onclick=closeSide;$("ocNew").onclick=$("ocSideNew").onclick=newConversation;
 $("ocInput").oninput=resizeInput;$("ocInput").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}};$("ocAction").onclick=()=>$("ocAction").dataset.mode==="send"?send():$("ocAction").dataset.mode==="stop"?stop():dictate();$("ocMic").onclick=dictate;
 $("ocAttach").onclick=()=>$("ocFile").click();$("ocFile").onchange=e=>{addFiles(e.target.files);e.target.value=""};$("ocFiles").onclick=e=>{const b=e.target.closest("[data-remove]");if(b){files.splice(Number(b.dataset.remove),1);drawFiles()}};
@@ -126,6 +148,6 @@ $("ocMessageMore").onclick=e=>{const b=e.target.closest("[data-message-more]");i
 $("ocUseful").onclick=e=>{const b=e.target.closest("[data-useful]");if(!b)return;const a=read(),x=a.find(v=>v.id===aid()),turns=x.messages.filter(m=>m.role==="user"||m.role==="assistant"&&!m.kind).length;x.usefulLastTurn=turns;if(b.dataset.useful!=="close")x.usefulRating=b.dataset.useful;x.updated=Date.now();write(a);useful(x)};
 $("ocMoreBtn").onclick=e=>{e.stopPropagation();$("ocMore").hidden=!$("ocMore").hidden};$("ocMore").onclick=e=>{const b=e.target.closest("[data-more]");if(!b)return;$("ocMore").hidden=true;const x=current();if(b.dataset.more==="conversations")openSide();if(b.dataset.more==="home")navigate("home",{reason:"chat-more"});if(b.dataset.more==="share")shareText(x.title,x.messages.map(m=>(m.role==="user"?"Eu: ":"OLEN: ")+(m.text||"")).join("\n\n"))};
 document.addEventListener("click",e=>{if(!e.target.closest("#ocTone")&&!e.target.closest("#ocToneMenu"))$("ocToneMenu").hidden=true;if(!e.target.closest("#ocMoreBtn")&&!e.target.closest("#ocMore"))$("ocMore").hidden=true;if(!e.target.closest("[data-act=more]")&&!e.target.closest("#ocMessageMore"))$("ocMessageMore").hidden=true});
-window.addEventListener("resize",()=>{if(innerWidth<700){$("ocSidebar").hidden=true;$("ocSidebar").classList.remove("expanded");$("ocSidebar").setAttribute("aria-hidden","true");$("ocChat").classList.remove("expanded")}else{$("ocSidebar").hidden=false;$("ocSidebar").setAttribute("aria-hidden","false")}});
+window.addEventListener("resize",()=>applySidebarState(false));
 window.OLENChatClean={version:"2.0.0-clean-v2",render:drawChat,newConversation,openSidebar:openSide,closeSidebar:closeSide,send,requestEngine:engine,stopGeneration:stop}}
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init()})();</script></body></html>
