@@ -11,8 +11,26 @@ function drawChat(){const x=current(),out=$("ocStream");out.innerHTML=x.messages
 function useful(x){const n=$("ocUseful"),turns=x.messages.filter(m=>m.role==="user"||m.role==="assistant"&&!m.kind).length;n.hidden=turns<15||turns-Number(x.usefulLastTurn||0)<15}
 function section(name,list,limit,all){if(!list.length)return"";return '<div class="oc-section"><div class="oc-section-title">'+name+"</div>"+list.slice(0,limit).map(x=>'<div class="oc-conv-row"><button class="oc-conv '+(x.id===aid()?"active":"")+'" data-conv="'+safe(x.id)+'">'+safe(x.title)+'</button><button class="oc-conv-more" data-conv-more="'+safe(x.id)+'">⋮</button></div>').join("")+(all&&list.length>limit?'<button id="ocRecentAll" class="oc-side-more">Ver todas</button>':"")+"</div>"}
 function drawSide(){const a=read(),p=a.filter(x=>x.pinned).sort((a,b)=>b.updated-a.updated),r=a.filter(x=>!x.pinned).sort((a,b)=>b.updated-a.updated),out=$("ocSections");if(!out)return;out.innerHTML=section("Afixados",p,10,false)+section("Recentes",r,5,true);out.querySelectorAll("[data-conv]").forEach(b=>{b.onclick=()=>setActive(b.dataset.conv);b.onpointerdown=e=>{if(e.pointerType!=="mouse")timer=setTimeout(()=>openLong(b.dataset.conv),500)};["pointerup","pointercancel","pointerleave"].forEach(k=>b.addEventListener(k,()=>clearTimeout(timer)))});out.querySelectorAll("[data-conv-more]").forEach(b=>b.onclick=e=>{e.stopPropagation();openLong(b.dataset.convMore)});$("ocRecentAll")?.addEventListener("click",()=>openSearch(true))}
-function openSide(){$("ocSidebar").hidden=false;$("ocSidebar").classList.add("expanded");$("ocChat").classList.add("expanded");$("ocSidebar").setAttribute("aria-hidden","false");if(innerWidth<700)$("ocScrim").hidden=false}
-function closeSide(){if(innerWidth<700){$("ocSidebar").hidden=true;$("ocSidebar").setAttribute("aria-hidden","true")}else $("ocSidebar").setAttribute("aria-hidden","false");$("ocSidebar").classList.remove("expanded");$("ocChat").classList.remove("expanded");$("ocScrim").hidden=true}
+function applySidebarState(open){
+  const sidebar=$("ocSidebar"),chat=$("ocChat"),scrim=$("ocScrim"),mobile=innerWidth<700;
+  if(mobile){
+    sidebar.hidden=false;
+    sidebar.classList.toggle("mobile-open",open);
+    sidebar.classList.remove("expanded");
+    chat.classList.remove("expanded");
+    sidebar.setAttribute("aria-hidden",open?"false":"true");
+    scrim.hidden=!open;
+    return;
+  }
+  sidebar.hidden=false;
+  sidebar.classList.remove("mobile-open");
+  sidebar.classList.toggle("expanded",open);
+  chat.classList.toggle("expanded",open);
+  sidebar.setAttribute("aria-hidden","false");
+  scrim.hidden=true;
+}
+function openSide(){applySidebarState(true)}
+function closeSide(){applySidebarState(false)}
 function newConversation(){stop();files=[];drawFiles();const a=read(),id="c-"+Date.now();a.unshift({id,title:"Nova conversa",pinned:false,updated:Date.now(),messages:[{role:"assistant",text:"Olá. O que queres fazer hoje?"}]});write(a);setActive(id)}
 function resizeInput(){const n=$("ocInput");n.style.height="auto";n.style.height=Math.min(n.scrollHeight,132)+"px";n.style.overflowY=n.scrollHeight>132?"auto":"hidden";syncAction()}
 function syncAction(){const a=$("ocAction"),has=$("ocInput").value.trim()||files.length;if(a.dataset.mode==="stop"){a.querySelector("span").hidden=true;a.querySelector("img").hidden=false;a.querySelector("img").src="./assets/olen-stop-icon.png";$("ocMic").hidden=true;return}a.dataset.mode=has?"send":"voice";a.querySelector("span").hidden=!!has;a.querySelector("img").hidden=!has;if(has)a.querySelector("img").src="./assets/olen-send-msg-icon.png";$("ocMic").hidden=!!has}
@@ -31,7 +49,7 @@ function search(q){q=q.trim().toLowerCase();results(!q?[]:read().filter(x=>x.tit
 function openSearch(all=false){closeSide();$("ocSearch").hidden=false;$("ocSearchInput").value="";if(all)results(read().sort((a,b)=>b.updated-a.updated),"Sem conversas.");else search("");$("ocSearchInput").focus()}
 function shareText(title,text){if(navigator.share)navigator.share({title,text}).catch(()=>{});else navigator.clipboard?.writeText(text)}
 function retry(i){const a=read(),x=a.find(v=>v.id===aid());if(!x)return;x.messages.splice(i);x.updated=Date.now();write(a);drawChat();engine(x.id,i)}
-function init(){if(!$("ocChat"))return;seed();if(innerWidth<700){$("ocSidebar").hidden=true;$("ocSidebar").setAttribute("aria-hidden","true")}else $("ocSidebar").setAttribute("aria-hidden","false");drawChat();drawSide();resizeInput();setTone(prefTone());
+function init(){if(!$("ocChat"))return;seed();applySidebarState(false);drawChat();drawSide();resizeInput();setTone(prefTone());
 $("ocMenu").onclick=openSide;$("ocRail").onclick=()=>$("ocSidebar").classList.contains("expanded")?closeSide():openSide;$("ocSideCollapse").onclick=closeSide;$("ocScrim").onclick=closeSide;$("ocNew").onclick=$("ocSideNew").onclick=newConversation;
 $("ocInput").oninput=resizeInput;$("ocInput").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();send()}};$("ocAction").onclick=()=>$("ocAction").dataset.mode==="send"?send():$("ocAction").dataset.mode==="stop"?stop():dictate();$("ocMic").onclick=dictate;
 $("ocAttach").onclick=()=>$("ocFile").click();$("ocFile").onchange=e=>{addFiles(e.target.files);e.target.value=""};$("ocFiles").onclick=e=>{const b=e.target.closest("[data-remove]");if(b){files.splice(Number(b.dataset.remove),1);drawFiles()}};
@@ -45,6 +63,6 @@ $("ocMessageMore").onclick=e=>{const b=e.target.closest("[data-message-more]");i
 $("ocUseful").onclick=e=>{const b=e.target.closest("[data-useful]");if(!b)return;const a=read(),x=a.find(v=>v.id===aid()),turns=x.messages.filter(m=>m.role==="user"||m.role==="assistant"&&!m.kind).length;x.usefulLastTurn=turns;if(b.dataset.useful!=="close")x.usefulRating=b.dataset.useful;x.updated=Date.now();write(a);useful(x)};
 $("ocMoreBtn").onclick=e=>{e.stopPropagation();$("ocMore").hidden=!$("ocMore").hidden};$("ocMore").onclick=e=>{const b=e.target.closest("[data-more]");if(!b)return;$("ocMore").hidden=true;const x=current();if(b.dataset.more==="conversations")openSide();if(b.dataset.more==="home")navigate("home",{reason:"chat-more"});if(b.dataset.more==="share")shareText(x.title,x.messages.map(m=>(m.role==="user"?"Eu: ":"OLEN: ")+(m.text||"")).join("\n\n"))};
 document.addEventListener("click",e=>{if(!e.target.closest("#ocTone")&&!e.target.closest("#ocToneMenu"))$("ocToneMenu").hidden=true;if(!e.target.closest("#ocMoreBtn")&&!e.target.closest("#ocMore"))$("ocMore").hidden=true;if(!e.target.closest("[data-act=more]")&&!e.target.closest("#ocMessageMore"))$("ocMessageMore").hidden=true});
-window.addEventListener("resize",()=>{if(innerWidth<700){$("ocSidebar").hidden=true;$("ocSidebar").classList.remove("expanded");$("ocSidebar").setAttribute("aria-hidden","true");$("ocChat").classList.remove("expanded")}else{$("ocSidebar").hidden=false;$("ocSidebar").setAttribute("aria-hidden","false")}});
+window.addEventListener("resize",()=>applySidebarState(false));
 window.OLENChatClean={version:"2.0.0-clean-v2",render:drawChat,newConversation,openSidebar:openSide,closeSidebar:closeSide,send,requestEngine:engine,stopGeneration:stop}}
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init()})();
