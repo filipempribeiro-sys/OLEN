@@ -244,8 +244,8 @@ body:has(.screen[data-screen="chat"].active){--olen-chat-rail:72px;--olen-chat-p
 .screen[data-screen="chat"].active.side-expanded{padding-left:var(--olen-chat-panel)!important}
 .screen[data-screen="chat"] .olen-chat-top{position:fixed!important;left:calc(var(--olen-chat-rail) + 18px)!important;right:18px!important;max-width:none!important;transition:left .22s ease!important}
 .screen[data-screen="chat"].side-expanded .olen-chat-top{left:calc(var(--olen-chat-panel) + 18px)!important}
-.screen[data-screen="chat"] .chat-body{height:100dvh!important;max-width:none!important;padding:0 clamp(24px,5vw,76px)!important}
-.screen[data-screen="chat"] .olen-chat-messages{max-width:900px!important;margin:0 auto!important}
+.screen[data-screen="chat"] .chat-body{height:100dvh!important;max-width:none!important;padding:0!important}
+
 .screen[data-screen="chat"] .composer{left:auto!important;right:auto!important;max-width:900px!important;margin-left:auto!important;margin-right:auto!important}
 .screen[data-screen="chat"] .olen-chat-menu{display:none!important}
 .olen-chat-scrim{display:none!important}
@@ -272,8 +272,8 @@ body:has(.screen[data-screen="chat"].active){--olen-chat-rail:72px;--olen-chat-p
 @media(min-width:1100px){
 body:has(.screen[data-screen="chat"].active){padding-left:0!important}
 body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[data-screen="chat"].active)>.desktop-context{display:none!important}
-.screen[data-screen="chat"] .chat-body{padding-left:clamp(32px,6vw,110px)!important;padding-right:clamp(32px,6vw,110px)!important}
-.screen[data-screen="chat"] .olen-chat-messages,.screen[data-screen="chat"] .composer{max-width:980px!important}
+.screen[data-screen="chat"] .chat-body{padding-left:0!important;padding-right:0!important}
+.screen[data-screen="chat"] .composer{max-width:980px!important}
 }
 
 @media(min-width:700px){.olen-chat-sidebar{width:360px}.olen-chat-top{max-width:760px}.chat-screen .chat-body{max-width:760px}}/* CHAT DESKTOP OWNERSHIP — one navigation system at a time */
@@ -289,11 +289,11 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
 .screen[data-screen="chat"] .olen-chat-top>.olen-chat-menu{display:none!important}
 .screen[data-screen="chat"] .olen-chat-actions{pointer-events:auto!important;width:68px!important;margin:0!important;flex:0 0 68px!important}
 .screen[data-screen="chat"] .chat-body{box-sizing:border-box!important;width:100%!important;max-width:none!important;margin:0!important}
-.screen[data-screen="chat"] .olen-chat-messages,.screen[data-screen="chat"] .composer{width:100%!important;max-width:900px!important;margin-left:auto!important;margin-right:auto!important}
+.screen[data-screen="chat"] .composer{width:100%!important;max-width:900px!important;margin-left:auto!important;margin-right:auto!important}
 .olen-chat-sidebar:not(.show) .olen-side-new,.olen-chat-sidebar:not(.show) .olen-side-tools button{overflow:hidden!important;color:transparent!important;white-space:nowrap!important}
 .olen-chat-sidebar:not(.show) .olen-side-new span,.olen-chat-sidebar:not(.show) .olen-side-tools button span{color:#eef7f4!important;flex:0 0 27px!important}
 }
-@media (min-width:1100px){.screen[data-screen="chat"] .olen-chat-messages,.screen[data-screen="chat"] .composer{max-width:980px!important}}
+@media (min-width:1100px){.screen[data-screen="chat"] .composer{max-width:980px!important}}
 /* CHAT COMPOSER DESKTOP/TABLET — fixed above device navigation, always visible */
 @media (min-width:700px){
   .screen[data-screen="chat"] .composer{
@@ -577,7 +577,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
   width:min(768px,calc(100vw - var(--olen-chat-panel) - 64px))!important;
  }
 }
-/* CHAT STREAM WIDTH — TABLET/DESKTOP MATCHES COMPOSER; MOBILE UNCHANGED */
+/* CHAT STREAM — CLEAN TABLET/DESKTOP GEOMETRY; MOBILE UNCHANGED */
 @media(min-width:700px) and (max-width:1099px){
  .screen[data-screen="chat"] .olen-chat-messages{
   width:min(760px,calc(100vw - var(--olen-chat-rail) - 48px))!important;
