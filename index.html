@@ -1384,6 +1384,48 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
  .screen[data-screen="chat"].side-expanded .olen-composer-wrap{width:min(768px,calc(100vw - var(--oc-panel) - 96px))!important}
  .screen[data-screen="chat"].side-expanded .olen-chat-messages{width:min(768px,calc(100% - 96px))!important}
 }
+
+/* Clean ownership of sidebar, menus, message actions and responsive states */
+.olen-chat-sidebar .olen-side-head{height:64px;display:flex;align-items:center;justify-content:space-between}
+.olen-chat-sidebar .olen-side-head img{width:96px;height:auto}
+.olen-chat-sidebar .olen-side-head button{width:44px;height:44px;border:0;border-radius:50%;background:transparent;color:#fff;padding:0;display:grid;place-items:center}
+.olen-chat-sidebar .olen-side-search{display:flex;gap:8px;margin:4px 0 10px}
+.olen-chat-sidebar .olen-side-search input{flex:1;min-width:0;border:1px solid #ffffff18;background:var(--oc-green);color:#fff;border-radius:16px;padding:11px 13px}
+.olen-chat-sidebar .olen-side-new{width:100%;height:48px;border:1px solid #ffffff12;border-radius:16px;background:var(--oc-green);color:#eef8f4;text-align:left;padding:0 15px;font-weight:700;margin:5px 0 14px}
+.olen-chat-sidebar .olen-side-tools button{border:0;background:transparent;color:#eaf3f0}
+.olen-chat-sidebar .olen-side-section{margin:13px 0}
+.olen-chat-sidebar .olen-side-title{display:flex;align-items:center;justify-content:space-between;color:#63ddb1;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;padding:0 6px 5px}
+.olen-chat-sidebar .olen-conv-row{display:flex;align-items:center;min-width:0;border-radius:12px}
+.olen-chat-sidebar .olen-conv{flex:1;min-width:0;border:0;background:transparent;color:#eaf3f0;text-align:left;padding:10px 9px;border-radius:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.olen-chat-sidebar .olen-conv.active,.olen-chat-sidebar .olen-conv-row.active{background:#123126}
+.olen-chat-sidebar .olen-conv-more{width:34px;height:34px;flex:0 0 34px;border:0;background:transparent;color:#b9cac4;border-radius:10px}
+.olen-chat-sidebar .olen-side-empty{padding:8px;color:#748b83;font-size:12px}
+.olen-chat-sidebar .olen-side-mainnav{flex:0 0 auto}
+.olen-chat-more{position:fixed;right:18px;top:78px;z-index:230;width:210px;padding:7px;background:#0c211a;border:1px solid #ffffff1c;border-radius:17px;box-shadow:0 18px 48px #0009}
+.olen-chat-more button{width:100%;height:46px;border:0;background:transparent;color:#edf7f3;text-align:left;padding:0 13px;border-radius:11px;font-weight:650}
+.olen-long-scrim{z-index:240}
+.olen-long-menu{position:fixed;z-index:241;left:50%;top:50%;transform:translate(-50%,-50%);width:min(260px,calc(100vw - 36px));padding:8px;background:#0c211a;border:1px solid #63ddb133;border-radius:20px;box-shadow:0 20px 54px #000a}
+.olen-long-menu button{width:100%;height:52px;border:0;background:transparent;color:#eaf4f1;text-align:left;padding:0 15px;border-radius:13px;font-weight:700}
+.olen-long-menu .danger{color:#ff7f88;border-top:1px solid #ffffff10}
+.screen[data-screen="chat"] .olen-msg-actions{display:flex;align-items:center;gap:2px;margin-top:5px}
+.screen[data-screen="chat"] .olen-msg-actions button{border:0;background:transparent;color:#91a59e;display:grid;place-items:center}
+.screen[data-screen="chat"] .olen-msg-actions svg{fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+@media(min-width:700px){
+ .olen-chat-sidebar .olen-side-head{height:54px;justify-content:center}
+ .olen-chat-sidebar:not(.show) .olen-side-head>img,.olen-chat-sidebar:not(.show) .olen-side-head-actions{display:none!important}
+ .olen-chat-sidebar .olen-rail-toggle{width:46px;height:46px;border:0;background:transparent;padding:0;display:grid;place-items:center;cursor:pointer}
+ .olen-chat-sidebar .olen-rail-toggle img{display:block!important;width:40px!important;height:40px!important;object-fit:contain}
+ .olen-chat-sidebar:not(.show) .olen-side-new,.olen-chat-sidebar:not(.show) .olen-side-tools button{display:flex!important;width:52px!important;height:52px!important;padding:0!important;justify-content:center!important;align-items:center!important;gap:0!important;font-size:0!important;margin:2px 0!important;overflow:hidden!important}
+ .olen-chat-sidebar:not(.show) .olen-side-new span,.olen-chat-sidebar:not(.show) .olen-side-tools button span{display:grid!important;width:27px!important;height:27px!important;flex:0 0 27px!important;place-items:center!important}
+ .olen-chat-sidebar.show .olen-side-head{justify-content:flex-start;gap:8px}
+ .olen-chat-sidebar.show .olen-side-head>img{display:block!important;width:96px!important;margin-right:auto}
+ .olen-chat-sidebar.show .olen-side-head-actions{display:flex!important}
+ .olen-chat-sidebar.show .olen-rail-toggle{width:44px;height:44px;flex:0 0 44px}
+ .olen-chat-sidebar.show .olen-rail-toggle img{display:none!important}
+ .olen-chat-sidebar.show .olen-rail-toggle:before{content:"";width:20px;height:20px;border:1.8px solid #eef7f4;border-radius:4px;box-sizing:border-box;background:linear-gradient(90deg,transparent 0 35%,#eef7f4 35% 43%,transparent 43%)}
+ .olen-chat-sidebar.show .olen-side-new,.olen-chat-sidebar.show .olen-side-tools button{width:100%!important;height:54px!important;padding:0 14px!important;justify-content:flex-start!important;gap:15px!important;font-size:16px!important}
+ .olen-chat-sidebar.show #olenSideSections{display:block!important}
+}
 </style></head><body>
 <div class="splash intro-splash" id="splash">
  <img class="official-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
