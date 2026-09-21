@@ -1,0 +1,60 @@
+<section id="ocChat" class="oc-chat" data-clean-chat-v2>
+  <header class="oc-header">
+    <button id="ocMenu" class="oc-icon oc-mobile-menu" aria-label="Abrir barra lateral"><img src="./assets/olen-sidebar-icon.png" alt=""></button>
+    <div class="oc-header-actions">
+      <button id="ocNew" class="oc-icon" aria-label="Nova conversa"><svg viewBox="0 0 24 24"><path d="M13.5 5.5 18.5 10.5"/><path d="M4 20l4.1-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20Z"/><path d="M13 6H6a2 2 0 0 0-2 2v10"/></svg></button>
+      <button id="ocMoreBtn" class="oc-icon" aria-label="Mais opções">⋮</button>
+    </div>
+  </header>
+
+  <main class="oc-main">
+    <div id="ocStream" class="oc-stream" aria-live="polite"></div>
+    <div id="ocUseful" class="oc-useful" hidden><span>Esta conversa está a ser útil?</span><button data-useful="up">👍</button><button data-useful="down">👎</button><button data-useful="close">×</button></div>
+    <div class="oc-compose-zone">
+      <div id="ocFiles" class="oc-files" hidden></div>
+      <div class="oc-composer">
+        <button id="ocAttach" class="oc-icon" aria-label="Anexar ficheiros">＋</button>
+        <input id="ocFile" type="file" multiple accept="image/*,.pdf,.txt,.md,.doc,.docx" hidden>
+        <textarea id="ocInput" rows="1" placeholder="Fala com a OLEN…"></textarea>
+        <button id="ocTone" class="oc-tone">Equilibrado⌄</button>
+        <button id="ocMic" class="oc-icon" aria-label="Ditado"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M9 21h6"/></svg></button>
+        <button id="ocAction" class="oc-action" data-mode="voice" aria-label="Iniciar voz"><span class="oc-voice"><i></i><i></i><i></i></span><img alt="" hidden></button>
+      </div>
+      <div id="ocToneMenu" class="oc-menu-pop oc-tone-pop" hidden><button data-tone="balanced">Equilibrado</button><button data-tone="direct">Direto</button><button data-tone="explore">Explorar</button></div>
+      <div id="ocStatus" class="oc-status" data-state="idle" role="status" hidden></div>
+      <div class="oc-disclaimer">A OLEN pode cometer erros. Confirma informações importantes antes de partir.</div>
+    </div>
+  </main>
+
+  <div id="ocScrim" class="oc-scrim" hidden></div>
+  <aside id="ocSidebar" class="oc-sidebar" aria-hidden="true">
+    <div class="oc-side-head">
+      <button id="ocRail" class="oc-icon oc-rail" data-rail-tip="Abrir barra lateral" aria-label="Expandir ou recolher barra lateral"><img src="./assets/olen-sidebar-icon.png" alt="OLEN"></button>
+      <img class="oc-wordmark" src="./assets/olen-wordmark.png" alt="OLEN">
+      <div class="oc-side-actions"><button id="ocSearchBtn" class="oc-icon" aria-label="Pesquisar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button><button id="ocSideCollapse" class="oc-icon" aria-label="Recolher barra lateral">‹</button></div>
+    </div>
+    <div class="oc-side-scroll">
+      <button id="ocSideNew" class="oc-side-row oc-side-new" data-rail-tip="Novo chat"><svg viewBox="0 0 24 24"><path d="M13.5 5.5 18.5 10.5"/><path d="M4 20l4.1-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20Z"/><path d="M13 6H6a2 2 0 0 0-2 2v10"/></svg><span>Nova conversa</span></button>
+      <div class="oc-tools">
+        <button class="oc-side-row" data-tool="images" data-rail-tip="Imagens"><span>▧</span><b>Imagens</b></button>
+        <button class="oc-side-row" data-tool="library" data-rail-tip="Biblioteca"><span>▤</span><b>Biblioteca</b></button>
+        <button class="oc-side-row" data-tool="plans" data-rail-tip="Projetos / Planos"><span>▱</span><b>Projetos / Planos</b></button>
+        <button class="oc-side-row" data-tool="scheduled" data-rail-tip="Agendados"><span>◷</span><b>Agendados</b></button>
+      </div>
+      <div id="ocSections"></div>
+    </div>
+    <nav id="ocMainNav" class="oc-nav" aria-label="Navegação principal do Chat">
+      <button data-view="home" data-rail-tip="Início"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5V21h-6v-6H9v6H3Z"/></svg><span>Início</span></button>
+      <button data-view="map" data-rail-tip="Mapa"><svg viewBox="0 0 24 24"><path d="m9 18-6 3V6l6-3 6 3 6-3v15l-6 3-6-3Z"/><path d="M9 3v15m6-12v15"/></svg><span>Mapa</span></button>
+      <button class="active" data-view="chat" data-rail-tip="Chat"><svg viewBox="0 0 24 24"><path d="M4 6h16v10H9l-5 4Z"/></svg><span>Chat</span></button>
+      <button data-view="agenda" data-rail-tip="Agenda"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4m8-4v4M4 10h16"/></svg><span>Agenda</span></button>
+      <button data-view="profile" data-rail-tip="Perfil"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4.5 3.6-7 8-7s7 2.5 8 7"/></svg><span>Perfil</span></button>
+    </nav>
+  </aside>
+
+  <section id="ocSearch" class="oc-search" hidden><div class="oc-search-head"><button id="ocSearchBack" class="oc-icon">←</button><input id="ocSearchInput" placeholder="Pesquisar conversas"></div><p>Pesquisa em todas as conversas</p><div id="ocSearchResults"></div></section>
+  <div id="ocLongScrim" class="oc-scrim oc-long-scrim" hidden></div>
+  <div id="ocLong" class="oc-menu-pop oc-long" hidden><button data-long="pin">Fixar</button><button data-long="rename">Renomear</button><button data-long="delete" class="danger">Eliminar</button></div>
+  <div id="ocMore" class="oc-menu-pop oc-more" hidden><button data-more="share">Partilhar conversa</button><button data-more="conversations">Conversas</button><button data-more="home">Início</button></div>
+  <div id="ocMessageMore" class="oc-menu-pop oc-message-more" hidden><button data-message-more="copy">Copiar resposta</button><button data-message-more="share">Partilhar resposta</button><button data-message-more="retry">Gerar novamente</button></div>
+</section>
