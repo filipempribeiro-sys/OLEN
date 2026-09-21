@@ -41,6 +41,31 @@ function providerKey(input){
    }
    if(key==="notification"&&normalize(input.mode)==="ferry")return "ferry";
  }
+ var here={
+  "arrive":"arrive","continue-on":"straight","depart":"start",
+  "enter-highway-from-left":"merge","enter-highway-from-right":"merge",
+  "keep-left":"keep-left","keep-right":"keep-right",
+  "left-turn":"left","right-turn":"right","slightly-left-turn":"slight-left","slightly-right-turn":"slight-right",
+  "sharp-left-turn":"sharp-left","sharp-right-turn":"sharp-right","u-turn":"uturn",
+  "roundabout-enter":"roundabout","roundabout-exit":"roundabout","ferry":"ferry"
+ };
+ if(p.indexOf("here")>=0&&here[key])return here[key];
+ var tomtom={
+  "depart":"start","arrive":"arrive","arrive-left":"arrive","arrive-right":"arrive",
+  "straight":"straight","continue-straight":"straight","keep-right":"keep-right","keep-left":"keep-left",
+  "bear-right":"slight-right","turn-slight-right":"slight-right","turn-right":"right","sharp-right":"sharp-right","turn-sharp-right":"sharp-right",
+  "bear-left":"slight-left","turn-slight-left":"slight-left","turn-left":"left","sharp-left":"sharp-left","turn-sharp-left":"sharp-left",
+  "make-uturn":"uturn","make-u-turn":"uturn","try-make-uturn":"uturn",
+  "enter-motorway":"motorway","enter-freeway":"motorway","enter-highway":"motorway",
+  "take-exit":"exit-right","motorway-exit-left":"left","exit-motorway-left":"left","motorway-exit-right":"exit-right","exit-motorway-right":"exit-right",
+  "take-ferry":"ferry","take-ship-ferry":"ferry","roundabout-cross":"roundabout","roundabout-straight":"roundabout",
+  "roundabout-right":"roundabout","roundabout-left":"roundabout","roundabout-back":"roundabout",
+  "entrance-ramp":"straight","waypoint-left":"waypoint","waypoint-right":"waypoint","waypoint-reached":"waypoint"
+ };
+ if(p.indexOf("tomtom")>=0&&tomtom[key]){
+   if(key.indexOf("roundabout")===0){var tx=Number(input.exit||input.exitNumber||input.exit_number||input.roundaboutExitNumber);if(tx>=1&&tx<=6)return "roundabout-exit-"+tx}
+   return tomtom[key];
+ }
  if((key==="turn"||key==="turning")&&mod)return mod;
  if((key==="fork"||key==="keep")&&mod)return key+"-"+mod.replace(/^keep-/,"");
  if(key==="roundabout"||key==="rotary"){var exit=Number(input.exit||input.exitNumber||input.exit_number);if(exit>=1&&exit<=6)return "roundabout-exit-"+exit;return "roundabout"}
