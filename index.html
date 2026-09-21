@@ -1342,11 +1342,17 @@ $("rzShareExternal").onclick=async()=>{const txt="A minha experiência OLEN: "+c
 $("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);
 document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$("rzModeLabel").textContent=modes[mode][0];document.querySelectorAll("#rzModes button").forEach(x=>x.classList.toggle("selected",x===b))});document.querySelector("#rzModes [data-mode=walk]").classList.add("selected");
 })();
-/* STEP 3A — adapter for the full maneuver library */
+/* STEP 3A — OLEN Maneuver Library compatibility bridge
+   The full registry/renderer is owned by js/olen-maneuvers.js. */
 (function(){
- var paths={straight:"M32 68V18M32 18L18 32M32 18l14 14",right:"M18 68V43Q18 25 36 25H49M49 25 38 14M49 25 38 36",left:"M46 68V43Q46 25 28 25H15M15 25 26 14M15 25l11 11",slightRight:"M18 68V48Q18 38 26 32L46 18M46 18H31M46 18v15",slightLeft:"M46 68V48Q46 38 38 32L18 18M18 18h15M18 18v15",sharpRight:"M18 68V38H46M46 38 35 27M46 38 35 49",sharpLeft:"M46 68V38H18M18 38l11-11M18 38l11 11",uturn:"M43 68V35Q43 18 30 18Q17 18 17 35v7M17 42 7 32M17 42l10-10"};
- function set(data){data=data||{};var p=document.getElementById("rzManeuverPath"),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");if(p)p.setAttribute("d",data.path||paths[data.type]||paths.straight);if(t&&data.instruction!=null)t.textContent=data.instruction;if(r&&data.road!=null)r.textContent=data.road;if(line)line.hidden=data.road===false||data.road==="";if(d&&data.distance!=null)d.textContent=data.distance}
- window.OLENNavigationGuide={set:set,paths:paths};
+ if(!window.OLENManeuvers) return;
+ window.OLENNavigationGuide=Object.assign({},window.OLENNavigationGuide||{},{
+   set:window.OLENManeuvers.set,
+   resolve:window.OLENManeuvers.resolve,
+   render:window.OLENManeuvers.render,
+   registry:window.OLENManeuvers.registry,
+   version:window.OLENManeuvers.version
+ });
 })();
 document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(btn){btn.addEventListener("click",function(){var was=btn.classList.contains("selected");document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(b){b.classList.remove("selected")});if(!was)btn.classList.add("selected")})});
 </script>
