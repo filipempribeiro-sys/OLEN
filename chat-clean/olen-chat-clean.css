@@ -39,3 +39,9 @@
 .oc-user-turn{align-self:stretch;display:flex;justify-content:flex-end;min-width:0}.oc-bubble{white-space:pre-wrap;overflow-wrap:anywhere;word-break:break-word}.oc-message-files{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}.oc-message-files span{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:5px 8px;border:1px solid #ffffff16;border-radius:10px;font-size:11px;color:#c8d8d3}.oc-search-results{overflow:auto}.oc-search-result b,.oc-search-result small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.oc-search-result small{margin-top:3px;color:#91a19c}.oc-search-empty{padding:22px 12px;color:#91a19c;text-align:center}.oc-status[data-state="limit"]{color:#d9bd7a}
 @media(max-width:420px){.oc-stream{padding-left:8px;padding-right:8px}.oc-bubble,.oc-turn{max-width:88%}.oc-composer{gap:2px;padding-left:5px;padding-right:5px}.oc-plus,.oc-mic{flex-basis:32px;width:32px}.oc-action{flex-basis:36px;width:36px}.oc-message-more{left:12px!important;right:12px;width:auto}}
 @media(max-height:520px) and (orientation:landscape){.oc-stream{padding-top:58px;padding-bottom:86px}.oc-composer-wrap{bottom:calc(8px + var(--oc-safe))}.oc-disclaimer{display:none}.oc-sidebar{padding-top:8px;padding-bottom:8px}.oc-side-head{height:48px}.oc-side-new{height:42px;margin-bottom:7px}.oc-mainnav button{height:38px}}
+
+/* Integrated cutover authority: clean Chat owns the Chat viewport. */
+.screen[data-screen="chat"].active{padding:0!important;height:100dvh!important;overflow:hidden!important}
+.screen[data-screen="chat"].active>#ocChat{display:block!important}
+#olenChatLegacyPreserved{display:none!important}
+@media(min-width:1100px){body:has(.screen[data-screen="chat"].active){padding-left:0!important}body:has(.screen[data-screen="chat"].active)>.app>.desktop-sidebar,body:has(.screen[data-screen="chat"].active)>.app>.desktop-context{display:none!important}}
