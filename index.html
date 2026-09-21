@@ -461,22 +461,34 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
  .olen-chat-sidebar .olen-side-head-actions #olenChatSearchBtn svg{display:block!important;width:23px!important;height:23px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
  .olen-chat-sidebar .olen-side-head-actions .olen-side-collapse{display:none!important}
 }
-/* MOBILE COMPOSER SAFE CLEARANCE — compact, borderless wrapper */
+/* MOBILE COMPOSER FINAL POSITION — only the v4 capsule is visible */
 @media(max-width:699px){
  .screen[data-screen="chat"] .olen-composer-wrap{
-   bottom:calc(62px + var(--safe))!important;
-   border:0!important;
-   outline:0!important;
-   box-shadow:none!important;
-   background:transparent!important;
-   border-radius:0!important;
+   position:fixed!important;
+   z-index:120!important;
+   left:40px!important;
+   right:40px!important;
+   bottom:calc(48px + var(--safe))!important;
+   width:auto!important;
+   max-width:none!important;
+   margin:0!important;
    padding:0!important;
- }
- .screen[data-screen="chat"] .olen-chat-disclaimer{
    border:0!important;
    outline:0!important;
    box-shadow:none!important;
-   background:transparent!important;
+   background:none!important;
+   border-radius:0!important;
+ }
+ .screen[data-screen="chat"] .olen-composer-wrap>.composer:not(.olen-composer-v4){border:0!important;outline:0!important;box-shadow:none!important;background:transparent!important}
+ .screen[data-screen="chat"] .olen-composer-v4{margin:0!important;box-shadow:none!important}
+ .screen[data-screen="chat"] .olen-chat-disclaimer{
+   margin:4px 0 0!important;
+   padding:0!important;
+   border:0!important;
+   outline:0!important;
+   box-shadow:none!important;
+   background:none!important;
+   border-radius:0!important;
  }
 }
 /* Chat conversation layout: user right,OLEN left + assistant actions */
