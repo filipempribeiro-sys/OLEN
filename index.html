@@ -1317,7 +1317,7 @@ document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(btn
   var SKIP=new Set(["SCRIPT","STYLE","SVG","PATH","RECT","CIRCLE","LINE","POLYLINE","POLYGON","INPUT","TEXTAREA","SELECT","OPTION"]);
   function directText(el){return Array.prototype.some.call(el.childNodes,function(n){return n.nodeType===3&&n.nodeValue.trim()})}
   function whiteText(el){
-    if(!el||el.nodeType!==1||SKIP.has(el.tagName)||el.classList.contains("close")||el.closest(".close")||el.matches(".screen[data-screen=\"agenda\"] .day"))return false;
+    if(!el||el.nodeType!==1||SKIP.has(el.tagName)||el.classList.contains("close")||el.closest(".close")||el.closest(".bubble.me")||el.matches(".screen[data-screen=\"agenda\"] .day"))return false;
     if(el.closest(".footer .nav.active"))return false;
     if(!directText(el))return false;
     var c=getComputedStyle(el).color,m=c.match(/rgba?\((\d+)[,\s]+(\d+)[,\s]+(\d+)/);if(!m)return false;
