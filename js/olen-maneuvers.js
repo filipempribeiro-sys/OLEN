@@ -15,11 +15,34 @@ registry[74]=Object.freeze({id:74,key:"camper",asset:asset(74),layer:"mobility",
 [[92,"plane","Avião"],[93,"motorcycle","Mota"],[94,"scooter","Trotineta"],[95,"bicycle","Bicicleta"],[96,"helicopter","Helicóptero"]].forEach(function(x){registry[x[0]]=Object.freeze({id:x[0],key:x[1],asset:asset(x[0]),layer:"mobility",label:x[2]})});
 var aliases=Object.freeze({"straight":1,"continue":1,"depart":1,"right":2,"turn-right":2,"left":3,"turn-left":3,"slight-right":4,"slight-left":5,"sharp-left":6,"sharp-right":7,"curve-right":8,"fork-left":9,"fork-right":10,"merge":11,"keep-right":12,"uturn":13,"u-turn":13,"keep-left":37,"roundabout":40,"roundabout-exit-1":46,"roundabout-exit-2":47,"roundabout-exit-3":48,"roundabout-exit-4":49,"roundabout-exit-5":50,"roundabout-exit-6":52,"finish":53,"arrive":53,"arrival":53,"start":54,"location":55,"location-pin":55,"waypoint":57,"information":58,"warning":59,"roadworks":60,"incident":61,"slippery-road":62,"car":63,"pedestrian":64,"walking":65,"walk":65,"ferry":66,"carpool":68,"fuel":70,"tunnel":72,"mountain":73,"camper":74,"motorhome":74,"autocaravana":74,"truck":79,"snow":86,"cafe":89,"parking":90,"lane-guidance":91,"plane":92,"air":92,"airplane":92,"aviao":92,"motorcycle":93,"moto":93,"scooter":94,"trotineta":94,"bicycle":95,"bike":95,"bicicleta":95,"helicopter":96,"helicoptero":96});
 function normalize(value){return String(value==null?"":value).trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[_\s]+/g,"-")}
-function resolve(input){if(typeof input==="number"&&registry[input])return registry[input];if(input&&typeof input==="object"){if(Number.isInteger(input.id)&&registry[input.id])return registry[input.id];input=input.type||input.key||input.maneuver||input.action||""}var key=normalize(input),id=aliases[key];if(!id){for(var i=1;i<=96;i++)if(registry[i]&&registry[i].key===key){id=i;break}}return registry[id||1]}
+function providerKey(input){
+ if(!input||typeof input!=="object")return input;
+ var p=normalize(input.provider||input.source||"");
+ var raw=input.type||input.key||input.maneuver||input.action||input.modifier||"";
+ var key=normalize(raw);
+ var mod=normalize(input.modifier||input.direction||"");
+ if((key==="turn"||key==="turning")&&mod)return mod.indexOf("slight")===0?mod:mod.indexOf("sharp")===0?mod:mod;
+ if((key==="fork"||key==="keep")&&mod)return key+"-"+mod.replace(/^keep-/,"");
+ if(key==="roundabout"||key==="rotary"){
+   var exit=Number(input.exit||input.exitNumber||input.exit_number);
+   if(exit>=1&&exit<=6)return "roundabout-exit-"+exit;
+   return "roundabout";
+ }
+ if(key==="arrive"||key==="arrival"||key==="destination")return "arrive";
+ if(key==="depart"||key==="departure")return "straight";
+ if(key==="continue"||key==="new-name"||key==="notification")return "straight";
+ if(key==="on-ramp"||key==="off-ramp"||key==="ramp"){
+   if(mod==="left")return "left";
+   if(mod==="right")return "right";
+ }
+ if(key==="merge"||key==="ferry"||key==="uturn"||key==="u-turn")return key;
+ return raw;
+}
+function resolve(input){if(typeof input==="number"&&registry[input])return registry[input];if(input&&typeof input==="object"){if(Number.isInteger(input.id)&&registry[input.id])return registry[input.id];input=providerKey(input)}var key=normalize(input),id=aliases[key];if(!id){for(var i=1;i<=96;i++)if(registry[i]&&registry[i].key===key){id=i;break}}return registry[id||1]}
 function ensureImage(){var oldSvg=document.getElementById("rzManeuverPath"),host=oldSvg&&oldSvg.closest("svg");if(!host)host=document.querySelector("#rzGuide svg");if(!host)return null;var img=document.getElementById("olenManeuverIcon");if(!img){img=document.createElement("img");img.id="olenManeuverIcon";img.alt="";img.setAttribute("aria-hidden","true");img.style.cssText="width:64px;height:64px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(65,255,222,.18));";host.insertAdjacentElement("afterend",img)}host.style.display="none";return img}
 function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img&&img.getAttribute("src")!==item.asset)img.setAttribute("src",item.asset);return item}
 function set(data){data=data||{};var item=render(data.id||data.type||data.key||data.maneuver||data.action||1),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");if(t&&data.instruction!=null)t.textContent=data.instruction;if(r&&data.road!=null)r.textContent=data.road;if(line)line.hidden=data.road===false||data.road==="";if(d&&data.distance!=null)d.textContent=data.distance;return item}
-var api=Object.freeze({version:VERSION,registry:registry,aliases:aliases,asset:asset,resolve:resolve,render:render,set:set});
+var api=Object.freeze({version:VERSION,registry:registry,aliases:aliases,asset:asset,providerKey:providerKey,resolve:resolve,render:render,set:set});
 global.OLENManeuvers=api;
 var previous=global.OLENNavigationGuide||{};
 global.OLENNavigationGuide=Object.assign({},previous,{set:set,resolve:resolve,render:render,registry:registry,version:VERSION});
