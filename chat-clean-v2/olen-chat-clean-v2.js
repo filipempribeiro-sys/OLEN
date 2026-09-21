@@ -7,7 +7,22 @@ function navigate(view,detail={}){try{if(window.OLEN5?.router?.enter){window.OLE
 function status(state,text=""){const n=$("ocStatus");n.dataset.state=state;n.textContent=text;n.hidden=!text}
 function setActive(id){stop();files=[];drawFiles();localStorage.setItem(ACTIVE,id);drawChat();drawSide();closeSide()}
 function msgActions(i,m){const active=m.feedback||"";const icons={copy:"⧉",up:"△",down:"▽",share:"⌯",retry:"↻",more:"•••"};return '<div class="oc-msg-actions" data-index="'+i+'>'+Object.entries(icons).map(([a,v])=>'<button data-act="'+a+'" class="'+(active===a?"active":"")+'" aria-label="'+a+'">'+v+"</button>").join("")+"</div>"}
-function drawChat(){const x=current(),out=$("ocStream");out.innerHTML=x.messages.map((m,i)=>{const attach=(m.attachments||[]).map(f=>"\n📎 "+safe(f.name)).join("");if(m.role==="user")return '<div class="oc-user-turn"><div class="oc-bubble">'+safe(m.text)+attach+"</div></div>";const body=m.kind==="card"?'<div class="oc-card" data-card="'+i+'"><small>EXPERIÊNCIA</small><b>'+safe(m.title)+'</b><p>'+safe(m.text)+'</p><button data-card-action="details">Ver detalhes</button><button data-card-action="map">Ver no mapa</button></div>':'<div class="oc-bubble">'+safe(m.text)+"</div>";return '<div class="oc-turn">'+body+msgActions(i,m)+"</div>"}).join("");out.scrollTop=out.scrollHeight;useful(x)}
+function drawChat(){
+  const conversation=current(),stream=$("ocStream");
+  stream.innerHTML=conversation.messages.map((message,index)=>{
+    if(message.role==="user"){
+      const text=message.text?'<span class="oc-message-text">'+safe(message.text)+'</span>':"";
+      const attachments=(message.attachments||[]).map(file=>'<span class="oc-message-attachment">📎 '+safe(file.name)+'</span>').join("");
+      return '<div class="oc-user-turn"><div class="oc-bubble">'+text+attachments+"</div></div>";
+    }
+    const body=message.kind==="card"
+      ?'<div class="oc-card" data-card="'+index+'"><small>EXPERIÊNCIA</small><b>'+safe(message.title)+'</b><p>'+safe(message.text)+'</p><button data-card-action="details">Ver detalhes</button><button data-card-action="map">Ver no mapa</button></div>'
+      :'<div class="oc-bubble">'+safe(message.text)+"</div>";
+    return '<div class="oc-turn">'+body+msgActions(index,message)+"</div>";
+  }).join("");
+  stream.scrollTop=stream.scrollHeight;
+  useful(conversation);
+}
 function useful(x){const n=$("ocUseful"),turns=x.messages.filter(m=>m.role==="user"||m.role==="assistant"&&!m.kind).length;n.hidden=turns<15||turns-Number(x.usefulLastTurn||0)<15}
 function section(name,list,limit,all){if(!list.length)return"";return '<div class="oc-section"><div class="oc-section-title">'+name+"</div>"+list.slice(0,limit).map(x=>'<div class="oc-conv-row"><button class="oc-conv '+(x.id===aid()?"active":"")+'" data-conv="'+safe(x.id)+'">'+safe(x.title)+'</button><button class="oc-conv-more" data-conv-more="'+safe(x.id)+'">⋮</button></div>').join("")+(all&&list.length>limit?'<button id="ocRecentAll" class="oc-side-more">Ver todas</button>':"")+"</div>"}
 function drawSide(){const a=read(),p=a.filter(x=>x.pinned).sort((a,b)=>b.updated-a.updated),r=a.filter(x=>!x.pinned).sort((a,b)=>b.updated-a.updated),out=$("ocSections");if(!out)return;out.innerHTML=section("Afixados",p,10,false)+section("Recentes",r,5,true);out.querySelectorAll("[data-conv]").forEach(b=>{b.onclick=()=>setActive(b.dataset.conv);b.onpointerdown=e=>{if(e.pointerType!=="mouse")timer=setTimeout(()=>openLong(b.dataset.conv),500)};["pointerup","pointercancel","pointerleave"].forEach(k=>b.addEventListener(k,()=>clearTimeout(timer)))});out.querySelectorAll("[data-conv-more]").forEach(b=>b.onclick=e=>{e.stopPropagation();openLong(b.dataset.convMore)});$("ocRecentAll")?.addEventListener("click",()=>openSearch(true))}
@@ -41,7 +56,23 @@ function setTone(v){let p={};try{p=JSON.parse(localStorage.getItem("olen.prefere
 function dictate(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){window.dispatchEvent(new CustomEvent("olen:dictation-unavailable"));return}recognition?.stop?.();const r=new SR();recognition=r;r.lang="pt-PT";r.interimResults=true;const base=$("ocInput").value;r.onresult=e=>{let t="";for(let i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;$("ocInput").value=(base+(base&&t?" ":"")+t).trimStart();resizeInput()};r.onend=()=>{if(recognition===r)recognition=null};r.onerror=r.onend;r.start()}
 function stop(){if(!generation)return;generation.abort();generation=null;$("ocAction").dataset.mode="voice";syncAction();status("stopped","Resposta interrompida.");setTimeout(()=>status("idle",""),1400)}
 async function engine(id,retryFrom=null){stop();const x=read().find(v=>v.id===id);if(!x)return;const controller=new AbortController();generation=controller;$("ocAction").dataset.mode="stop";syncAction();status("generating","A OLEN está a preparar a resposta…");const detail={conversationId:id,retryFrom,signal:controller.signal,messages:x.messages.map(m=>({role:m.role,content:m.text||"",kind:m.kind||null,attachments:m.attachments||[]})),respond(text,extra={}){if(controller.signal.aborted)return;const a=read(),y=a.find(v=>v.id===id);if(!y)return;y.messages.push({role:"assistant",text:String(text||""),...extra});y.updated=Date.now();write(a);drawChat()},fail(text){if(!controller.signal.aborted)status("error",String(text||"Não foi possível gerar a resposta."))}};window.dispatchEvent(new CustomEvent("olen:conversation-request",{detail}));try{if(typeof window.OLENConversationEngine?.request==="function")await window.OLENConversationEngine.request(detail)}catch(e){detail.fail(e?.message)}finally{if(generation===controller){generation=null;$("ocAction").dataset.mode="voice";syncAction();if($("ocStatus").dataset.state==="generating")status("idle","")}}}
-function send(){const input=$("ocInput"),text=input.value.trim();if(!text&&!files.length)return;const a=read(),x=a.find(v=>v.id===aid()),attachments=files.map(f=>({name:f.name,type:f.type||"application/octet-stream",size:f.size,lastModified:f.lastModified}));x.messages.push({role:"user",text:text||attachments.map(f=>"📎 "+f.name).join("\n"),attachments});if(x.title==="Nova conversa")x.title=(text||attachments[0]?.name||"Nova conversa").slice(0,42);x.updated=Date.now();input.value="";files=[];drawFiles();write(a);drawChat();resizeInput();engine(x.id)}
+function send(){
+  const input=$("ocInput"),text=input.value.trim();
+  if(!text&&!files.length)return;
+  const conversations=read(),conversation=conversations.find(item=>item.id===aid());
+  if(!conversation)return;
+  const attachments=files.map(file=>({name:file.name,type:file.type||"application/octet-stream",size:file.size,lastModified:file.lastModified}));
+  conversation.messages.push({role:"user",text,attachments});
+  if(conversation.title==="Nova conversa")conversation.title=(text||attachments[0]?.name||"Nova conversa").slice(0,42);
+  conversation.updated=Date.now();
+  input.value="";
+  files=[];
+  drawFiles();
+  write(conversations);
+  drawChat();
+  resizeInput();
+  engine(conversation.id);
+}
 function openLong(id){longId=id;$("ocLong").hidden=false;$("ocLongScrim").hidden=false;const x=read().find(v=>v.id===id),b=$("ocLong").querySelector('[data-long="pin"]');b.textContent=x?.pinned?"Desafixar":"Fixar";b.disabled=!x?.pinned&&read().filter(v=>v.pinned).length>=10}
 function closeLong(){$("ocLong").hidden=true;$("ocLongScrim").hidden=true;longId=null}
 function results(list,empty){const n=$("ocSearchResults");n.innerHTML=list.map(x=>'<button class="oc-search-result" data-result="'+safe(x.id)+'"><b>'+safe(x.title)+'</b><small>'+safe(x.messages.at(-1)?.text||x.messages.at(-1)?.attachments?.[0]?.name||"")+"</small></button>").join("")||'<div class="oc-search-empty">'+empty+"</div>";n.querySelectorAll("[data-result]").forEach(b=>b.onclick=()=>{$("ocSearch").hidden=true;setActive(b.dataset.result)})}
