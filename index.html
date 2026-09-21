@@ -276,7 +276,14 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
 .screen[data-screen="chat"] .olen-chat-messages,.screen[data-screen="chat"] .composer{max-width:980px!important}
 }
 
-@media(min-width:700px){.olen-chat-sidebar{width:360px}.olen-chat-top{max-width:760px}.chat-screen .chat-body{max-width:760px}}/* CHAT RAIL CLEAN V2 — geometry reset after locked checkpoint */
+@media(min-width:700px){.olen-chat-sidebar{width:360px}.olen-chat-top{max-width:760px}.chat-screen .chat-body{max-width:760px}}/* CHAT DESKTOP OWNERSHIP — one navigation system at a time */
+@media (min-width:1100px){
+  body.olen-chat-route{padding-left:0!important}
+  body.olen-chat-route .desktop-sidebar,
+  body.olen-chat-route .desktop-context{display:none!important}
+  body.olen-chat-route .screen[data-screen="chat"]{margin:0!important;max-width:none!important}
+}
+/* CHAT RAIL CLEAN V2 — geometry reset after locked checkpoint */
 @media (min-width:700px){
 .screen[data-screen="chat"] .olen-chat-top{left:auto!important;right:clamp(18px,3vw,34px)!important;width:auto!important;max-width:none!important;justify-content:flex-end!important;pointer-events:none!important}
 .screen[data-screen="chat"] .olen-chat-top>.olen-chat-menu{display:none!important}
@@ -1056,7 +1063,7 @@ if(completed&&splash&&!SPLASH_VALIDATION_MODE){
  setTimeout(function(){splash.classList.add("hidden");setTimeout(function(){splash.style.display="none"},400)},startupDelay);
 }
 var navs=document.querySelectorAll(".nav,.desk-nav"),screens=document.querySelectorAll(".screen");
-function paint(v){for(var n=0;n<navs.length;n++)navs[n].classList.toggle("active",navs[n].getAttribute("data-view")===v);for(var s=0;s<screens.length;s++)screens[s].classList.toggle("active",screens[s].getAttribute("data-screen")===v);window.scrollTo(0,0)}
+function paint(v){for(var n=0;n<navs.length;n++)navs[n].classList.toggle("active",navs[n].getAttribute("data-view")===v);for(var s=0;s<screens.length;s++)screens[s].classList.toggle("active",screens[s].getAttribute("data-screen")===v);document.body.classList.toggle("olen-chat-route",v==="chat");if(v!=="chat"&&window.innerWidth>=700){document.querySelector(".screen[data-screen=\"chat\"]")?.classList.remove("side-expanded")}window.scrollTo(0,0)}
 for(var i=0;i<navs.length;i++)navs[i].onclick=function(){var v=this.getAttribute("data-view");if(v==="profile")v="account";try{window.OLEN5.router.enter(v,{reason:"footer"})}catch(e){paint(v==="account"?"profile":v)}};
 try{
  window.OLEN5.bootstrap.start({initialView:"home",modules:{
