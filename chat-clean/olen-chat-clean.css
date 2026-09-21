@@ -26,3 +26,5 @@
 
 /* Clean composer attachment queue */
 .oc-files{position:absolute;left:12px;right:12px;bottom:62px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:2px 0}.oc-files::-webkit-scrollbar{display:none}.oc-file{flex:0 0 auto;max-width:190px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:7px 8px 7px 11px;border:1px solid #ffffff18;border-radius:13px;background:#0b2119;color:#dcebe6;font-size:12px}.oc-file button{border:0;background:transparent;color:#dcebe6;margin-left:5px;padding:0 2px}.oc-files:not([hidden])+.oc-disclaimer{margin-top:5px}
+
+.oc-status{text-align:center;font-size:11px;line-height:16px;margin:4px 12px 0;color:#aebdb8}.oc-status[data-state="generating"]{color:#63ddb1}.oc-status[data-state="error"]{color:#ff9aa1}.oc-status[data-state="stopped"]{color:#c5d2ce}.oc-msg-actions button.active{color:#63ddb1;background:rgba(99,221,177,.08);border-radius:50%}
