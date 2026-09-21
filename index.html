@@ -461,10 +461,22 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
  .olen-chat-sidebar .olen-side-head-actions #olenChatSearchBtn svg{display:block!important;width:23px!important;height:23px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
  .olen-chat-sidebar .olen-side-head-actions .olen-side-collapse{display:none!important}
 }
-/* MOBILE COMPOSER SAFE CLEARANCE — keep disclaimer above active footer */
+/* MOBILE COMPOSER SAFE CLEARANCE — compact, borderless wrapper */
 @media(max-width:699px){
  .screen[data-screen="chat"] .olen-composer-wrap{
-   bottom:calc(78px + var(--safe))!important;
+   bottom:calc(62px + var(--safe))!important;
+   border:0!important;
+   outline:0!important;
+   box-shadow:none!important;
+   background:transparent!important;
+   border-radius:0!important;
+   padding:0!important;
+ }
+ .screen[data-screen="chat"] .olen-chat-disclaimer{
+   border:0!important;
+   outline:0!important;
+   box-shadow:none!important;
+   background:transparent!important;
  }
 }
 /* Chat conversation layout: user right,OLEN left + assistant actions */
