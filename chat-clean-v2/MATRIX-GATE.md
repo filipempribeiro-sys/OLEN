@@ -1,65 +1,44 @@
 # Chat Clean V2 — Matrix Gate
-Static acceptance checks for the 5/5 contract.
 
-## Required DOM
-- [x] #ocChat
-- [x] #ocMenu
-- [x] #ocNew
-- [x] #ocMoreBtn
-- [x] #ocStream
-- [x] #ocUseful
-- [x] #ocAttach
-- [x] #ocFile
-- [x] #ocFiles
-- [x] #ocInput
-- [x] #ocTone
-- [x] #ocToneMenu
-- [x] #ocMic
-- [x] #ocAction
-- [x] #ocStatus
-- [x] #ocScrim
-- [x] #ocSidebar
-- [x] #ocRail
-- [x] #ocSearchBtn
-- [x] #ocSideCollapse
-- [x] #ocSideNew
-- [x] #ocSections
-- [x] #ocMainNav
-- [x] #ocSearch
-- [x] #ocSearchInput
-- [x] #ocSearchResults
-- [x] #ocLong
-- [x] #ocLongScrim
-- [x] #ocMore
-- [x] #ocMessageMore
+## Static structure
+- [x] Core DOM present with no duplicate IDs.
+- [x] Correct OLEN rail asset.
+- [x] Correct Nova conversa composition SVG.
+- [x] Real SVG navigation: Início / Mapa / Chat / Agenda / Perfil.
+- [x] Imagens / Biblioteca / Projetos-Planos / Agendados.
+- [x] Afixados / Recentes / Ver todas.
+- [x] Search, long menu, general menu, message-more menu, useful prompt.
 
-## Required sidebar labels
-- [x] Nova conversa
-- [x] Imagens
-- [x] Biblioteca
-- [x] Projetos / Planos
-- [x] Agendados
-- [x] SVG navigation icons
-- [x] OLEN rail asset
+## Behavior implemented
+- [x] conversation persistence and active conversation.
+- [x] new conversation and automatic title.
+- [x] 500 ms long press.
+- [x] Fixar / Desafixar / Renomear / Eliminar.
+- [x] search title, messages and attachment filenames.
+- [x] multiple attachments and removal.
+- [x] SpeechRecognition pt-PT.
+- [x] tone persistence.
+- [x] Conversation Engine request / stop / fail.
+- [x] copy / share / retry / thumbs feedback / message more.
+- [x] periodic useful prompt and persistence.
+- [x] sidebar tool action bridge plus direct compatible shell targets.
+- [x] card Ver detalhes action event.
+- [x] card Ver no mapa navigation.
+- [x] rail main navigation routed through OLEN router with shell fallback.
+- [x] general menu Início routed through same navigation bridge.
 
-## Required behavior present in JS
-- [x] Afixados / Recentes
-- [x] Ver todas
-- [x] 500ms long press
-- [x] Fixar / Desafixar
-- [x] Renomear / Eliminar
-- [x] Search
-- [x] Attachment filename search
-- [x] SpeechRecognition
-- [x] Conversation Engine event
-- [x] generation stop
-- [x] message feedback
-- [x] periodic useful prompt
-- [x] tool dispatch bridge
+## Static audit
+- Duplicate static IDs: 0.
+- The only JS-referenced ID not statically present is `ocRecentAll`; this is intentional because it is dynamically rendered only when Recentes > 5.
 
-## Current static result
-HTML length: 6188
-JS length: 18616
-CSS length: 14043
+## Remaining acceptance gates
+- [ ] Integrate Clean V2 into an isolated app preview/cutover branch without deleting legacy.
+- [ ] Syntax/runtime validation.
+- [ ] Mobile 390×844 runtime/visual validation.
+- [ ] Tablet 768×1024 runtime/visual validation.
+- [ ] Desktop 1440×900 runtime/visual validation.
+- [ ] Physical Android validation.
+- [ ] Final parity audit against the accepted current Chat.
+- [ ] Only after all above: 5/5.
 
-This file records structural presence only. Runtime and physical-device gates remain mandatory before 5/5.
+Presence in this gate is not itself runtime validation.
