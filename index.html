@@ -430,7 +430,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
 }
 .olen-composer-wrap{max-width:720px!important}
 .olen-composer-v4{display:flex!important;align-items:center!important;width:100%!important;min-height:46px!important;padding:3px 6px!important;gap:4px!important;border-radius:24px!important;background:#10271f!important;border:1px solid rgba(82,246,220,.18)!important;box-sizing:border-box!important}
-.olen-composer textarea{flex:1!important;min-width:0!important;min-height:38px!important;max-height:112px!important;padding:9px 5px!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;line-height:20px!important}
+.olen-composer-v4 textarea{flex:1!important;min-width:0!important;min-height:38px!important;max-height:112px!important;padding:9px 5px!important;margin:0!important;border:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;line-height:20px!important}
 .olen-composer-v4 .olen-compose-plus,.olen-composer-v4 .olen-compose-mic{width:34px!important;height:34px!important;flex:0 0 34px!important;padding:0!important;margin:0!important;border:0!important;background:transparent!important;display:grid!important;place-items:center!important;color:#dcebe6!important;align-self:center!important}
 .olen-composer-v4 .olen-compose-plus{font-size:24px!important;font-weight:300!important}
 .olen-composer-v4 .olen-compose-mic svg{width:19px!important;height:19px!important;fill:none!important;stroke:currentColor!important;stroke-width:1.8!important}
@@ -499,7 +499,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
    max-width:none!important;margin:0!important;padding:0!important;
    border:0!important;background:transparent!important;box-shadow:none!important;outline:0!important;
  }
- .screen[data-screen="chat"] .olen-composer-wrap>.olen-composer-v4{
+ .screen[data-screen="chat"] .olen-composer-wrap>.composer.olen-composer-v4-v4{
    position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
    width:100%!important;max-width:none!important;margin:0!important;
    padding:3px 6px!important;
@@ -507,8 +507,8 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
    background:#10271f!important;
    box-shadow:none!important;outline:0!important;
  }
- .screen[data-screen="chat"] .olen-composer-wrap>.olen-composer-v4:before,
- .screen[data-screen="chat"] .olen-composer-wrap>.olen-composer-v4:after{content:none!important;display:none!important}
+ .screen[data-screen="chat"] .olen-composer-wrap>.composer.olen-composer-v4-v4:before,
+ .screen[data-screen="chat"] .olen-composer-wrap>.composer.olen-composer-v4-v4:after{content:none!important;display:none!important}
  .screen[data-screen="chat"] .olen-chat-disclaimer{position:static!important;margin:4px 0 0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;outline:0!important}
 }/* MOBILE COMPOSER VISUAL LIFT — independent of legacy bottom calculations */
 @media(max-width:699px){
@@ -584,7 +584,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
 @media(min-width:700px) and (max-width:1099px){
  .screen[data-screen="chat"] .olen-composer-wrap{bottom:18px!important}
 }/* CHAT COMPOSER VISUAL UNIFICATION — same capsule on all breakpoints */
-.screen[data-screen="chat"] .olen-composer-wrap>.olen-composer-v4{
+.screen[data-screen="chat"] .olen-composer-wrap>.composer.olen-composer-v4-v4{
  background:#10271f!important;
  background-image:none!important;
  border:1px solid rgba(82,246,220,.18)!important;
@@ -616,7 +616,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
  }
 }
 /* CHAT COMPOSER FINAL RESPONSIVE AUTHORITY — one visual, one sizing model */
-.screen[data-screen="chat"] .olen-composer-wrap>.olen-composer{
+.screen[data-screen="chat"] .olen-composer-wrap>.composer.olen-composer-v4{
  position:relative!important;
  left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
  width:100%!important;max-width:none!important;
@@ -664,7 +664,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
 .screen[data-screen="chat"] .olen-composer-wrap{
  box-sizing:border-box!important;
 }
-.screen[data-screen="chat"] .olen-composer-wrap>.olen-composer{
+.screen[data-screen="chat"] .olen-composer-wrap>.composer.olen-composer-v4{
  position:relative!important;
  inset:auto!important;
  width:100%!important;
@@ -682,7 +682,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
  box-shadow:none!important;
  box-sizing:border-box!important;
 }
-.screen[data-screen="chat"] .olen-composer textarea{
+.screen[data-screen="chat"] .olen-composer-v4 textarea{
  min-height:42px!important;
  padding:10px 7px!important;
  background:transparent!important;
