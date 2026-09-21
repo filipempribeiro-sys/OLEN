@@ -543,7 +543,11 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
 @media(min-width:700px) and (max-width:1099px){
  .screen[data-screen="chat"] .olen-composer-wrap{max-width:620px!important;left:calc(var(--olen-chat-rail) + max(28px,calc((100vw - var(--olen-chat-rail) - 620px)/2)))!important;right:max(28px,calc((100vw - var(--olen-chat-rail) - 620px)/2))!important}
  .screen[data-screen="chat"].side-expanded .olen-composer-wrap{left:calc(var(--olen-chat-panel) + max(28px,calc((100vw - var(--olen-chat-panel) - 620px)/2)))!important;right:max(28px,calc((100vw - var(--olen-chat-panel) - 620px)/2))!important}
-}/* MOBILE COMPOSER MICRO-ADJUSTMENT */
+}/* TABLET/DESKTOP COMPOSER BOTTOM MARGIN — ChatGPT-like */
+@media(min-width:700px){
+ .screen[data-screen="chat"] .olen-composer-wrap{bottom:24px!important}
+}
+/* MOBILE COMPOSER MICRO-ADJUSTMENT */
 @media(max-width:699px){
  .screen[data-screen="chat"] .olen-composer-wrap{transform:translateY(-29px)!important}
 }
