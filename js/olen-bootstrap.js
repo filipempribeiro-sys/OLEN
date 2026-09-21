@@ -2,7 +2,7 @@
    Deterministic composition root for the clean OLEN 5.0 runtime.
    Loads no legacy code, performs no Service Worker injection and owns no domain logic.
    Required script order:
-   core -> router -> home -> map-go -> live -> media -> account -> bootstrap.\n   Chat is owned exclusively by chat-clean/olen-chat-clean.js and is not a bootstrap domain.
+   core -> router -> home -> chat -> map-go -> live -> media -> account -> bootstrap.
    Intentionally not auto-started while OLEN 4.x remains the active runtime.
 */
 (()=>{
@@ -13,8 +13,8 @@ if(!ROOT?.core) throw new Error('OLEN 5.0 bootstrap requires olen-core.js');
 if(ROOT.bootstrap?.version==='5.0.1') return;
 
 const VERSION='5.0.1';
-const REQUIRED=Object.freeze(['router','home','mapGo','live','media','agenda','account']);
-const DOMAIN_ORDER=Object.freeze(['home','mapGo','live','media','agenda','account']);
+const REQUIRED=Object.freeze(['router','home','chat','mapGo','live','media','agenda','account']);
+const DOMAIN_ORDER=Object.freeze(['home','chat','mapGo','live','media','agenda','account']);
 let started=false;
 let starting=false;
 
