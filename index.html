@@ -958,7 +958,6 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
 <script src="./js/olen-provider.js"></script>
 <script src="./js/olen-router.js"></script>
 <script src="./js/olen-home.js"></script>
-<script src="./js/olen-chat.js"></script>
 <script src="./js/olen-map-go.js"></script>
 <script src="./js/olen-live.js"></script>
 <script src="./js/olen-media.js"></script>
@@ -1007,7 +1006,6 @@ for(var i=0;i<navs.length;i++)navs[i].onclick=function(){var v=this.getAttribute
 try{
  window.OLEN5.bootstrap.start({initialView:"home",modules:{
   home:{selectors:{root:'[data-screen="home"]'}},
-  chat:{selectors:{root:'[data-screen="chat"]',thread:"#ocStream",composer:".oc-composer"}},
   mapGo:{selectors:{mapRoot:'[data-screen="map"]',goRoot:'[data-screen="map"]',mapCanvas:".map"}},
   live:{selectors:{root:'[data-screen="map"]'}},
   agenda:{selectors:{root:'[data-screen="agenda"]'}},
