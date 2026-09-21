@@ -519,7 +519,7 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
  border:0!important;
  border-radius:27px!important;
  outline:0!important;
- background:#202020!important;
+ background:#10271f!important;
  box-shadow:none!important;
  box-sizing:border-box!important;
 }
@@ -575,6 +575,35 @@ body:has(.screen[data-screen="chat"].active)>.desktop-sidebar,body:has(.screen[d
  .screen[data-screen="chat"].side-expanded .olen-composer-wrap{
   left:calc(var(--olen-chat-panel) + (100vw - var(--olen-chat-panel))/2)!important;
   width:min(768px,calc(100vw - var(--olen-chat-panel) - 64px))!important;
+ }
+}
+/* CHAT STREAM WIDTH — TABLET/DESKTOP MATCHES COMPOSER; MOBILE UNCHANGED */
+@media(min-width:700px) and (max-width:1099px){
+ .screen[data-screen="chat"] .olen-chat-messages{
+  width:min(760px,calc(100vw - var(--olen-chat-rail) - 48px))!important;
+  max-width:none!important;
+  margin-left:calc(var(--olen-chat-rail) + (100vw - var(--olen-chat-rail))/2)!important;
+  margin-right:0!important;
+  transform:translateX(-50%)!important;
+  box-sizing:border-box!important;
+ }
+ .screen[data-screen="chat"].side-expanded .olen-chat-messages{
+  width:min(760px,calc(100vw - var(--olen-chat-panel) - 48px))!important;
+  margin-left:calc(var(--olen-chat-panel) + (100vw - var(--olen-chat-panel))/2)!important;
+ }
+}
+@media(min-width:1100px){
+ .screen[data-screen="chat"] .olen-chat-messages{
+  width:min(768px,calc(100vw - var(--olen-chat-rail) - 64px))!important;
+  max-width:none!important;
+  margin-left:calc(var(--olen-chat-rail) + (100vw - var(--olen-chat-rail))/2)!important;
+  margin-right:0!important;
+  transform:translateX(-50%)!important;
+  box-sizing:border-box!important;
+ }
+ .screen[data-screen="chat"].side-expanded .olen-chat-messages{
+  width:min(768px,calc(100vw - var(--olen-chat-panel) - 64px))!important;
+  margin-left:calc(var(--olen-chat-panel) + (100vw - var(--olen-chat-panel))/2)!important;
  }
 }
 /* Chat conversation layout: user right,OLEN left + assistant actions */
