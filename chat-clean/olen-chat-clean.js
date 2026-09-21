@@ -1,11 +1,12 @@
 (()=>{"use strict";const $=id=>document.getElementById(id);const KEY="olen.chat.conversations",ACTIVE="olen.chat.active";let longId=null,timer=null,generation=null,files=[],recognition=null;
 const ENGINE_EVENT="olen:conversation-request";
-function setGenerating(on){const a=$("ocAction");if(!a)return;a.dataset.mode=on?"stop":"voice";syncAction()}
-function stopGeneration(){if(!generation)return;generation.controller.abort();generation=null;setGenerating(false)}
+function setStatus(state,message=""){const box=$("ocStatus");if(!box)return;box.dataset.state=state||"idle";box.textContent=message||"";box.hidden=!message}
+function setGenerating(on){const a=$("ocAction");if(!a)return;a.dataset.mode=on?"stop":"voice";setStatus(on?"generating":"idle",on?"A OLEN está a preparar a resposta…":"");syncAction()}
+function stopGeneration(){if(!generation)return;generation.controller.abort();generation=null;setGenerating(false);setStatus("stopped","Resposta interrompida.");setTimeout(()=>setStatus("idle",""),1600)}
 async function requestEngine({conversationId,retryFrom=null}={}){
  const x=load().find(v=>v.id===(conversationId||activeId()));if(!x)return;
  stopGeneration();const controller=new AbortController();generation={controller,conversationId:x.id};setGenerating(true);
- const detail={conversationId:x.id,messages:x.messages.map(m=>({role:m.role,content:m.text||"",kind:m.kind||null,attachment:m.attachment||null})),retryFrom,signal:controller.signal,respond(text,extra){if(controller.signal.aborted)return;const a=load(),y=a.find(v=>v.id===x.id);if(!y)return;y.messages.push(Object.assign({role:"assistant",text:String(text||"")},extra||{}));y.updated=Date.now();save(a);renderChat()},fail(message){if(controller.signal.aborted)return;window.dispatchEvent(new CustomEvent("olen:conversation-error",{detail:{conversationId:x.id,message:String(message||"")}}))}};
+ const detail={conversationId:x.id,messages:x.messages.map(m=>({role:m.role,content:m.text||"",kind:m.kind||null,attachment:m.attachment||null})),retryFrom,signal:controller.signal,respond(text,extra){if(controller.signal.aborted)return;const a=load(),y=a.find(v=>v.id===x.id);if(!y)return;y.messages.push(Object.assign({role:"assistant",text:String(text||"")},extra||{}));y.updated=Date.now();save(a);renderChat()},fail(message){if(controller.signal.aborted)return;const msg=String(message||"Não foi possível gerar a resposta.");setStatus("error",msg);window.dispatchEvent(new CustomEvent("olen:conversation-error",{detail:{conversationId:x.id,message:msg}}))}};
  window.dispatchEvent(new CustomEvent(ENGINE_EVENT,{detail}));
  try{if(typeof window.OLENConversationEngine?.request==="function")await window.OLENConversationEngine.request(detail)}catch(err){detail.fail(err?.message||"Conversation Engine error")}finally{if(generation?.controller===controller){generation=null;setGenerating(false)}}
 }
