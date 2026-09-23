@@ -2,26 +2,12 @@
 const KEY="olen.chat.conversations.v1",ACTIVE="olen.chat.active.v1";
 const one=s=>document.querySelector(s),all=s=>Array.from(document.querySelectorAll(s));
 const el={chat:one("#olenChat"),side:one("#olenChatSidebar"),scrim:one("#olenChatScrim"),messages:one("#olenChatMessages"),sections:one("#olenSideSections"),input:one("#olenChatInput"),action:one("#olenChatAction"),search:one("#olenChatSearchPop"),searchInput:one("#olenSearchInput"),results:one("#olenSearchResults"),more:one("#olenChatMore"),longMenu:one("#olenLongMenu"),longScrim:one("#olenLongScrim"),useful:one("#olenChatUseful"),tone:one("#olenToneMenu"),toneLabel:one("#olenToneLabel")};let selected=null,generating=false,generationConversationId=null,sideOpener=null,searchOpener=null,longOpener=null;
-const demo=()=>({id:"demo-sintra-scroll-v1",title:"Sintra · Trail",pinned:false,updated:Date.now(),messages:[
-{role:"assistant",text:"Olá Filipe. O que queres fazer hoje?"},
-{role:"user",text:"Quero um trail em Sintra, com saída da Amadora de comboio. Quero monumentos, um sítio para almoçar e, se der, terminar perto da praia."},
-{role:"assistant",text:"Tenho uma proposta para um dia completo: chegada a Sintra de manhã, percurso pedonal pela vila e encosta, passagem por pontos históricos e continuação até uma zona com ligação à costa. Vou organizar tudo por etapas para conseguires testar uma resposta longa."},
-{role:"assistant",kind:"card",title:"1 · Chegada a Sintra",text:"Comboio até Sintra · início do percurso junto à estação. A partir daqui, a experiência segue a pé pelo centro histórico."},
-{role:"assistant",kind:"card",title:"2 · Centro histórico",text:"Percurso pela vila, com tempo para explorar ruas, miradouros e património antes de subir para a zona de Seteais."},
-{role:"user",text:"Quero privilegiar locais gratuitos e evitar andar sempre a correr."},
-{role:"assistant",text:"Perfeito. Ajusto o ritmo: menos paragens obrigatórias, mais tempo em cada local e prioridade a espaços exteriores ou gratuitos. Os locais pagos ficam apenas como alternativas."},
-{role:"assistant",kind:"card",title:"3 · Seteais e encosta",text:"Subida progressiva pela zona de Seteais, com paragens para descanso e fotografia. O percurso pode ser encurtado se o ritmo estiver abaixo do previsto."},
-{role:"assistant",kind:"card",title:"4 · Almoço",text:"Paragem prevista a meio da experiência. A OLEN poderá apresentar aqui opções próximas, preço estimado, distância e possibilidade de guardar a escolha."},
-{role:"user",text:"E depois do almoço ainda conseguimos ir à praia?"},
-{role:"assistant",text:"Sim. Mantendo este ritmo, a segunda metade pode orientar-se para a costa. Em dados reais, esta decisão seria recalculada com hora atual, transportes disponíveis e condições no percurso."},
-{role:"assistant",kind:"card",title:"5 · Continuação para a costa",text:"Etapa flexível para aproximar o percurso da zona costeira, mantendo alternativas caso o tempo ou o ritmo obriguem a encurtar."},
-{role:"assistant",kind:"card",title:"6 · Praia",text:"Final de tarde junto ao mar, se o horário e as ligações permitirem. A OLEN deverá adaptar automaticamente esta etapa ao progresso real."},
-{role:"user",text:"Quero também perceber como volto para casa."},
-{role:"assistant",text:"Claro. O regresso fica integrado no plano para que a experiência não termine sem uma opção prática de transporte."},
-{role:"assistant",kind:"card",title:"7 · Regresso",text:"Ligação de regresso calculada a partir do ponto final real da experiência, com margem para alterações durante o dia."},
-{role:"assistant",kind:"card",title:"8 · Plano alternativo",text:"Se alguma etapa falhar, a OLEN apresenta uma alternativa compatível com a localização e o tempo restante."},
-{role:"assistant",kind:"card",title:"9 · Ritmo adaptativo",text:"O plano reduz ou prolonga etapas consoante o progresso, evitando transformar a experiência numa corrida."},
-{role:"assistant",kind:"card",title:"10 · Resumo do dia",text:"Visão final do percurso, experiências selecionadas e opções de regresso para consulta rápida."}
+const demo=()=>({id:"demo-sintra-scroll-v1",title:"Sintra · fim de semana",pinned:false,updated:Date.now(),messages:[
+{role:"user",text:"Quero preparar um fim de semana em Sintra."},
+{role:"assistant",text:"Claro. Posso organizar uma proposta equilibrada entre património, natureza e tempo livre."},
+{role:"user",text:"Prefiro evitar um plano demasiado apertado."},
+{role:"assistant",text:"Perfeito. Deixo margem entre experiências e concentro o essencial sem transformar o passeio numa corrida."},
+{role:"assistant",kind:"card",title:"Sintra sem pressa",text:"Um plano flexível para descobrir Sintra ao teu ritmo."}
 ]});
 const load=()=>{try{const raw=localStorage.getItem(KEY);if(raw!==null){const v=JSON.parse(raw);if(Array.isArray(v)){const seen=new Set();return v.filter(c=>c&&typeof c==="object"&&typeof c.id==="string"&&c.id&&!seen.has(c.id)&&seen.add(c.id))}}}catch{}const v=[demo()];save(v);return v},save=v=>localStorage.setItem(KEY,JSON.stringify(v));
 const activeFrom=v=>{const id=localStorage.getItem(ACTIVE);return id?v.find(x=>x.id===id)||null:null},messagesOf=c=>Array.isArray(c?.messages)?c.messages:[],ensureMessages=c=>{if(!Array.isArray(c?.messages))c.messages=[];return c.messages},validMessagesOf=c=>messagesOf(c).filter(m=>m&&typeof m==="object"&&(m.role==="user"||m.role==="assistant")),safe=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
