@@ -22,7 +22,7 @@ function available(){return config.enabled&&Boolean(config.endpoint)}
 function abort(){if(controller){controller.abort();controller=null}}
 async function reply({messages=[],tone="balanced",signal}={}){
  if(!available())return{ok:false,disabled:true};
- const safeMessages=Array.isArray(messages)?messages.filter(m=>m&&typeof m==="object"&&(m.role==="user"||m.role==="assistant")).map(({role,text,title,kind})=>({role,text,title,kind})):[];
+ const safeMessages=Array.isArray(messages)?messages.filter(m=>m&&typeof m==="object"&&(m.role==="user"||m.role==="assistant")).map(({role,text,title,kind})=>({role,text:typeof text==="string"?text:"",title:typeof title==="string"?title:"",kind:typeof kind==="string"?kind:""})):[];
  const safeTone=["direct","balanced","explore"].includes(tone)?tone:"balanced";
  abort();
  const requestController=new AbortController();
