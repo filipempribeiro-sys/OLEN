@@ -22,6 +22,8 @@ function available(){return config.enabled&&Boolean(config.endpoint)}
 function abort(){if(controller){controller.abort();controller=null}}
 async function reply({messages=[],tone="balanced",signal}={}){
  if(!available())return{ok:false,disabled:true};
+ const safeMessages=Array.isArray(messages)?messages.filter(m=>m&&typeof m==="object"&&(m.role==="user"||m.role==="assistant")).map(({role,text,title,kind})=>({role,text,title,kind})):[];
+ const safeTone=["direct","balanced","explore"].includes(tone)?tone:"balanced";
  abort();
  const requestController=new AbortController();
  controller=requestController;
@@ -32,7 +34,7 @@ async function reply({messages=[],tone="balanced",signal}={}){
   const response=await fetch(config.endpoint,{
    method:"POST",
    headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({messages,tone,model:config.model||undefined}),
+   body:JSON.stringify({messages:safeMessages,tone:safeTone,model:config.model||undefined}),
    signal:requestController.signal
   });
   if(!response.ok)throw new Error("Conversation Engine HTTP "+response.status);
