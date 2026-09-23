@@ -39,7 +39,7 @@ async function reply({messages=[],tone="balanced",signal}={}){
   });
   if(!response.ok)throw new Error("Conversation Engine HTTP "+response.status);
   const data=await response.json();
-  const text=typeof data?.text==="string"?data.text:typeof data?.message==="string"?data.message:"";
+  const text=(typeof data?.text==="string"?data.text:typeof data?.message==="string"?data.message:"").trim();
   if(!text)throw new Error("Conversation Engine returned no text");
   return{ok:true,text,data};
  }finally{
