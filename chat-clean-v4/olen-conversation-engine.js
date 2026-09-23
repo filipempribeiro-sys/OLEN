@@ -23,16 +23,17 @@ function abort(){if(controller){controller.abort();controller=null}}
 async function reply({messages=[],tone="balanced",signal}={}){
  if(!available())return{ok:false,disabled:true};
  abort();
- controller=new AbortController();
- const timer=setTimeout(()=>controller?.abort(),config.timeoutMs);
- const forwardAbort=()=>controller?.abort();
+ const requestController=new AbortController();
+ controller=requestController;
+ const timer=setTimeout(()=>requestController.abort(),config.timeoutMs);
+ const forwardAbort=()=>requestController.abort();
  signal?.addEventListener?.("abort",forwardAbort,{once:true});
  try{
   const response=await fetch(config.endpoint,{
    method:"POST",
    headers:{"Content-Type":"application/json"},
    body:JSON.stringify({messages,tone,model:config.model||undefined}),
-   signal:controller.signal
+   signal:requestController.signal
   });
   if(!response.ok)throw new Error("Conversation Engine HTTP "+response.status);
   const data=await response.json();
@@ -42,7 +43,7 @@ async function reply({messages=[],tone="balanced",signal}={}){
  }finally{
   clearTimeout(timer);
   signal?.removeEventListener?.("abort",forwardAbort);
-  controller=null;
+  if(controller===requestController)controller=null;
  }
 }
 window.OLENConversationEngine=Object.freeze({configure,status,available,reply,abort});
