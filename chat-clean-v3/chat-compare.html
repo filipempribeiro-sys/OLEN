@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OLEN Chat · Current vs Clean V3</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#07110e;color:#eef7f4;font:14px system-ui,sans-serif}
+header{position:sticky;top:0;z-index:20;display:flex;gap:8px;align-items:center;padding:10px 12px;background:#0b1a15;border-bottom:1px solid #ffffff18}
+button,select{background:#12271f;color:#eef7f4;border:1px solid #ffffff20;border-radius:10px;padding:8px 10px}
+main{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#ffffff18;height:calc(100dvh - 58px)}
+.pane{position:relative;overflow:auto;background:#06130f}.label{position:absolute;z-index:5;top:8px;left:8px;padding:5px 8px;border-radius:8px;background:#000a;font-weight:700}
+iframe{display:block;border:0;background:#06130f;transform-origin:0 0}
+#overlay{display:none;position:fixed;inset:58px 0 0;z-index:10;background:#06130f}
+#overlay iframe{position:absolute;inset:0}.cleanOverlay{opacity:.5}
+body.overlay main{visibility:hidden}body.overlay #overlay{display:block}
+#report{position:fixed;right:12px;top:64px;z-index:30;max-height:75dvh;overflow:auto;width:min(520px,90vw);background:#081813f5;border:1px solid #ffffff20;border-radius:14px;padding:12px;display:none}
+#report.show{display:block}pre{white-space:pre-wrap;font-size:11px}
+</style></head><body>
+<header>
+<strong>OLEN Chat Comparator</strong>
+<select id="viewport"><option value="390,844">Mobile 390×844</option><option value="768,1024">Tablet 768×1024</option><option value="1440,900">Desktop 1440×900</option></select>
+<button id="side">Side by side</button><button id="over">Overlay 50%</button><button id="measure">Medir geometria</button><button id="toggleReport">Relatório</button>
+</header>
+<main><section class="pane"><span class="label">ATUAL</span><iframe id="current" src="./current-reference.html"></iframe></section><section class="pane"><span class="label">CLEAN V3</span><iframe id="clean" src="./clean-v3.html"></iframe></section></main>
+<div id="overlay"><iframe id="currentOverlay" src="./current-reference.html"></iframe><iframe class="cleanOverlay" id="cleanOverlay" src="./clean-v3.html"></iframe></div>
+<div id="report"><strong>Geometry delta · Clean − Atual</strong><pre id="out">Ainda não medido.</pre></div>
+<script>
+const $=q=>document.querySelector(q),frames=['current','clean','currentOverlay','cleanOverlay'];
+function size(){const [w,h]=$('#viewport').value.split(',').map(Number);frames.forEach(id=>{const f=$('#'+id);f.style.width=w+'px';f.style.height=h+'px'});}
+$('#viewport').onchange=size;size();
+$('#side').onclick=()=>document.body.classList.remove('overlay');
+$('#over').onclick=()=>document.body.classList.add('overlay');
+$('#toggleReport').onclick=()=>$('#report').classList.toggle('show');
+const targets=['[data-compare="root"]','[data-compare="header"]','[data-compare="messages"]','[data-compare="composer"]','[data-compare="sidebar"]','[data-compare="mainnav"]'];
+function rect(doc,s){const e=doc.querySelector(s);if(!e)return null;const r=e.getBoundingClientRect(),c=getComputedStyle(e);return{x:r.x,y:r.y,w:r.width,h:r.height,p:c.padding,g:c.gap,fs:c.fontSize,br:c.borderRadius}}
+$('#measure').onclick=()=>{const a=$('#current').contentDocument,b=$('#clean').contentDocument;let lines=[];for(const s of targets){const x=rect(a,s),y=rect(b,s);if(!x||!y){lines.push(s+'\n  missing: '+(!x?'ATUAL ':'')+(!y?'CLEAN':''));continue}const d={x:+(y.x-x.x).toFixed(2),y:+(y.y-x.y).toFixed(2),w:+(y.w-x.w).toFixed(2),h:+(y.h-x.h).toFixed(2)};lines.push(s+'\n  Atual '+JSON.stringify(x)+'\n  Clean '+JSON.stringify(y)+'\n  Δ '+JSON.stringify(d))}$('#out').textContent=lines.join('\n\n');$('#report').classList.add('show')};
+</script></body></html>
