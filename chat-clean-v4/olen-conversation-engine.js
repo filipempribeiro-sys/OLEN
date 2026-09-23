@@ -11,7 +11,7 @@ let controller=null;
 function configure(options={}){
  if(options&&typeof options==="object"){
   if(typeof options.enabled==="boolean")config.enabled=options.enabled;
-  if(typeof options.endpoint==="string")config.endpoint=options.endpoint.trim();
+  if(typeof options.endpoint==="string"){const endpoint=options.endpoint.trim();if(endpoint){let parsed;try{parsed=new URL(endpoint,location.href)}catch{throw new TypeError("Invalid Conversation Engine endpoint")}if(parsed.protocol!=="https:"&&parsed.origin!==location.origin)throw new TypeError("Conversation Engine endpoint must use HTTPS");config.endpoint=parsed.href}else config.endpoint=""}
   if(typeof options.model==="string")config.model=options.model.trim();
   if(Number.isFinite(options.timeoutMs)&&options.timeoutMs>0)config.timeoutMs=options.timeoutMs;
  }
