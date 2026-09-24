@@ -35,3 +35,12 @@
  [data-olen-chatbox="2026-clean"]{position:fixed!important;z-index:120!important;left:calc(var(--olen-chat-rail) + max(64px,calc((100vw - var(--olen-chat-rail) - 760px)/2)))!important;right:max(64px,calc((100vw - var(--olen-chat-rail) - 760px)/2))!important;bottom:24px!important;width:auto!important;max-width:760px!important;margin:0!important}
  .screen[data-screen="chat"].side-expanded [data-olen-chatbox="2026-clean"]{left:calc(var(--olen-chat-panel) + max(64px,calc((100vw - var(--olen-chat-panel) - 760px)/2)))!important;right:max(64px,calc((100vw - var(--olen-chat-panel) - 760px)/2))!important}
 }
+/* Attachments and browser-voice feedback, scoped to the isolated composer. */
+[data-olen-chatbox="2026-clean"] .olen-cbx-preview{position:absolute;left:0;bottom:calc(100% + 8px);display:flex;gap:8px;max-width:100%;padding:8px;border:1px solid rgba(82,246,220,.52);border-radius:16px;background:#061610;box-sizing:border-box}
+[data-olen-chatbox="2026-clean"] .olen-cbx-preview[hidden],[data-olen-chatbox="2026-clean"] .olen-cbx-status[hidden]{display:none!important}
+[data-olen-chatbox="2026-clean"] .olen-cbx-preview-item{position:relative;width:72px;height:72px;flex:0 0 72px}
+[data-olen-chatbox="2026-clean"] .olen-cbx-preview-item img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+[data-olen-chatbox="2026-clean"] .olen-cbx-preview-item button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border:1px solid rgba(82,246,220,.52);border-radius:50%;background:#061610;color:#fff;cursor:pointer}
+[data-olen-chatbox="2026-clean"] .olen-cbx-status{position:absolute;bottom:calc(100% + 8px);right:0;max-width:75%;padding:8px 10px;border-radius:12px;background:#061610;border:1px solid rgba(82,246,220,.52);color:#e5f6f1;font-size:12px}
+[data-olen-chatbox="2026-clean"] .olen-cbx-preview:not([hidden])~.olen-cbx-status:not([hidden]){bottom:calc(100% + 100px)}
+.olen-chat-messages .olen-chat-image{display:block;width:auto;max-width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:8px}
