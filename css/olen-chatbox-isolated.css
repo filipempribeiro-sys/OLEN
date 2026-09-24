@@ -105,3 +105,6 @@
 [data-olen-chatbox="2026-clean"] .olen-cbx-input::placeholder{color:#748780!important;-webkit-text-fill-color:#748780!important;opacity:1!important}
 [data-olen-chatbox="2026-clean"] .olen-cbx-tone{color:#748780!important;-webkit-text-fill-color:#748780!important}
 [data-olen-chatbox="2026-clean"] .olen-cbx-tone svg,[data-olen-chatbox="2026-clean"] .olen-cbx-tone .chevron{opacity:.75!important}
+
+/* Mobile-only optical adjustment: move plus glyph down 1px, leaving its button and other layouts untouched. */
+@media(max-width:699px){[data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-plus span{transform:translateY(-1px)!important}}
