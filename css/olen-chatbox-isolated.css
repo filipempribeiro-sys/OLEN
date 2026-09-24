@@ -115,3 +115,10 @@
  [data-olen-chatbox="2026-clean"] .olen-cbx-tone{gap:8px!important;padding:0 7px!important}
  [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row.olen-cbx-text-expanded{column-gap:7px!important}
 }
+
+/* Approved control proportions: readable response style and a 2px inset for the Aurora voice/send button. */
+@media(min-width:700px){
+ [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-tone{font-size:14px!important;line-height:20px!important}
+ [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-tone span{font-size:inherit!important;line-height:inherit!important}
+}
+[data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-action{transform:translateX(-2px)!important}
