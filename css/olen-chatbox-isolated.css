@@ -120,6 +120,7 @@
 @media(min-width:700px){
  [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-tone{font-size:calc(1em - 1px)!important;line-height:20px!important}
  [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-tone span{font-size:inherit!important;line-height:inherit!important}
+ [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-tone span:last-child{display:inline-flex!important;align-items:center!important;justify-content:center!important;line-height:1!important;transform:translateY(-2px)!important}
 }
 [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-action{transform:translateX(-4px)!important}
 
