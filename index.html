@@ -1841,7 +1841,7 @@ longScrim?.addEventListener('click',closeLong);longMenu?.addEventListener('click
 document.querySelectorAll('[data-side-nav]').forEach(b=>b.onclick=()=>{closeSide();document.querySelector('.nav[data-go="'+b.dataset.sideNav+'"]')?.click()});ensureLongDemo();renderChat();renderSide();
 // Opening Chat from another tab starts a fresh conversation. Existing conversations remain in history.
 let chatWasVisible=!!document.querySelector('.screen[data-screen="chat"]')?.classList.contains('active');
-document.addEventListener('click',function(e){const tab=e.target.closest('.nav[data-view="chat"],.desk-nav[data-view="chat"]');if(!tab)return;const nowVisible=!!document.querySelector('.screen[data-screen="chat"]')?.classList.contains('active');if(!nowVisible&&!chatWasVisible){closeToolPage();closeSearch();newChat()}chatWasVisible=true},true);
+document.addEventListener('click',function(e){const tab=e.target.closest('.nav[data-view="chat"],.desk-nav[data-view="chat"]');if(!tab)return;const nowVisible=!!document.querySelector('.screen[data-screen="chat"]')?.classList.contains('active');if(!nowVisible&&!chatWasVisible){closeToolPage();closeSearch();newChat()}syncSideLayout();requestAnimationFrame(syncSideLayout);chatWasVisible=true},true);
 document.addEventListener('click',function(e){const tab=e.target.closest('.nav[data-view],.desk-nav[data-view]');if(tab&&tab.dataset.view!=='chat')chatWasVisible=false},true);
 if(document.querySelector('.screen[data-screen="chat"]')?.classList.contains('active'))newChat();window.OLENChat={openSidebar:openSide,closeSidebar:closeSide,newConversation:newChat,render:renderChat};})();
 </script><script src="js/olen-maneuvers.js"></script><script id="rz-runtime">(()=>{"use strict";
