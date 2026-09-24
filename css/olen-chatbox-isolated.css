@@ -100,3 +100,8 @@
 /* Locked composer: optically center the plus glyph on the 38px action row in every viewport. */
 [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-plus{height:38px!important;min-height:38px!important;align-self:flex-end!important;place-items:center!important}
 [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-plus span{display:block!important;line-height:1!important;transform:translateY(-2px)!important}
+
+/* Quiet composer labels: preserve Aurora typography and keep entered text fully legible. */
+[data-olen-chatbox="2026-clean"] .olen-cbx-input::placeholder{color:#748780!important;-webkit-text-fill-color:#748780!important;opacity:1!important}
+[data-olen-chatbox="2026-clean"] .olen-cbx-tone{color:#748780!important;-webkit-text-fill-color:#748780!important}
+[data-olen-chatbox="2026-clean"] .olen-cbx-tone svg,[data-olen-chatbox="2026-clean"] .olen-cbx-tone .chevron{opacity:.75!important}
