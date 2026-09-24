@@ -44,3 +44,11 @@
 [data-olen-chatbox="2026-clean"] .olen-cbx-status{position:absolute;bottom:calc(100% + 8px);right:0;max-width:75%;padding:8px 10px;border-radius:12px;background:#061610;border:1px solid rgba(82,246,220,.52);color:#e5f6f1;font-size:12px}
 [data-olen-chatbox="2026-clean"] .olen-cbx-preview:not([hidden])~.olen-cbx-status:not([hidden]){bottom:calc(100% + 100px)}
 .olen-chat-messages .olen-chat-image{display:block;width:auto;max-width:100%;max-height:320px;object-fit:contain;border-radius:12px;margin-top:8px}
+
+/* Chat conversation shares the composer column on tablet and desktop. */
+@media(min-width:700px) and (max-width:1099px){
+ .screen[data-screen="chat"] .olen-chat-messages{width:100%!important;max-width:620px!important;box-sizing:border-box!important;margin-left:auto!important;margin-right:auto!important}
+}
+@media(min-width:1100px){
+ .screen[data-screen="chat"] .olen-chat-messages{width:100%!important;max-width:760px!important;box-sizing:border-box!important;margin-left:auto!important;margin-right:auto!important}
+}
