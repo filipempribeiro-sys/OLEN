@@ -53,3 +53,9 @@
 @media(min-width:1100px){
  .screen[data-screen="chat"] .olen-chat-messages{width:100%!important;max-width:var(--olen-chat-desktop-column)!important;box-sizing:border-box!important;margin-left:auto!important;margin-right:auto!important}
 }
+
+/* Tablet rail only: slightly wider shared conversation/composer column; expanded sidebar unchanged. */
+@media(min-width:700px) and (max-width:1099px){
+ .screen[data-screen="chat"]:not(.side-expanded) [data-olen-chatbox="2026-clean"]{left:calc(var(--olen-chat-rail) + max(28px,calc((100vw - var(--olen-chat-rail) - 680px)/2)))!important;right:max(28px,calc((100vw - var(--olen-chat-rail) - 680px)/2))!important;max-width:680px!important}
+ .screen[data-screen="chat"]:not(.side-expanded) .olen-chat-messages{max-width:680px!important}
+}
