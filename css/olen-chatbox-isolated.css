@@ -108,3 +108,10 @@
 
 /* Mobile-only optical adjustment: move plus glyph down 1px, leaving its button and other layouts untouched. */
 @media(max-width:699px){[data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-plus span{transform:translateY(0px)!important}}
+
+/* Airier ChatGPT-like control rhythm, with OLEN Aurora colors and outlined voice button preserved. */
+@media(min-width:700px){
+ [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row{gap:7px!important}
+ [data-olen-chatbox="2026-clean"] .olen-cbx-tone{gap:8px!important;padding:0 7px!important}
+ [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row.olen-cbx-text-expanded{column-gap:7px!important}
+}
