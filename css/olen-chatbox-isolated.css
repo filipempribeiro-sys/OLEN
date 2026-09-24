@@ -121,4 +121,7 @@
  [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-tone{font-size:14px!important;line-height:20px!important}
  [data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-tone span{font-size:inherit!important;line-height:inherit!important}
 }
-[data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-action{transform:translateX(-2px)!important}
+[data-olen-chatbox="2026-clean"] .olen-cbx-compose-row .olen-cbx-action{transform:translateX(-4px)!important}
+
+/* Placeholder only: one pixel smaller than entered text; input sizing and line height stay locked. */
+[data-olen-chatbox="2026-clean"] .olen-cbx-input::placeholder{font-size:calc(1em - 1px)!important}
