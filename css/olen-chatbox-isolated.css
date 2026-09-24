@@ -24,6 +24,9 @@
  [data-olen-chatbox="2026-clean"]{position:fixed!important;z-index:120!important;left:10px!important;right:10px!important;bottom:calc(58px + var(--safe))!important;width:auto!important;max-width:none!important;margin:0!important;padding:0!important;transform:translateY(-29px)!important}
  [data-olen-chatbox="2026-clean"] .olen-cbx-tone,[data-olen-chatbox="2026-clean"] .olen-cbx-disclaimer{display:none!important}
 }
+@media(min-width:700px){
+ [data-olen-chatbox="2026-clean"] .olen-cbx-plus{padding-bottom:3px!important}
+}
 @media(min-width:700px) and (max-width:1099px){
  [data-olen-chatbox="2026-clean"]{position:fixed!important;z-index:120!important;left:calc(var(--olen-chat-rail) + max(28px,calc((100vw - var(--olen-chat-rail) - 620px)/2)))!important;right:max(28px,calc((100vw - var(--olen-chat-rail) - 620px)/2))!important;bottom:24px!important;width:auto!important;max-width:620px!important;margin:0!important}
  .screen[data-screen="chat"].side-expanded [data-olen-chatbox="2026-clean"]{left:calc(var(--olen-chat-panel) + max(28px,calc((100vw - var(--olen-chat-panel) - 620px)/2)))!important;right:max(28px,calc((100vw - var(--olen-chat-panel) - 620px)/2))!important}
