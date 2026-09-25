@@ -45,6 +45,19 @@
    rgba(2,8,6,.90) 67%,rgba(2,8,6,1) 85%,rgba(2,8,6,1) 100%)!important;
  }
 }
+/* Tablet/desktop: the cards use the full Chat composer column; only the
+   experience carousel expands. Keep the response bubble at its approved 82%. */
+@media (min-width:700px){
+ .screen[data-screen="chat"] .olen-chat-messages .olen-assistant-turn:has(> .olen-place-section){
+  width:100%!important;max-width:100%!important;min-width:0!important;align-self:stretch!important;
+ }
+ .screen[data-screen="chat"] .olen-chat-messages .olen-assistant-turn:has(> .olen-place-section)>.olen-place-section{
+  width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;
+ }
+ .screen[data-screen="chat"] .olen-chat-messages .olen-assistant-turn:has(> .olen-place-section)>.bubble{
+  max-width:82%!important;
+ }
+}
 /* Only mobile: let place cards use the full Chat column, not the 82% response bubble.
    Popup details and tablet/desktop carousel sizing stay unchanged. */
 @media (max-width:699px){
