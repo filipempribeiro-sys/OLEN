@@ -4,7 +4,9 @@
 .rz-map.olen-real-map>.rz-warn,.rz-map.olen-real-map>.rz-dot{
  display:none!important;content:none!important;
 }
-#olenRealMap.olen-live-map{
+#olenRealMap.olen-live-map{display:none}
+.rz-map.olen-real-map #olenRealMap.olen-live-map{
+ display:block;
  position:absolute;inset:0;z-index:3;
  height:100%;width:100%;
  background:#0a2420;
