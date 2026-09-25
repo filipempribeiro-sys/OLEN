@@ -1,0 +1,50 @@
+/* Desktop main navigation adopts the exact five footer SVGs and tab palette.
+   Scoped to the original desktop sidebar: Chat rail and mobile footer untouched. */
+@media (min-width:1100px){
+ .desktop-sidebar .desktop-nav{gap:8px!important}
+ .desktop-sidebar .desk-nav{
+  --olen-nav-accent:#59edb6;
+  display:flex!important;align-items:center!important;gap:10px!important;
+  min-height:60px!important;padding:8px 12px!important;
+  border:0!important;border-radius:14px!important;
+  background:transparent!important;color:#f7fbff!important;
+  text-align:left!important;
+ }
+ .desktop-sidebar .desk-nav[data-view="home"]{--olen-nav-accent:#59edb6}
+ .desktop-sidebar .desk-nav[data-view="map"]{--olen-nav-accent:#52f6dc}
+ .desktop-sidebar .desk-nav[data-view="chat"]{--olen-nav-accent:#5ba8ff}
+ .desktop-sidebar .desk-nav[data-view="agenda"]{--olen-nav-accent:#b16cff}
+ .desktop-sidebar .desk-nav[data-view="profile"]{--olen-nav-accent:#7d4ed8}
+ .desktop-sidebar .desk-nav>svg{
+  display:block!important;box-sizing:border-box!important;
+  width:42px!important;height:42px!important;flex:0 0 42px!important;
+  margin:0!important;padding:9px!important;border:2px solid transparent!important;
+  border-radius:50%!important;background:transparent!important;
+  fill:none!important;stroke:url(#olenFooterAurora)!important;stroke-width:1.8!important;
+  stroke-linecap:round!important;stroke-linejoin:round!important;
+ }
+ .desktop-sidebar .desk-nav>span{
+  font-size:14px!important;font-weight:650!important;
+  background:linear-gradient(100deg,#bffaff 0%,#f9fbff 34%,#fff 52%,#f7d8ff 72%,#f1a6ff 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+ }
+ .desktop-sidebar .desk-nav.active{
+  color:var(--olen-nav-accent)!important;background:transparent!important;
+ }
+ .desktop-sidebar .desk-nav.active>svg{
+  border-color:var(--olen-nav-accent)!important;
+  color:var(--olen-nav-accent)!important;stroke:currentColor!important;
+  background:#06150f!important;box-shadow:0 0 0 4px #03100c!important;
+ }
+ .desktop-sidebar .desk-nav.active>span{
+  background:none!important;color:var(--olen-nav-accent)!important;
+  -webkit-text-fill-color:var(--olen-nav-accent)!important;
+ }
+ .desktop-sidebar .desk-nav:hover{
+  background:rgba(255,255,255,.045)!important;
+ }
+ .desktop-sidebar .desk-nav:focus-visible{
+  outline:2px solid var(--olen-nav-accent)!important;outline-offset:2px!important;
+ }
+}
