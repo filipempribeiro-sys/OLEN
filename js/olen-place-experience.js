@@ -128,7 +128,8 @@ function ensureOverlay(){
  overlay=document.createElement('div');
  overlay.id='olenPlaceDetailOverlay';overlay.className='olen-place-overlay olen-px-overlay';overlay.hidden=true;
  overlay.innerHTML='<section class="olen-place-modal olen-px-modal" role="dialog" aria-modal="true" aria-label="Detalhes do local">'+
- '<button type="button" class="olen-place-close" aria-label="Fechar detalhes">×</button>'+
+ '<div class="olen-place-modal-hero" hidden></div>'+
+ '<button type="button" class="olen-place-close" aria-label="Fechar detalhes"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M5 5L19 19M19 5L5 19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>'+
  '<div class="olen-place-modal-content"></div><div class="olen-place-modal-footer"></div></section>';
  document.body.appendChild(overlay);
  overlay.addEventListener('click',e=>{
@@ -148,8 +149,9 @@ function ensureOverlay(){
  document.addEventListener('error',e=>{
    const image=e.target;
    if(image?.tagName==='IMG'&&image.closest('.olen-place-card,.olen-px-modal')){
-     const wrapper=image.closest('.olen-place-image,.olen-px-hero,.olen-px-image');
-     wrapper?.remove();
+     const wrapper=image.closest('.olen-place-image,.olen-place-modal-hero,.olen-px-image');
+     if(wrapper?.classList?.contains('olen-place-modal-hero')){wrapper.hidden=true;wrapper.innerHTML=''}
+     else wrapper?.remove();
      image.closest('.olen-place-card')?.classList.add('no-photo');
    }
  },true);
@@ -166,11 +168,14 @@ function open(p,i,j){
 function footer(){
  if(!current)return'';
  const {p,i,j}=current;
+ const plan=p.selected?'<span class="olen-px-action-icon" aria-hidden="true">✓</span>Selecionado':
+   '<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 4v16M4 12h16"/></svg></span>Plano';
+ const map='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16m6-14v16"/></svg></span>Mapa';
+ const go='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20V4m0 0-6 6m6-6 6 6M5 20h14"/></svg></span>Ir';
  return '<div class="olen-px-footer">'+
- '<button type="button" data-place-action="select" data-place-msg="'+i+'" data-place-index="'+j+'">'+
- (p.selected?'✓ Selecionado':'＋ Plano')+'</button>'+
- '<button type="button" data-place-action="map" data-place-msg="'+i+'" data-place-index="'+j+'">⌖ Mapa</button>'+
- '<button type="button" class="primary" data-place-action="go" data-place-msg="'+i+'" data-place-index="'+j+'">Ir</button>'+
+ '<button type="button" data-place-action="select" title="Adicionar ao plano" data-place-msg="'+i+'" data-place-index="'+j+'">'+plan+'</button>'+
+ '<button type="button" data-place-action="map" title="Ver percurso no Mapa/GO OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+map+'</button>'+
+ '<button type="button" class="primary" data-place-action="go" title="Iniciar navegação GPS OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+go+'</button>'+
  '</div>';
 }
 function sections(p){
@@ -203,8 +208,9 @@ function renderMain(){
  const description=cleanText(p.description||p.summary||'');
  const source=publishedSources(p);
  const box=overlay.querySelector('.olen-place-modal-content');
- box.innerHTML=(ps[0]?'<div class="olen-px-hero"><img src="'+esc(ps[0])+'" alt="'+byName(p)+'">'+attr(p)+'</div>':'')+
- '<div class="olen-px-head"><small>'+esc(category(p.category||p.type))+'</small>'+
+ const hero=overlay.querySelector('.olen-place-modal-hero');
+ if(hero){hero.innerHTML=ps[0]?'<img src="'+esc(ps[0])+'" alt="'+byName(p)+'">'+attr(p):'';hero.hidden=!ps[0]}
+ box.innerHTML='<div class="olen-px-head"><small>'+esc(category(p.category||p.type))+'</small>'+
  '<h2>'+byName(p)+'</h2>'+
  (p.address?'<p class="olen-px-address">'+esc(cleanText(p.address))+'</p>':'')+
  (fact.length?'<div class="olen-px-facts">'+fact.join('')+'</div>':'')+'</div>'+
@@ -253,6 +259,7 @@ function prices(p){
 }
 function renderSection(id,imageIndex=0){
  if(!current||!overlay)return;
+ const hero=overlay.querySelector('.olen-place-modal-hero');if(hero){hero.hidden=true;hero.innerHTML=''}
  const p=current.p,ps=photos(p),name=byName(p);
  current.page=id;
  let body='';
