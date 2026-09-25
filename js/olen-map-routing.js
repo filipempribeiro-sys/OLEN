@@ -7,7 +7,7 @@ const API='https://olen-alpha-ai.filipe-m-p-ribeiro.workers.dev';
 const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
 let library=null,map=null,tile=null,routeLine=null,destinationMarker=null,userMarker=null;
-let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[];
+let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='';
 function $(id){return document.getElementById(id)}
 function coord(v){
  if(!v||typeof v!=='object')return null;
@@ -152,6 +152,24 @@ function stepFor(positionIndex){
  const steps=Array.isArray(route?.maneuvers)?route.maneuvers:[];
  return steps.find(s=>Number.isSafeInteger(s.pointIndex)&&s.pointIndex>=positionIndex)||null;
 }
+/* Translate Valhalla's documented maneuver types into OLEN's real icon library.
+   Unknown types deliberately display straight rather than claim an invented turn. */
+function maneuverType(type){
+ const n=Number(type);
+ if([4,5,6].includes(n))return 'finish';
+ if([1,2,3].includes(n))return 'start';
+ if([9,18,20,23].includes(n))return 'slight-right';
+ if([10].includes(n))return 'turn-right';
+ if([11].includes(n))return 'sharp-right';
+ if([12,13].includes(n))return 'uturn';
+ if([14].includes(n))return 'sharp-left';
+ if([15].includes(n))return 'turn-left';
+ if([16,19,21,24].includes(n))return 'slight-left';
+ if([25].includes(n))return 'merge';
+ if([26,27].includes(n))return 'roundabout';
+ if([28,29].includes(n))return 'ferry';
+ return 'straight';
+}
 function updateInstruction(pos){
  if(!active||!route||!curve.length)return;
  const nearest=getNearest(pos);
@@ -167,11 +185,21 @@ function updateInstruction(pos){
    step?.instruction||'Continua no percurso apresentado.';
  const road=step?.road||'Percurso confirmado';
  const node=$('rzGuideText'),roadNode=$('rzRoadName'),next=$('rzNextDistance'),status=$('rzStatus');
- if(node)node.textContent=text;
- if(roadNode)roadNode.textContent=road;
- if(next)next.textContent=step?.pointIndex!=null&&curve[step.pointIndex]?
-   formatDistance(Math.max(0,curve[step.pointIndex].meters-progress)):
-   formatDistance(remaining);
+ const nextMeters=step?.pointIndex!=null&&curve[step.pointIndex]?
+   Math.max(0,curve[step.pointIndex].meters-progress):remaining;
+ const displayDistance=formatDistance(nextMeters);
+ const instructionKey=(step?.pointIndex??-1)+'|'+(step?.type??-1)+'|'+text;
+ if(window.OLENNavigationGuide?.set){
+   if(lastManeuverKey!==instructionKey){
+     window.OLENNavigationGuide.set({type:remaining<25?'finish':maneuverType(step?.type),
+       instruction:text,road:remaining<25?'':road,distance:displayDistance});
+     lastManeuverKey=instructionKey;
+   }else if(next)next.textContent=displayDistance;
+ }else{
+   if(node)node.textContent=text;
+   if(roadNode)roadNode.textContent=road;
+   if(next)next.textContent=displayDistance;
+ }
  if(status)status.textContent='GO ativo · '+destination.name+' · '+(mode==='walk'?'A pé':mode==='bike'?'Bicicleta':mode==='car'?'Carro':mode==='moto'?'Moto':'Trotineta');
  const trip=$('rzBottom')?.querySelector('.rz-trip'),labels=trip?.querySelectorAll('span b');
  if(labels?.[0])labels[0].textContent=new Date(Date.now()+remaining/Math.max(route.distanceMeters,1)*route.durationSeconds*1000).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
@@ -196,7 +224,7 @@ function beginGuidance(){
  return true;
 }
 function stopGuidance(){
- active=false;notice('Navegação terminada. O percurso mantém-se no mapa.');
+ active=false;lastManeuverKey='';notice('Navegação terminada. O percurso mantém-se no mapa.');
  return true;
 }
 async function open(place,{navigate=false,travelMode='walk'}={}){
@@ -204,7 +232,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
  if(!target){notice('Este local não tem coordenadas confirmadas.',true);return false}
  const current=++serial;
  destination={...target,name:String(place.name||'Destino').slice(0,105)};
- route=null;curve=[];active=false;last=null;mode=travelMode;
+ route=null;curve=[];active=false;last=null;mode=travelMode;lastManeuverKey='';
  window.OLENPlaceExperience?.close?.();
  try{window.OLEN5?.router?.enter('map',{reason:navigate?'chat-place-go':'chat-place-map',destination:destination.name})}
  catch{document.querySelector('.nav[data-view="map"]')?.click()}
