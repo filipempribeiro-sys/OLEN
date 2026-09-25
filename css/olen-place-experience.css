@@ -154,7 +154,7 @@
 }
 .olen-px-sections button .olen-px-icon-wrap{display:grid;place-items:center;width:27px;height:27px;color:#fff!important;line-height:1}
 .olen-px-sections .olen-px-section-icon{display:block;width:23px;height:23px;stroke:currentColor;transition:transform .18s ease}
-.olen-px-sections .olen-px-price-symbol{display:block!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-family:Arial, sans-serif!important;font-size:20px!important;font-weight:400!important;line-height:27px!important;text-align:center!important;visibility:visible!important;opacity:1!important}
+.olen-px-sections .olen-px-price-symbol{display:block!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-family:'Segoe UI Light','Segoe UI',Arial,sans-serif!important;font-size:20px!important;font-weight:300!important;line-height:27px!important;text-align:center!important;visibility:visible!important;opacity:1!important}
 .olen-px-sections button:hover .olen-px-section-icon{transform:translateY(-1px)}
 .olen-px-sections button:focus-visible{outline:2px solid #5ba8ff;outline-offset:3px}
 .olen-px-modal .olen-place-modal-hero.olen-px-subhero{flex:0 0 min(17dvh,135px);height:min(17dvh,135px)}
