@@ -237,8 +237,13 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
  // Preview from "Mapa" shows only the real route; "Ir" owns GPS navigation.
  document.querySelector('.screen[data-screen="map"]')?.classList.toggle('olen-map-preview',!navigate);
  window.OLENPlaceExperience?.close?.();
- try{window.OLEN5?.router?.enter('map',{reason:navigate?'chat-place-go':'chat-place-map',destination:destination.name})}
- catch{document.querySelector('.nav[data-view="map"]')?.click()}
+ const reason=navigate?'chat-place-go':'chat-place-map';
+ // Use the active OLEN 4.x/5.x screen owner, not an uninitialised router or a website.
+ const activated=window.OLENOpenScreen?.('map',reason)===true;
+ if(!activated){
+   notice('Não foi possível abrir a aba Mapa/GO da OLEN. Atualiza a aplicação e tenta novamente.',true);
+   return false;
+ }
  const input=$('rzDestination');if(input)input.value=destination.name;
  const status=$('rzStatus');if(status)status.textContent='Mapa · '+destination.name;
  notice('A preparar o mapa da OLEN…');
