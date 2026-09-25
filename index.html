@@ -1852,6 +1852,45 @@ document.addEventListener("click",function(e){var b=e.target.closest(".event-act
 var newEventBtn=document.getElementById("newEventBtn"),newEventPop=document.getElementById("newEventPop"),newEventClose=document.getElementById("newEventClose"),newEventForm=document.getElementById("newEventForm");
 function resetEventEditor(){if(newEventForm)newEventForm.reset();eventStartDate="";eventEndDate="";olenTimeDraft={start:"00:00",end:"00:00"};["newEventDateBtn","newEventEndDateBtn"].forEach(function(id){var b=document.getElementById(id);if(b){b.textContent="Selecionar data";b.classList.remove("has-value")}});["newEventTimeBtn","newEventEndTimeBtn"].forEach(function(id){var b=document.getElementById(id);if(b){b.textContent="Selecionar hora";b.classList.remove("has-value")}})}
 if(newEventBtn)newEventBtn.onclick=function(){resetEventEditor();newEventPop.classList.add("show");setTimeout(function(){document.getElementById("newEventTitle")?.focus()},80)};
+/* Native OLEN calendar handoff. Prefill only facts supplied by the response; never auto-save. */
+window.OLENAgendaPrefill=function(data){
+ if(!data||typeof data!=='object')return false;
+ try{window.OLEN5?.router?.enter('agenda',{reason:'chat-calendar'})}
+ catch{document.querySelector('.nav[data-view="agenda"]')?.click()}
+ newEventBtn?.click();
+ const set=(id,value)=>{const el=document.getElementById(id);if(el&&value!=null)el.value=String(value)};
+ set("newEventTitle",String(data.title||'').slice(0,180));
+ set("newEventPlace",String(data.place||'').slice(0,220));
+ set("newEventNotes",String(data.notes||'').slice(0,1800));
+ const read=raw=>{
+   const text=String(raw||'').trim();if(!text)return null;
+   if(/^\d{4}-\d{2}-\d{2}$/.test(text))return{date:text,time:''};
+   const d=new Date(text);if(Number.isNaN(d.getTime()))return null;
+   return{date:d.toLocaleDateString('sv-SE'),
+     time:String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')};
+ };
+ const start=read(data.start),end=read(data.end)||start;
+ const date=(which,v)=>{
+   if(!v?.date)return;
+   const id=which==='start'?'newEventDate':'newEventEndDate',
+     btnId=which==='start'?'newEventDateBtn':'newEventEndDateBtn';
+   set(id,v.date);const btn=document.getElementById(btnId);
+   if(btn){btn.textContent=agendaDate(v.date);btn.classList.add('has-value')}
+   if(which==='start')eventStartDate=v.date;else eventEndDate=v.date;
+ };
+ date('start',start);date('end',end);
+ const time=(which,v)=>{
+   if(!v?.time)return;
+   const id=which==='start'?'newEventTime':'newEventEndTime',
+     btnId=which==='start'?'newEventTimeBtn':'newEventEndTimeBtn';
+   set(id,v.time);olenTimeDraft[which]=v.time;
+   const btn=document.getElementById(btnId);
+   if(btn){btn.textContent=v.time;btn.classList.add('has-value')}
+ };
+ time('start',start);time('end',end);
+ return true;
+};
+
 if(newEventClose)newEventClose.onclick=function(){newEventPop.classList.remove("show")};
 if(newEventPop)newEventPop.onclick=function(e){if(e.target===newEventPop)newEventPop.classList.remove("show")};
 if(newEventForm)newEventForm.onsubmit=function(e){
