@@ -87,8 +87,8 @@
  position:relative!important;width:min(100%,540px)!important;
  max-width:540px!important;max-height:min(90dvh,780px)!important;
  margin:0!important;overflow:hidden!important;
- background:linear-gradient(160deg,#09231f,#06151a)!important;
- border:1px solid rgba(91,168,255,.24)!important;
+ background:linear-gradient(180deg,#102820,#0b201c)!important;
+ border:1px solid rgba(77,224,170,.25)!important;
  border-radius:24px!important;box-shadow:0 24px 70px rgba(0,0,0,.44)!important;
  display:flex!important;flex-direction:column!important;
 }
@@ -114,7 +114,7 @@
 .olen-px-modal .olen-place-modal-content::-webkit-scrollbar{display:none!important;width:0!important;height:0!important}
 .olen-px-modal .olen-place-modal-footer{
  flex:0 0 auto;position:relative;z-index:5;min-width:0;
- background:#061b1b;
+ background:#102820;
 }
 .olen-px-modal .olen-place-modal-hero{
  display:block;flex:0 0 min(27dvh,215px);
@@ -133,32 +133,34 @@
 .olen-px-head>small{font-size:11px;color:#84e5c4;font-weight:760;letter-spacing:.04em}
 .olen-px-head h2{font-size:clamp(21px,5.2vw,28px);line-height:1.12;margin:8px 43px 7px 0;color:#f0faf8}
 .olen-px-address{font-size:12px;line-height:1.4;color:#b5c9c4;margin:4px 0!important}
-.olen-px-facts{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.olen-px-facts{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start;width:100%;min-width:0;margin-top:9px}
 .olen-px-fact{
- padding:6px 9px;font-size:11px;line-height:1.25;
- border-radius:999px;border:1px solid rgba(255,255,255,.12);
- background:rgba(255,255,255,.035);color:#e7f4f1;
+ box-sizing:border-box;display:inline-block;flex:0 1 auto;width:max-content;max-width:100%;min-width:0;
+ padding:8px 12px;font-size:11px;line-height:1.45;white-space:normal;
+ overflow-wrap:anywhere;word-break:normal;text-align:left;
+ border-radius:16px;border:1px solid rgba(77,224,170,.22);
+ background:rgba(16,40,32,.58);color:#e7f4f1;
 }
-.olen-px-fact.benefit{color:#8fe7b0;border-color:rgba(91,233,151,.28)}
-.olen-px-fact.status{color:#a9ddff;border-color:rgba(91,168,255,.28)}
+.olen-px-fact.benefit{color:#8fe7b0;border-color:rgba(77,224,170,.34)}
+.olen-px-fact.status{color:#b0f2d8;border-color:rgba(77,224,170,.34)}
 .olen-px-body{padding:4px 17px 12px}
 .olen-px-sections{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:7px 0 13px}
 .olen-px-sections button{
  display:grid;place-items:center;align-content:center;gap:6px;
  height:66px;min-height:66px;padding:7px 4px;
- background:rgba(255,255,255,.045);color:#f0f8f5;
- border:1px solid rgba(91,168,255,.13);border-radius:14px;
+ background:rgba(16,40,32,.50);color:#f0f8f5;
+ border:1px solid rgba(77,224,170,.22);border-radius:14px;
  font-size:11px;font-weight:730;
 }
-.olen-px-sections button .olen-px-icon-wrap{display:grid;place-items:center;width:27px;height:27px;color:#80cfff;line-height:1}
+.olen-px-sections button .olen-px-icon-wrap{display:grid;place-items:center;width:27px;height:27px;color:#4de0aa;line-height:1}
 .olen-px-sections .olen-px-section-icon{display:block;width:23px;height:23px;stroke:currentColor;transition:transform .18s ease}
 .olen-px-sections button:hover .olen-px-section-icon{transform:translateY(-1px)}
-.olen-px-sections button:focus-visible{outline:2px solid #80cfff;outline-offset:3px}
+.olen-px-sections button:focus-visible{outline:2px solid #4de0aa;outline-offset:3px}
 .olen-px-modal .olen-place-modal-hero.olen-px-subhero{flex:0 0 min(17dvh,135px);height:min(17dvh,135px)}
 .olen-px-sub .olen-px-empty{margin:10px 0;padding:14px;border:1px solid rgba(91,168,255,.15);border-radius:12px;background:rgba(91,168,255,.045);line-height:1.5}
 
 .olen-px-desc{font-size:12px;line-height:1.48;color:#c0d1cb;margin:7px 0 10px!important}
-.olen-px-reco{font-size:12px;line-height:1.46;color:#d6e9e3;border-left:2px solid #59edb6;padding:7px 11px;background:rgba(89,237,182,.05)}
+.olen-px-reco{box-sizing:border-box;width:100%;max-width:100%;min-width:0;font-size:12px;line-height:1.46;color:#d6e9e3;border:1px solid rgba(77,224,170,.24);border-radius:16px;padding:10px 12px;background:rgba(77,224,170,.05);overflow-wrap:anywhere}
 .olen-px-reco strong{display:block;color:#9debc8;margin-bottom:3px}
 .olen-px-source,.olen-px-source a{font-size:10px;color:#95aaa4;line-height:1.35}
 .olen-px-source a{color:#9bdfce;text-decoration:underline}
@@ -166,8 +168,8 @@
  position:relative;z-index:4;
  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;
  padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));
- background:#061b1b;
- border-top:1px solid rgba(91,168,255,.14);
+ background:#102820;
+ border-top:1px solid rgba(77,224,170,.18);
 }
 .olen-px-footer button{
  min-width:0;min-height:44px;padding:9px 5px;
