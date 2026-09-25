@@ -1,0 +1,48 @@
+/* OLEN in-app map ownership; applies only while the actual tile map is mounted. */
+.rz-map.olen-real-map::before,.rz-map.olen-real-map::after,
+.rz-map.olen-real-map>.rz-route,.rz-map.olen-real-map>.rz-place,
+.rz-map.olen-real-map>.rz-warn,.rz-map.olen-real-map>.rz-dot{
+ display:none!important;content:none!important;
+}
+#olenRealMap.olen-live-map{
+ position:absolute;inset:0;z-index:3;
+ height:100%;width:100%;
+ background:#0a2420;
+ touch-action:pan-x pan-y;
+}
+#olenMapStatus.olen-map-status{
+ position:absolute;z-index:8;left:12px;right:12px;top:12px;
+ max-width:610px;margin:auto;padding:11px 14px;
+ border:1px solid rgba(82,246,220,.35);
+ border-radius:14px;
+ background:rgba(3,23,21,.91);
+ color:#e9fff7;line-height:1.4;font-size:12px;
+ backdrop-filter:blur(10px);
+}
+#olenMapStatus.olen-map-status.error{
+ border-color:rgba(248,184,110,.5);color:#ffe9c9;
+}
+#olenMapStatus.olen-map-status[hidden]{display:none!important}
+.rz-map.olen-real-map .leaflet-container{
+ background:#10342f;font:inherit;
+}
+.rz-map.olen-real-map .leaflet-control-attribution{
+ font-size:10px!important;line-height:1.3!important;
+ padding:2px 5px!important;background:rgba(2,15,14,.84)!important;
+ color:#dff4ed!important;
+}
+.rz-map.olen-real-map .leaflet-control-attribution a{
+ color:#a3e9da!important;
+}
+.rz-map.olen-real-map .leaflet-control-zoom{
+ border:1px solid rgba(83,233,186,.32)!important;
+ box-shadow:none!important;margin-bottom:50px!important;
+}
+.rz-map.olen-real-map .leaflet-control-zoom a{
+ background:#0a2c24!important;color:#ebfff5!important;
+ border-bottom-color:#275445!important;
+}
+@media(max-width:699px){
+ #olenMapStatus.olen-map-status{max-width:calc(100% - 24px);font-size:11px;top:10px}
+ .rz-map.olen-real-map .leaflet-control-zoom{margin-bottom:110px!important}
+}
