@@ -150,7 +150,13 @@
  border:1px solid rgba(91,168,255,.13);border-radius:14px;
  font-size:11px;font-weight:730;
 }
-.olen-px-sections button span{color:#72ceeb;font-size:20px;line-height:1.1}
+.olen-px-sections button .olen-px-icon-wrap{display:grid;place-items:center;width:27px;height:27px;color:#80cfff;line-height:1}
+.olen-px-sections .olen-px-section-icon{display:block;width:23px;height:23px;stroke:currentColor;transition:transform .18s ease}
+.olen-px-sections button:hover .olen-px-section-icon{transform:translateY(-1px)}
+.olen-px-sections button:focus-visible{outline:2px solid #80cfff;outline-offset:3px}
+.olen-px-modal .olen-place-modal-hero.olen-px-subhero{flex:0 0 min(17dvh,135px);height:min(17dvh,135px)}
+.olen-px-sub .olen-px-empty{margin:10px 0;padding:14px;border:1px solid rgba(91,168,255,.15);border-radius:12px;background:rgba(91,168,255,.045);line-height:1.5}
+
 .olen-px-desc{font-size:12px;line-height:1.48;color:#c0d1cb;margin:7px 0 10px!important}
 .olen-px-reco{font-size:12px;line-height:1.46;color:#d6e9e3;border-left:2px solid #59edb6;padding:7px 11px;background:rgba(89,237,182,.05)}
 .olen-px-reco strong{display:block;color:#9debc8;margin-bottom:3px}
