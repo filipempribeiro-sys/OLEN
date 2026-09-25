@@ -58,6 +58,14 @@
   max-width:82%!important;
  }
 }
+/* Chat mobile: keep the existing global footer and raised active Chat ring
+   above the isolated composer fade and capsule. Do not alter its geometry. */
+@media (max-width:699px){
+ body:has(.screen[data-screen="chat"].active)>.footer{
+  z-index:160!important;
+  isolation:isolate!important;
+ }
+}
 /* Only mobile: let place cards use the full Chat column, not the 82% response bubble.
    Popup details and tablet/desktop carousel sizing stay unchanged. */
 @media (max-width:699px){
