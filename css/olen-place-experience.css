@@ -15,7 +15,7 @@
  align-items:stretch!important;gap:10px!important;
  overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;
  scrollbar-width:none!important;-ms-overflow-style:none!important;
- padding:2px 2px 6px!important;-webkit-overflow-scrolling:touch;
+ padding:2px 11px 6px 3px!important;scroll-padding-inline:3px 11px;-webkit-overflow-scrolling:touch;
  background:transparent!important;border:0!important;box-shadow:none!important;
 }
 @media (hover:hover) and (pointer:fine){.olen-place-nav{display:flex}.olen-place-swipe-hint{display:none}}
@@ -194,8 +194,11 @@
 .olen-px-experience-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
 .olen-px-experience-actions button{padding:11px 13px;border-radius:999px;border:1px solid rgba(91,168,255,.3);color:#eff8f5;background:rgba(91,168,255,.075);font-size:12px;font-weight:750}
 body.olen-px-open{overflow:hidden!important}
+@media(min-width:520px){
+ /* Two whole cards plus the gap and safe edge padding: no clipped right border. */
+ .olen-place-track{grid-auto-columns:min(276px,calc((100% - 26px)/2))!important}
+}
 @media(min-width:700px){
- .olen-place-track{grid-auto-columns:min(78%,276px)!important}
  .olen-px-sections button{height:70px}
 }
 @media(max-width:380px){
