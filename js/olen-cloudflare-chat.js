@@ -5,6 +5,7 @@
   const SITE_KEY='0x4AAAAAAFDJzZctEJACttl0';
   const ACTION='olen_chat';
   let loader=null,widget=null,accept=null,reject=null,tokenTimeout=null,controller=null,busy=false;
+  let backendReadyAt=0;
   function clearChallenge(){
     if(tokenTimeout){clearTimeout(tokenTimeout);tokenTimeout=null}
     accept=null;reject=null;
@@ -72,17 +73,37 @@
         ?API+photo:photo};
     });
   }
+  // ALPHA-style health check: run on cold starts, cache readiness for 90 seconds.
+  async function verifyBackend(signal){
+    if(Date.now()-backendReadyAt<90000)return;
+    const response=await fetch(API+'/api/health',{
+      method:'GET',mode:'cors',credentials:'omit',cache:'no-store',signal
+    });
+    if(!response.ok)throw Object.assign(new Error('Não consegui estabelecer ligação ao serviço OLEN.'),{code:'BACKEND_HEALTH',status:response.status});
+    const result=await response.json();
+    if(!result?.ok||!result?.ready)
+      throw Object.assign(new Error('O serviço OLEN ainda não está pronto.'),{code:'BACKEND_NOT_READY',status:503});
+    backendReadyAt=Date.now();
+  }
   function send(request={}){
     if(busy)return false;
     busy=true;
     const task=(async()=>{
-      let turnstileToken='';
+      let turnstileToken='',limitTimer=null,timedOut=false;
       try{
-        turnstileToken=await token();
         controller=new AbortController();
+        if(Date.now()-backendReadyAt>=90000){
+          request.onStage?.('A verificar ligação ao serviço');
+          await verifyBackend(controller.signal);
+        }
+        if(controller.signal.aborted)throw Object.assign(new Error('OLEN_STOPPED'),{name:'AbortError'});
+        turnstileToken=await token();
+        if(controller.signal.aborted)throw Object.assign(new Error('OLEN_STOPPED'),{name:'AbortError'});
         const attachments=(Array.isArray(request.images)?request.images:[]).slice(0,3).map(i=>({
           name:String(i.name||'Imagem'),type:String(i.type||'image/png'),dataUrl:String(i.data||'')
         }));
+        // One AI request; do not retry automatically after a network failure.
+        limitTimer=setTimeout(()=>{timedOut=true;controller?.abort()},360000);
         const response=await fetch(API+'/api/chat',{
           method:'POST',mode:'cors',credentials:'omit',
           headers:{'Content-Type':'application/json'},
@@ -94,12 +115,21 @@
         });
         const data=await response.json().catch(()=>null);
         if(!response.ok||!data?.ok)
-          throw new Error(String(data?.error||'Não foi possível obter resposta da OLEN.').slice(0,300));
+          throw Object.assign(new Error(String(data?.error||'Não foi possível obter resposta da OLEN.').slice(0,300)),{
+            code:String(data?.code||'HTTP_'+response.status),status:response.status
+          });
         request.onResponse?.({...data,placeCards:cards(data.placeCards)});
       }catch(e){
-        const cancelled=e?.name==='AbortError'||e?.message==='OLEN_STOPPED';
-        request.onFailure?.({cancelled,message:cancelled?'Pedido interrompido.':String(e?.message||'Não foi possível comunicar com a OLEN.').slice(0,300)});
+        const cancelled=!timedOut&&(e?.name==='AbortError'||e?.message==='OLEN_STOPPED');
+        request.onFailure?.({
+          cancelled,timedOut,
+          code:timedOut?'CHAT_TIMEOUT':String(e?.code||''),
+          status:Number(e?.status||0),
+          message:cancelled?'Pedido interrompido.':timedOut?'A investigação ultrapassou o tempo limite.':
+            String(e?.message||'Não foi possível comunicar com a OLEN.').slice(0,300)
+        });
       }finally{
+        if(limitTimer)clearTimeout(limitTimer);
         controller=null;
         if(reject)settleChallenge(new Error('OLEN_STOPPED'));
         try{if(widget!==null)window.turnstile?.reset(widget)}catch(_){}
