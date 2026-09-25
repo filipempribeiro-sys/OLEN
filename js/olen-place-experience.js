@@ -112,15 +112,17 @@ function cards(m,i){
      '<h3>'+esc(title)+'</h3>'+(address?'<p class="olen-place-address">'+esc(address)+'</p>':'')+
      (description?'<p class="olen-place-desc">'+esc(description)+'</p>':'')+
      '<div class="olen-place-actions">'+
-     '<button type="button" data-place-action="detail" data-place-msg="'+i+'" data-place-index="'+j+'">Detalhes</button>'+
-     '<button type="button" data-place-action="map" data-place-msg="'+i+'" data-place-index="'+j+'">⌖ Mapa</button>'+
-     '<button type="button" data-place-action="go" data-place-msg="'+i+'" data-place-index="'+j+'">Ir</button>'+
+     '<button type="button" aria-label="Detalhes de '+esc(title)+'" data-place-action="detail" data-place-msg="'+i+'" data-place-index="'+j+'"><span>Detalhes</span></button>'+
+     '<button type="button" aria-label="Ver '+esc(title)+' no mapa OLEN" data-place-action="map" data-place-msg="'+i+'" data-place-index="'+j+'"><span>Mapa</span></button>'+
+     '<button type="button" aria-label="Ir para '+esc(title)+' com a OLEN" data-place-action="go" data-place-msg="'+i+'" data-place-index="'+j+'"><span>Ir</span></button>'+
      '</div></div></article>';
  }).join('');
  const source=cleanText(m.placeSource||'').replace(/Alpha Tools/gi,'Ferramentas OLEN');
  return '<section class="olen-place-section" aria-label="Locais escolhidos pela OLEN">'+
  '<div class="olen-place-heading"><b>Locais escolhidos pela OLEN</b><small>desliza ↔</small></div>'+
- '<div class="olen-place-track">'+html+'</div>'+
+ '<div class="olen-place-carousel"><button class="olen-place-arrow olen-place-prev" type="button" data-olen-place-scroll="prev" aria-label="Ver cartões anteriores" disabled><span aria-hidden="true">‹</span></button>'+
+ '<div class="olen-place-track" tabindex="0" aria-label="Locais, deslocar horizontalmente">'+html+'</div>'+
+ '<button class="olen-place-arrow olen-place-next" type="button" data-olen-place-scroll="next" aria-label="Ver próximos cartões"><span aria-hidden="true">›</span></button></div>'+
  (source?'<small class="olen-place-source">'+esc(source)+'</small>':'')+'</section>';
 }
 function ensureOverlay(){
@@ -245,6 +247,7 @@ function prices(p){
  const benefit=benefits(p);
  const main=uniq([...arr(p.prices),...arr(p.familyTicket),...arr(p.ageBands),...arr(p.discounts)],22);
  const ticket=officialLink(p,'ticketUrl')||officialLink(p,'ticketsUrl')||officialLink(p,'officialTicketsUrl')||officialLink(p,'bookingUrl');
+ const site=officialLink(p,'website');
  const experience=officialLink(p,'experiencesUrl')||officialLink(p,'officialExperiencesUrl');
  return '<h3>Preços e entradas</h3>'+
  (benefit.length?'<div class="olen-px-benefit"><strong>🎟 '+esc(benefitLabel(benefit))+'</strong>'+
@@ -255,7 +258,8 @@ function prices(p){
  '<p class="olen-px-empty">Preços regulares não confirmados.</p>')+
  ((ticket||experience)?'<div class="olen-px-ctas">'+
  (ticket?'<a class="primary" href="'+esc(ticket)+'" target="_blank" rel="noopener noreferrer">🎟 Comprar bilhetes</a>':'')+
- (experience?'<a href="'+esc(experience)+'" target="_blank" rel="noopener noreferrer">Experiências disponíveis</a>':'')+'</div>':'');
+ (experience?'<a href="'+esc(experience)+'" target="_blank" rel="noopener noreferrer">Experiências disponíveis</a>':'')+'</div>':'')+
+ (!ticket&&site?'<div class="olen-px-ctas"><a href="'+esc(site)+'" target="_blank" rel="noopener noreferrer">Consultar bilheteira no site oficial ↗</a></div>':'');
 }
 function renderSection(id,imageIndex=0){
  if(!current||!overlay)return;
@@ -318,7 +322,24 @@ function experienceActions(m,i){
  (events.length?'<button type="button" data-olen-experience="calendar" data-msg-index="'+i+'">▣ Adicionar plano à Agenda</button>':'')+
  (wantsShare?'<button type="button" data-olen-experience="share" data-msg-index="'+i+'">↗ Partilhar no WhatsApp</button>':'')+'</div>';
 }
+function updateCarousel(carousel){
+ const track=carousel?.querySelector('.olen-place-track');if(!track)return;
+ const prev=carousel.querySelector('.olen-place-prev'),next=carousel.querySelector('.olen-place-next');
+ if(prev)prev.disabled=track.scrollLeft<=2;
+ if(next)next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-2;
+}
 function setEventHandlers(){
+ document.addEventListener('click',e=>{
+   const arrow=e.target.closest('[data-olen-place-scroll]');
+   if(arrow){
+     const carousel=arrow.closest('.olen-place-carousel'),track=carousel?.querySelector('.olen-place-track');
+     if(track){const card=track.querySelector('.olen-place-card');const gap=parseFloat(getComputedStyle(track).gap)||10;
+       track.scrollBy({left:(arrow.dataset.olenPlaceScroll==='prev'?-1:1)*((card?.getBoundingClientRect().width||track.clientWidth)+gap),behavior:'smooth'});
+     }return;
+   }
+ });
+ document.addEventListener('scroll',e=>{if(e.target?.classList?.contains('olen-place-track'))updateCarousel(e.target.closest('.olen-place-carousel'))},true);
+ window.addEventListener('resize',()=>document.querySelectorAll('.olen-place-carousel').forEach(updateCarousel));
  document.addEventListener('click',e=>{
    const b=e.target.closest('[data-olen-experience]');if(!b)return;
    const index=Number(b.dataset.msgIndex),chat=window.OLENChat?.getCurrent?.(),m=chat?.messages?.[index];if(!m)return;
