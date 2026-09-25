@@ -118,6 +118,7 @@ function cards(m,i){
      '</div></div></article>';
  }).join('');
  const source=cleanText(m.placeSource||'').replace(/Alpha Tools/gi,'Ferramentas OLEN');
+ requestAnimationFrame(()=>document.querySelectorAll('.olen-place-carousel').forEach(updateCarousel));
  return '<section class="olen-place-section" aria-label="Locais escolhidos pela OLEN">'+
  '<div class="olen-place-heading"><b>Locais escolhidos pela OLEN</b><small>desliza ↔</small></div>'+
  '<div class="olen-place-carousel"><button class="olen-place-arrow olen-place-prev" type="button" data-olen-place-scroll="prev" aria-label="Ver cartões anteriores" disabled><span aria-hidden="true">‹</span></button>'+
