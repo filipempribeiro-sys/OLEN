@@ -156,7 +156,7 @@ function updateInstruction(pos){
  if(!active||!route||!curve.length)return;
  const nearest=getNearest(pos);
  if(nearest.delta>130){
-   notice('Estás fora do percurso confirmado. Volta ao trajeto ou toca em «Ir» para recalcular.',true);
+   notice('Estás fora do percurso confirmado. Pára o GO e prepara novamente a rota para recalcular.',true);
    return;
  }
  notice('');
@@ -233,9 +233,11 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
    notice('Percurso confirmado · '+formatDistance(route.distanceMeters)+' · cerca de '+
      Math.max(1,Math.ceil(route.durationSeconds/60))+' min · '+route.source);
    if(navigate){
-     if(!window.OLENLegacyGo?.startRoute)throw new Error('O modo de navegação OLEN ainda não está pronto.');
-     window.OLENLegacyGo.startRoute(destination.name,mode);
-     beginGuidance();
+     if(!window.OLENLegacyGo?.startRoute||typeof navigator.geolocation?.watchPosition!=='function')
+       throw new Error('A navegação em tempo real necessita de GPS contínuo disponível.');
+     if(window.OLENLegacyGo.startRoute(destination.name,mode)!==true)
+       throw new Error('Não foi possível iniciar a navegação GPS da OLEN.');
+     if(!beginGuidance())throw new Error('Não foi possível ligar a navegação ao percurso confirmado.');
      notice('');
    }
    return true;
