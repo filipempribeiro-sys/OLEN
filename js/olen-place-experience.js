@@ -176,12 +176,12 @@ function footer(){
  const mapIcon='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3zM9 3v15m6-12v15"/></svg></span>';
  // Filled directional arrow from the approved "Ir" reference, not the outlined paper-plane icon.
  const goIcon='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" fill="currentColor" stroke="none"><path d="M3.7 11.7 20.4 3.6l-7.6 16.8-2.6-6.6-6.5-2.1z"/></svg></span>';
- const plan=p.selected?'<span class="olen-px-action-icon olen-px-simple-mark" aria-hidden="true">✓</span>Selecionado':
-   '<span class="olen-px-action-icon olen-px-simple-mark" aria-hidden="true">+</span>Plano';
+ const plan=p.selected?'<span class="olen-px-action-icon olen-px-simple-mark" aria-hidden="true">✓</span><span class="olen-px-action-label">Selecionado</span>':
+   '<span class="olen-px-action-icon olen-px-simple-mark" aria-hidden="true">+</span><span class="olen-px-action-label">Plano</span>';
  return '<div class="olen-px-footer">'+
  '<button type="button" data-place-action="select" title="Adicionar ao plano" data-place-msg="'+i+'" data-place-index="'+j+'">'+plan+'</button>'+
- '<button type="button" data-place-action="map" title="Ver percurso no Mapa/GO OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+mapIcon+'Mapa</button>'+
- '<button type="button" class="primary" data-place-action="go" title="Iniciar navegação GPS OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+goIcon+'Ir</button>'+
+ '<button type="button" data-place-action="map" title="Ver percurso no Mapa/GO OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+mapIcon+'<span class="olen-px-action-label">Mapa</span></button>'+
+ '<button type="button" class="primary" data-place-action="go" title="Iniciar navegação GPS OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+goIcon+'<span class="olen-px-action-label">Ir</span></button>'+
  '</div>';
 }
 function sectionIcon(id){
