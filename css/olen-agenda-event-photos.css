@@ -1,0 +1,44 @@
+/* OLEN Agenda photos: verified places for demo events; no repeated generic image.
+   The four demo photographs are hosted by Wikimedia Commons; authors/license
+   links are displayed in the Agenda photo credits. */
+.screen[data-screen="agenda"] .event-thumb,
+#eventsPop .event-thumb{
+ background-image:linear-gradient(180deg,rgba(3,15,11,.05) 25%,rgba(3,15,11,.86) 100%)!important;
+ background-color:#10251f!important;
+ background-position:center!important;background-size:cover!important;
+ background-repeat:no-repeat!important;
+}
+.screen[data-screen="agenda"] .event-thumb[data-olen-event-photo="arrabida"],
+#eventsPop .event-thumb[data-olen-event-photo="arrabida"]{
+ background-image:linear-gradient(180deg,rgba(3,15,11,.04) 15%,rgba(3,15,11,.88) 100%),url("https://commons.wikimedia.org/wiki/Special:FilePath/Parque_Natural_da_Arr%C3%A1bida%2C_Set%C3%BAbal%2C_Portugal%2C_2012-05-11%2C_DD_07.JPG?width=960")!important;
+}
+.screen[data-screen="agenda"] .event-thumb[data-olen-event-photo="sesimbra"],
+#eventsPop .event-thumb[data-olen-event-photo="sesimbra"]{
+ background-image:linear-gradient(180deg,rgba(3,15,11,.04) 15%,rgba(3,15,11,.88) 100%),url("https://commons.wikimedia.org/wiki/Special:FilePath/Sesimbra%2C_vista_para_o_Porto_de_Abrigo.jpg?width=960")!important;
+}
+.screen[data-screen="agenda"] .event-thumb[data-olen-event-photo="sintra"],
+#eventsPop .event-thumb[data-olen-event-photo="sintra"]{
+ background-image:linear-gradient(180deg,rgba(3,15,11,.04) 15%,rgba(3,15,11,.88) 100%),url("https://commons.wikimedia.org/wiki/Special:FilePath/Palace_da_Pena_Sintra.jpg?width=960")!important;
+}
+.screen[data-screen="agenda"] .event-thumb[data-olen-event-photo="lisboa"],
+#eventsPop .event-thumb[data-olen-event-photo="lisboa"]{
+ background-image:linear-gradient(180deg,rgba(3,15,11,.04) 15%,rgba(3,15,11,.88) 100%),url("https://commons.wikimedia.org/wiki/Special:FilePath/Sunset_Lisboa.jpg?width=960")!important;
+}
+.screen[data-screen="agenda"] .event-thumb b,
+.screen[data-screen="agenda"] .event-thumb small,
+#eventsPop .event-thumb b,
+#eventsPop .event-thumb small{
+ position:relative;z-index:1;text-shadow:0 1px 8px rgba(0,0,0,.85)!important;
+}
+.screen[data-screen="agenda"] .olen-event-photo-credits,
+#eventsPop .olen-event-photo-credits{
+ margin:7px 2px 0;color:#879f97;font-size:10px;line-height:1.4;
+}
+.screen[data-screen="agenda"] .olen-event-photo-credits summary,
+#eventsPop .olen-event-photo-credits summary{cursor:pointer;list-style:none;width:max-content;max-width:100%;text-decoration:underline;text-decoration-color:rgba(135,159,151,.45);text-underline-offset:3px}
+.screen[data-screen="agenda"] .olen-event-photo-credits summary::-webkit-details-marker,
+#eventsPop .olen-event-photo-credits summary::-webkit-details-marker{display:none}
+.screen[data-screen="agenda"] .olen-event-photo-credits p,
+#eventsPop .olen-event-photo-credits p{margin:6px 0 0}
+.screen[data-screen="agenda"] .olen-event-photo-credits a,
+#eventsPop .olen-event-photo-credits a{color:#b6d9cd;text-decoration:underline;text-underline-offset:2px}
