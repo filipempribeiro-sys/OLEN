@@ -27,9 +27,33 @@
   .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="chat"]{color:#5ba8ff!important}
   .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="agenda"]{color:#b16cff!important}
   .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="profile"]{color:#7d4ed8!important}
-  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button.active,
   .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button:hover{
     background:rgba(91,168,255,.075)!important;
+  }
+  /* The approved app-footer ring, reused on the selected sidebar tab only.
+     Rail (closed), mobile footer and navigation handlers are unchanged. */
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav{
+    padding-top:18px!important;
+    overflow:visible!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button{
+    height:68px!important;
+    overflow:visible!important;
+    isolation:isolate!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button.active{
+    background:transparent!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button.active>svg{
+    box-sizing:border-box!important;
+    flex:0 0 53px!important;width:53px!important;height:53px!important;
+    padding:14px!important;margin-top:-19px!important;
+    border:2px solid currentColor!important;border-radius:50%!important;
+    background:#06150f!important;box-shadow:0 0 0 4px #03100c!important;
+    overflow:visible!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button.active>span{
+    margin-top:-3px!important;
   }
 }
 .screen[data-screen="chat"] .olen-chat-final-fade{
