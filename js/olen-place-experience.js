@@ -44,9 +44,12 @@ function category(raw){
    viewpoint:'Miradouro',museum:'Museu',restaurant:'Restaurante',attraction:'Atração',
    hotel:'Hotel',park:'Parque',beach:'Praia',trail:'Trilho',castle:'Castelo',
    palace:'Palácio',church:'Igreja',cafe:'Café',garden:'Jardim',monument:'Monumento',
-   historic:'Património',tourism:'Turismo',amenity:'Local'
+   historic:'Património',tourism:'Turismo',amenity:'Local',artwork:'Arte pública',
+   guest_house:'Alojamento',fast_food:'Restauração rápida',picnic_site:'Zona de piquenique',
+   nature_reserve:'Reserva natural',information:'Informação turística',
+   place_of_worship:'Local de culto',public_building:'Edifício público'
  };
- return labels[v.toLowerCase()]||v;
+ return labels[v.toLowerCase()]||v.replace(/_/g,' ');
 }
 function rating(p){const n=Number(p?.rating);return Number.isFinite(n)&&n>0&&n<=5?n:null}
 function reviews(p){const n=Number(p?.reviews??p?.userRatingCount);return Number.isSafeInteger(n)&&n>0?n:null}
@@ -115,7 +118,7 @@ function ensureOverlay(){
  overlay.id='olenPlaceDetailOverlay';overlay.className='olen-place-overlay olen-px-overlay';overlay.hidden=true;
  overlay.innerHTML='<section class="olen-place-modal olen-px-modal" role="dialog" aria-modal="true" aria-label="Detalhes do local">'+
  '<button type="button" class="olen-place-close" aria-label="Fechar detalhes">×</button>'+
- '<div class="olen-place-modal-content"></div></section>';
+ '<div class="olen-place-modal-content"></div><div class="olen-place-modal-footer"></div></section>';
  document.body.appendChild(overlay);
  overlay.addEventListener('click',e=>{
    if(e.target===overlay||e.target.closest('.olen-place-close')){close();return}
@@ -199,7 +202,8 @@ function renderMain(){
  (p.olenRecommendation?'<p class="olen-px-reco"><strong>OLEN recomenda</strong>'+esc(cleanText(p.olenRecommendation))+'</p>':'')+
  (source.length?'<div class="olen-px-source">'+source.length+' fonte'+(source.length!==1?'s':'')+' consultada'+(source.length!==1?'s':'')+
  ': '+source.slice(0,4).map(u=>'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(new URL(u).hostname)+'</a>').join(' · ')+'</div>':'')+
- '</div>'+footer();
+ '</div>';
+ overlay.querySelector('.olen-place-modal-footer').innerHTML=footer();
  box.scrollTop=0;
 }
 function rows(title,values){
@@ -268,7 +272,8 @@ function renderSection(id,imageIndex=0){
  overlay.querySelector('.olen-place-modal-content').innerHTML=
    '<div class="olen-px-sub"><button type="button" class="olen-px-back" data-olen-px="back">‹ '+name+'</button>'+
    body+(sources.length?'<p class="olen-px-source">Fontes: '+sources.slice(0,4).map(u=>'<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(new URL(u).hostname)+'</a>').join(' · ')+'</p>':'')+
-   '</div>'+footer();
+   '</div>';
+ overlay.querySelector('.olen-place-modal-footer').innerHTML=footer();
  overlay.querySelector('.olen-place-modal-content').scrollTop=0;
 }
 function calendarAction(p){
