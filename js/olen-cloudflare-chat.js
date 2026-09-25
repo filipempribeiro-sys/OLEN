@@ -145,7 +145,7 @@
     controller?.abort();
   }
   window.OLENCloudflareChat=Object.freeze({
-    send,stop,get busy(){return busy},
+    send,stop,getTurnstileToken:token,get busy(){return busy},
     get endpoint(){return API}
   });
 })();
