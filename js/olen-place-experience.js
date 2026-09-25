@@ -77,7 +77,9 @@ function officialLink(p,key){
 }
 function byName(p){return esc(cleanText(p.name||'Local'))}
 function attr(p){
- const items=arr(p?.photoAttributions).map(a=>({name:cleanText(a?.displayName||a),uri:url(a?.uri)})).filter(a=>a.name);
+ const items=arr(p?.photoAttributions).map(a=>({name:cleanText(a?.displayName||a?.name||a),uri:url(a?.uri)})).filter(a=>a.name);
+ const direct=cleanText(p?.photoCredit||p?.imageAttribution||p?.photoAuthor||'');
+ if(direct&&!items.some(a=>a.name===direct))items.push({name:direct,uri:url(p?.photoSource||'')});
  if(!items.length)return'';
  return '<div class="olen-place-photo-credit">Foto: '+items.map(a=>a.uri?
    '<a href="'+esc(a.uri)+'" rel="noopener noreferrer" target="_blank">'+esc(a.name)+'</a>':esc(a.name)).join(' · ')+'</div>';
