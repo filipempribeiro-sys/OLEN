@@ -1,0 +1,10 @@
+# Static Cloudflare Pages test assets must not retain the previous OLEN Chat runtime.
+# Keep images and large media cacheable; only the app shell, scripts and styles revalidate.
+/
+  Cache-Control: no-cache, no-store, must-revalidate
+/index.html
+  Cache-Control: no-cache, no-store, must-revalidate
+/js/*
+  Cache-Control: no-cache, must-revalidate
+/css/*
+  Cache-Control: no-cache, must-revalidate
