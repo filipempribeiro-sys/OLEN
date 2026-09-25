@@ -329,6 +329,14 @@ function updateCarousel(carousel){
  if(next)next.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-2;
 }
 function setEventHandlers(){
+ document.addEventListener('error',e=>{
+   const image=e.target;
+   if(image?.tagName!=='IMG')return;
+   const card=image.closest('.olen-place-card'),hero=image.closest('.olen-place-modal-hero');
+   if(card){image.closest('.olen-place-image')?.remove();card.classList.add('no-photo')}
+   else if(hero){hero.hidden=true;hero.innerHTML=''}
+   else if(image.closest('.olen-px-gallery,.olen-px-featured'))image.closest('button,.olen-px-featured')?.remove();
+ },true);
  document.addEventListener('click',e=>{
    const arrow=e.target.closest('[data-olen-place-scroll]');
    if(arrow){
