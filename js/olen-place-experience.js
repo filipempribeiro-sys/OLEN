@@ -17,7 +17,8 @@ function cleanText(value){
    .replace(/\s+/g,' ').trim();
 }
 function uniq(values,max=24){
- return [...new Set(values.flatMap(arr).map(cleanText).filter(Boolean))]
+ return [...new Set(values.flatMap(arr).map(v=>typeof v==='string'||typeof v==='number'?cleanText(v):
+   (v&&typeof v==='object'?cleanText(v.text||v.description||v.value||''):'' )).filter(Boolean))]
    .filter(x=>x.length>1&&!/^(in[ií]cio|saber mais|aceitar cookies|gerir cookies|menu|termos e condições|política de privacidade|contacte-nos)$/i.test(x))
    .slice(0,max);
 }
@@ -100,7 +101,7 @@ function cards(m,i){
      '<button type="button" data-place-action="go" data-place-msg="'+i+'" data-place-index="'+j+'">Ir</button>'+
      '</div></div></article>';
  }).join('');
- const source=cleanText(m.placeSource||'');
+ const source=cleanText(m.placeSource||'').replace(/Alpha Tools/gi,'Ferramentas OLEN');
  return '<section class="olen-place-section" aria-label="Locais escolhidos pela OLEN">'+
  '<div class="olen-place-heading"><b>Locais escolhidos pela OLEN</b><small>desliza ↔</small></div>'+
  '<div class="olen-place-track">'+html+'</div>'+
