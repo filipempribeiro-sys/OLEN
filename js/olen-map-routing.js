@@ -322,6 +322,12 @@ window.OLEN5?.core?.on?.('route:change',e=>{
    showBaseMap().catch(()=>{});
  }
 });
+window.OLEN5?.core?.on?.('route:stable',e=>{
+ if(e?.view==='map'&&e.reason==='footer'){
+   document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
+   showBaseMap().catch(()=>{});
+ }
+});
 window.OLENMapRouting=Object.freeze({
  open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,
  get state(){return {destination:destination?{...destination}:null,routeReady:!!route,
