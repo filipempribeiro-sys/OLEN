@@ -185,6 +185,7 @@ function footer(){
  '</div>';
 }
 function sectionIcon(id){
+ if(id==='prices')return '<span class="olen-px-price-symbol" aria-hidden="true">€</span>';
  const drawings={
   hours:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.3 2"/>',
   prices:'<text x="12" y="17.2" text-anchor="middle" font-size="18" font-family="Arial, sans-serif" font-weight="600" stroke="none" fill="currentColor">€</text>',
