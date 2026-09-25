@@ -1,0 +1,155 @@
+/* OLEN Map/GO — tablet + desktop composition derived from the approved mobile.
+   Keep the map edge-to-edge in its own screen, retain the mobile-scale HUD
+   and the five controls. Do not modify mobile (<700px) or Map/GO logic. */
+@media (min-width:700px){
+ .screen[data-screen="map"].rz-screen{
+  box-sizing:border-box!important;
+  width:100%!important;max-width:none!important;
+  padding:0!important;margin:0!important;
+  min-height:0!important;height:calc(100dvh - 76px - var(--safe,0px))!important;
+  overflow:hidden!important;
+ }
+ .screen[data-screen="map"].rz-screen.active{
+  display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:82px minmax(0,1fr)!important;gap:0!important;
+ }
+ .screen[data-screen="map"] .rz-header{
+  box-sizing:border-box!important;width:100%!important;min-width:0!important;
+  height:82px!important;min-height:82px!important;
+  padding:0 clamp(18px,3vw,34px)!important;
+  overflow:hidden!important;
+ }
+ .screen[data-screen="map"] .rz-header-idle p{
+  font-size:clamp(14px,1.5vw,18px)!important;
+ }
+ .screen[data-screen="map"] .rz-map{
+  position:relative!important;box-sizing:border-box!important;
+  width:100%!important;min-width:0!important;min-height:0!important;
+  height:100%!important;margin:0!important;overflow:hidden!important;
+ }
+ /* GO guide belongs to the header, not to a giant floating map card. */
+ .screen[data-screen="map"] .rz-header.rz-navigating .rz-guide-host{
+  box-sizing:border-box!important;min-width:0!important;height:100%!important;
+ }
+ .screen[data-screen="map"] .rz-header.rz-navigating .rz-guide{
+  box-sizing:border-box!important;height:100%!important;min-height:0!important;
+  grid-template-columns:clamp(62px,7vw,76px) minmax(0,1fr) clamp(76px,9vw,96px)!important;
+  gap:0!important;padding:6px clamp(12px,2vw,24px)!important;
+  border:0!important;border-radius:0!important;background:transparent!important;
+ }
+ .screen[data-screen="map"] .rz-guide-copy{
+  box-sizing:border-box!important;min-width:0!important;
+ }
+ .screen[data-screen="map"] .rz-guide-copy>b{
+  font-size:clamp(14px,1.5vw,17px)!important;
+  text-overflow:ellipsis!important;overflow:hidden!important;white-space:nowrap!important;
+ }
+ .screen[data-screen="map"] .rz-guide-copy>small{font-size:8px!important}
+ .screen[data-screen="map"] .rz-roadline{font-size:11px!important}
+ .screen[data-screen="map"] .rz-next{padding-left:clamp(6px,1vw,10px)!important}
+ .screen[data-screen="map"] .rz-next b{font-size:clamp(18px,2vw,22px)!important}
+ .screen[data-screen="map"] .rz-next small{font-size:8px!important}
+ .screen[data-screen="map"] .rz-maneuver{
+  width:clamp(58px,6vw,68px)!important;height:70px!important;
+ }
+ .screen[data-screen="map"] .rz-maneuver svg{
+  width:clamp(46px,5vw,54px)!important;height:66px!important;
+ }
+ /* Before GO: same compact entry actions as mobile, not 106px-high pills. */
+ .screen[data-screen="map"] .rz-idle{
+  left:50%!important;right:auto!important;bottom:clamp(20px,4vh,38px)!important;
+  width:min(490px,calc(100% - 48px))!important;max-width:490px!important;
+  transform:translateX(-50%)!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;
+ }
+ .screen[data-screen="map"] .rz-idle button{
+  width:100%!important;height:58px!important;min-height:58px!important;
+  border-radius:29px!important;font-size:17px!important;
+ }
+ .screen[data-screen="map"] .rz-idle small{
+  font-size:10px!important;grid-column:1 / -1!important;
+ }
+ /* During GO: compact lower HUD, speedometer and Report anchored to edges.
+    The flexible third track prevents a huge stretched information capsule. */
+ .screen[data-screen="map"] .rz-bottom:not([hidden]){
+  box-sizing:border-box!important;
+  left:clamp(14px,2vw,28px)!important;right:clamp(14px,2vw,28px)!important;
+  bottom:clamp(14px,3vh,28px)!important;width:auto!important;
+  grid-template-columns:minmax(0,320px) 66px minmax(0,1fr) 66px!important;
+  gap:12px!important;align-items:center!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-trip{
+  grid-column:1!important;box-sizing:border-box!important;
+  width:100%!important;min-width:0!important;height:68px!important;
+  padding:0 8px!important;border-radius:21px!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 58px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-trip span{
+  box-sizing:border-box!important;min-width:0!important;height:50px!important;
+  padding:0 8px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-trip b{
+  font-size:clamp(12px,1.5vw,16px)!important;white-space:nowrap!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-trip small{
+  font-size:8px!important;margin-top:5px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-stop{
+  width:50px!important;height:50px!important;min-height:50px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-speed{
+  grid-column:2!important;width:66px!important;height:66px!important;
+  min-height:66px!important;margin:0!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-speed b{font-size:23px!important}
+ .screen[data-screen="map"] .rz-bottom .rz-speed small{font-size:8px!important}
+ .screen[data-screen="map"] .rz-bottom .rz-plus{
+  grid-column:4!important;width:66px!important;height:66px!important;
+  min-height:66px!important;font-size:46px!important;
+ }
+ /* The five existing tool buttons remain in a single compact vertical group. */
+ .screen[data-screen="map"] .rz-map>.rz-tools.rz-tools-go-centered{
+  top:calc(50% - 34px)!important;right:clamp(12px,2vw,25px)!important;
+  bottom:auto!important;transform:translateY(-50%)!important;
+  grid-template-columns:48px!important;gap:8px!important;
+ }
+ .screen[data-screen="map"] .rz-tools button{
+  box-sizing:border-box!important;width:48px!important;height:48px!important;
+  min-width:48px!important;min-height:48px!important;
+ }
+}
+@media (min-width:1100px){
+ /* Desktop has the sidebar, not the mobile/tablet footer. */
+ .screen[data-screen="map"].rz-screen{
+  height:100dvh!important;min-height:0!important;
+ }
+}
+@media (min-width:700px) and (max-width:760px){
+ .screen[data-screen="map"] .rz-bottom:not([hidden]){
+  grid-template-columns:minmax(0,275px) 60px minmax(0,1fr) 60px!important;
+  gap:8px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-speed,
+ .screen[data-screen="map"] .rz-bottom .rz-plus{
+  width:60px!important;height:60px!important;min-height:60px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-trip{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 54px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom .rz-stop{
+  width:46px!important;height:46px!important;min-height:46px!important;
+ }
+}
+@media (min-width:700px) and (max-height:680px){
+ .screen[data-screen="map"] .rz-map>.rz-tools.rz-tools-go-centered{
+  top:calc(50% - 28px)!important;gap:5px!important;
+  grid-template-columns:43px!important;
+ }
+ .screen[data-screen="map"] .rz-tools button{
+  width:43px!important;height:43px!important;min-width:43px!important;min-height:43px!important;
+ }
+ .screen[data-screen="map"] .rz-tools button svg{
+  max-width:25px!important;max-height:25px!important;
+ }
+ .screen[data-screen="map"] .rz-bottom:not([hidden]){bottom:10px!important}
+}
