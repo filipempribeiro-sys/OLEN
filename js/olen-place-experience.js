@@ -172,10 +172,11 @@ function open(p,i,j){
 function footer(){
  if(!current)return'';
  const {p,i,j}=current;
- const plan=p.selected?'<span class="olen-px-action-icon" aria-hidden="true">✓</span>Selecionado':
-   '<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 4v16M4 12h16"/></svg></span>Plano';
- const map='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5Zm6-2v16m6-14v16"/></svg></span>Mapa';
- const go='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20V4m0 0-6 6m6-6 6 6M5 20h14"/></svg></span>Ir';
+ const icon=drawing=>'<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+drawing+'</svg></span>';
+ const plan=p.selected?icon('<path d="m4.5 12 5 5 10-10"/>')+'Selecionado':
+   icon('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5h6M8.5 11h7M12 8v6m-3.5 4h7"/>')+'Plano';
+ const map=icon('<path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5ZM9 3v16m6-14v16"/><circle cx="12" cy="11" r="1.5"/>')+'Mapa';
+ const go=icon('<path d="m4 20 5.5-16 3.5 7 7 3.5L4 20Z"/><path d="m12 12 6 6"/>')+'Ir';
  return '<div class="olen-px-footer">'+
  '<button type="button" data-place-action="select" title="Adicionar ao plano" data-place-msg="'+i+'" data-place-index="'+j+'">'+plan+'</button>'+
  '<button type="button" data-place-action="map" title="Ver percurso no Mapa/GO OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+map+'</button>'+
@@ -186,9 +187,9 @@ function sectionIcon(id){
  const drawings={
   hours:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.3 2"/>',
   prices:'<path d="M17.4 6.6a7 7 0 1 0 0 10.8"/><path d="M7.2 10h8M7.2 14h8"/>',
-  images:'<rect x="3.5" y="4" width="17" height="16" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="m5 17 4.8-4.5 3 2.5 2.6-3L19 16"/>',
+  images:'<rect x="5" y="6" width="15" height="14" rx="2.5"/><path d="M8 6V4h10v2"/><circle cx="10" cy="11" r="1.5"/><path d="m7 17 4-4 2.8 2.8 2-2.2 2.2 3.4"/>',
   history:'<path d="M12 6.5c-2.4-1.5-5.1-1.7-8-1.1v13.1c3-.5 5.6-.3 8 1.2 2.4-1.5 5-1.7 8-1.2V5.4c-2.9-.6-5.6-.4-8 1.1z"/><path d="M12 6.5v13.2"/>',
-  access:'<circle cx="11" cy="4.5" r="1.5"/><path d="m11 7-.5 6 4 3 2 4M6 11h7M9 13a6 6 0 1 0 5 9"/>',
+  access:'<circle cx="12.5" cy="4" r="1.5"/><path d="m12 7-1 5h5l2.5 4.5M11 12l-1 3"/><path d="M8 12a6.5 6.5 0 1 0 9 7"/>',
   services:'<path d="M4 15h16M5.5 15a6.5 6.5 0 0 1 13 0M12 8.5V6M9.5 6h5M5 18h14"/><circle cx="12" cy="5" r="1"/>',
   rules:'<path d="M7 3.5h8l3.5 3.5v13H7z"/><path d="M15 3.5V7h3.5M10 11h5M10 15h5"/>',
   transport:'<rect x="5" y="4" width="14" height="14" rx="3"/><path d="M5 10h14M8 18l-2 3m10-3 2 3M8 7h8"/><circle cx="8.5" cy="14" r="1"/><circle cx="15.5" cy="14" r="1"/>',
