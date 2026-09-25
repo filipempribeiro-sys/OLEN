@@ -182,22 +182,78 @@ function footer(){
  '<button type="button" class="primary" data-place-action="go" title="Iniciar navegação GPS OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+go+'</button>'+
  '</div>';
 }
+function sectionIcon(id){
+ const drawings={
+  hours:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.3 2"/>',
+  prices:'<path d="M17.4 6.6a7 7 0 1 0 0 10.8"/><path d="M7.2 10h8M7.2 14h8"/>',
+  images:'<rect x="3.5" y="4" width="17" height="16" rx="3"/><circle cx="9" cy="9" r="1.5"/><path d="m5 17 4.8-4.5 3 2.5 2.6-3L19 16"/>',
+  history:'<path d="M4 7h16M4 12h12M4 17h16"/><path d="M18 10v4m-2-2h4"/>',
+  access:'<circle cx="11" cy="4.5" r="1.5"/><path d="m11 7-.5 6 4 3 2 4M6 11h7M9 13a6 6 0 1 0 5 9"/>',
+  services:'<path d="M12 3v18M3 12h18"/><path d="M7 7h10v10H7z" opacity=".35"/>',
+  rules:'<path d="M7 3.5h8l3.5 3.5v13H7z"/><path d="M15 3.5V7h3.5M10 11h5M10 15h5"/>',
+  transport:'<rect x="5" y="4" width="14" height="14" rx="3"/><path d="M5 10h14M8 18l-2 3m10-3 2 3M8 7h8"/><circle cx="8.5" cy="14" r="1"/><circle cx="15.5" cy="14" r="1"/>',
+  parking:'<rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M9 17V7.5h4a2.8 2.8 0 0 1 0 5.6H9"/>',
+  contact:'<path d="M7 4h3l1.2 4-2 1.5a14 14 0 0 0 5.3 5.3l1.5-2 4 1.2v3c0 1-.9 1.7-2 1.6C10.6 18.1 5.9 13.4 5.4 6c-.1-1.1.6-2 1.6-2z"/>',
+  discover:'<path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5z"/>'
+ };
+ const drawing=drawings[id]||drawings.discover;
+ return '<svg class="olen-px-section-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round">'+drawing+'</svg>';
+}
+function detailLines(raw,limit=24){
+ const labels={wheelchair:'Acesso a cadeira de rodas',wheelchairAccessible:'Acesso a cadeira de rodas',
+ stepFree:'Acesso sem degraus',step_free:'Acesso sem degraus',ramp:'Rampa',lift:'Elevador',
+ elevator:'Elevador',accessibleToilet:'WC adaptado',toilets:'Instalações sanitárias',
+ accessibleParking:'Estacionamento adaptado',parking:'Estacionamento',spaces:'Lugares disponíveis',
+ paid:'Pagamento',price:'Preço',fee:'Tarifa',hours:'Horário',distance:'Distância',
+ bus:'Autocarro',train:'Comboio',metro:'Metro',tram:'Elétrico',stop:'Paragem',
+ station:'Estação',routes:'Linhas',lines:'Linhas',name:'Nome',description:'Descrição',
+ details:'Detalhes',notes:'Observações',availability:'Disponibilidade',entrance:'Entrada',
+ surface:'Pavimento',address:'Morada',location:'Localização'};
+ const output=[],seen=new Set();
+ const append=(line)=>{
+  const t=cleanText(line);if(!t||t.length<2||/^https?:/i.test(t))return;
+  const key=t.toLocaleLowerCase('pt-PT');if(seen.has(key))return;
+  seen.add(key);output.push(t);
+ };
+ function walk(value,label='',depth=0){
+  if(output.length>=limit||value==null||depth>3)return;
+  if(Array.isArray(value)){value.forEach(v=>walk(v,label,depth+1));return}
+  if(typeof value==='boolean'){if(label)append(label+': '+(value?'Sim':'Não'));return}
+  if(typeof value==='string'||typeof value==='number'){
+   const t=cleanText(value);if(t)append(label?label+': '+t:t);return;
+  }
+  if(typeof value!=='object')return;
+  const main=value.text||value.description||value.summary||value.value;
+  if(typeof main==='string'&&main.trim())walk(main,label,depth+1);
+  for(const [key,v] of Object.entries(value)){
+   if(['text','description','summary','value','url','uri','source','sourceUrl','id','raw','metadata'].includes(key))continue;
+   if(v==null||v==='')continue;
+   const name=labels[key]||key.replace(/([a-z])([A-Z])/g,'$1 $2').replace(/[_-]/g,' ');
+   if(typeof v==='object'&&name==='Nome')walk(v,'',depth+1);
+   else walk(v,name,depth+1);
+  }
+ }
+ walk(raw);return output.slice(0,limit);
+}
 function sections(p){
  const ps=photos(p),defs=[
- ['hours','◷','Horários',first(p,'openingHours','lastEntry')],
- ['prices','€','Preços',first(p,'prices','familyTicket','discounts','freeEntry','ticketUrl','ticketsUrl','bookingUrl')],
- ['images','▧','Imagens',ps.length],
- ['history','≡',p.history?'História':'Sobre',first(p,'history','description','summary')],
- ['access','♿','Acessibilidade',p.accessibility],
- ['services','＋','Serviços',p.services],
- ['rules','ⓘ','Regras',first(p,'rules','parking','publicTransport')],
- ['transport','⌖','Transportes',p.publicTransport],
- ['parking','▤','Estacionamento',p.parking],
- ['contact','☎','Contactos',first(p,'telephone','phone','email','website')],
- ['discover','◇','Descobrir aqui',first(p,'discover','highlights','inside','pointsOfInterest')]
+ ['hours','Horários',first(p,'openingHours','lastEntry')],
+ ['prices','Preços',first(p,'prices','familyTicket','discounts','freeEntry','ticketUrl','ticketsUrl','bookingUrl','website')],
+ ['images','Imagens',ps.length],
+ ['history',p.history?'História':'Sobre',first(p,'history','description','summary')],
+ ['access','Acessibilidade',p.accessibility],
+ ['services','Serviços',p.services],
+ ['rules','Regras',first(p,'rules','parking','publicTransport')],
+ ['transport','Transportes',p.publicTransport],
+ ['parking','Estacionamento',p.parking],
+ ['contact','Contactos',first(p,'telephone','phone','email','website')],
+ ['discover','Descobrir aqui',first(p,'discover','highlights','inside','pointsOfInterest')]
  ];
- return defs.filter(x=>x[3]).map(([id,icon,title])=>
-   '<button type="button" data-olen-px="section" data-section="'+id+'"><span aria-hidden="true">'+icon+'</span>'+esc(title)+'</button>').join('');
+ return defs.filter(([id,,value])=>['access','transport','parking'].includes(id)||(
+   value!=null&&value!==''&&(!Array.isArray(value)||value.length)&&(
+     typeof value!=='object'||detailLines(value).length>0||id==='images'||id==='prices'
+   ))).map(([id,title])=>
+   '<button type="button" data-olen-px="section" data-section="'+id+'"><span class="olen-px-icon-wrap" aria-hidden="true">'+sectionIcon(id)+'</span>'+esc(title)+'</button>').join('');
 }
 function renderMain(){
  if(!current||!overlay)return;
@@ -213,7 +269,7 @@ function renderMain(){
  const source=publishedSources(p);
  const box=overlay.querySelector('.olen-place-modal-content');
  const hero=overlay.querySelector('.olen-place-modal-hero');
- if(hero){hero.innerHTML=ps[0]?'<img src="'+esc(ps[0])+'" alt="'+byName(p)+'">'+attr(p):'';hero.hidden=!ps[0]}
+ if(hero){hero.classList.remove('olen-px-subhero');hero.innerHTML=ps[0]?'<img src="'+esc(ps[0])+'" alt="'+byName(p)+'">'+attr(p):'';hero.hidden=!ps[0]}
  box.innerHTML='<div class="olen-px-head"><small>'+esc(category(p.category||p.type))+'</small>'+
  '<h2>'+byName(p)+'</h2>'+
  (p.address?'<p class="olen-px-address">'+esc(cleanText(p.address))+'</p>':'')+
@@ -228,7 +284,7 @@ function renderMain(){
  box.scrollTop=0;
 }
 function rows(title,values){
- const normalized=uniq(values,30);
+ const normalized=detailLines(values,30);
  return '<h3>'+esc(title)+'</h3>'+(normalized.length?
  normalized.map(x=>'<div class="olen-px-row">'+esc(x)+'</div>').join(''):
  '<p class="olen-px-empty">Informação não disponível nas fontes consultadas.</p>');
@@ -265,8 +321,9 @@ function prices(p){
 }
 function renderSection(id,imageIndex=0){
  if(!current||!overlay)return;
- const hero=overlay.querySelector('.olen-place-modal-hero');if(hero){hero.hidden=true;hero.innerHTML=''}
+ const hero=overlay.querySelector('.olen-place-modal-hero');
  const p=current.p,ps=photos(p),name=byName(p);
+ if(hero){hero.classList.toggle('olen-px-subhero',id!=='images');hero.innerHTML=id!=='images'&&ps[0]?'<img src="'+esc(ps[0])+'" alt="'+name+'">'+attr(p):'';hero.hidden=id==='images'||!ps[0]}
  current.page=id;
  let body='';
  if(id==='hours')body=hours(p);
