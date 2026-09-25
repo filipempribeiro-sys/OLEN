@@ -172,15 +172,16 @@ function open(p,i,j){
 function footer(){
  if(!current)return'';
  const {p,i,j}=current;
- const icon=drawing=>'<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">'+drawing+'</svg></span>';
- const plan=p.selected?icon('<path d="m4.5 12 5 5 10-10"/>')+'Selecionado':
-   icon('<rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4.5h6M8.5 11h7M12 8v6m-3.5 4h7"/>')+'Plano';
- const map=icon('<path d="m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2V5ZM9 3v16m6-14v16"/><circle cx="12" cy="11" r="1.5"/>')+'Mapa';
- const go=icon('<path d="m4 20 5.5-16 3.5 7 7 3.5L4 20Z"/><path d="m12 12 6 6"/>')+'Ir';
+ // The map symbol is the same path as the OLEN main Map footer.
+ const mapIcon='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l-6 3V6l6-3 6 3 6-3v15l-6 3zM9 3v15m6-12v15"/></svg></span>';
+ // Filled directional arrow from the approved "Ir" reference, not the outlined paper-plane icon.
+ const goIcon='<span class="olen-px-action-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false" fill="currentColor" stroke="none"><path d="M3.7 11.7 20.4 3.6l-7.6 16.8-2.6-6.6-6.5-2.1z"/></svg></span>';
+ const plan=p.selected?'<span class="olen-px-action-icon olen-px-simple-mark" aria-hidden="true">✓</span>Selecionado':
+   '<span class="olen-px-action-icon olen-px-simple-mark" aria-hidden="true">+</span>Plano';
  return '<div class="olen-px-footer">'+
  '<button type="button" data-place-action="select" title="Adicionar ao plano" data-place-msg="'+i+'" data-place-index="'+j+'">'+plan+'</button>'+
- '<button type="button" data-place-action="map" title="Ver percurso no Mapa/GO OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+map+'</button>'+
- '<button type="button" class="primary" data-place-action="go" title="Iniciar navegação GPS OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+go+'</button>'+
+ '<button type="button" data-place-action="map" title="Ver percurso no Mapa/GO OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+mapIcon+'Mapa</button>'+
+ '<button type="button" class="primary" data-place-action="go" title="Iniciar navegação GPS OLEN" data-place-msg="'+i+'" data-place-index="'+j+'">'+goIcon+'Ir</button>'+
  '</div>';
 }
 function sectionIcon(id){
