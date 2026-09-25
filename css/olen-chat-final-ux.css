@@ -1,0 +1,55 @@
+/* OLEN Chat final UX, isolated to the Chat screen and its existing sidebar. */
+@media (min-width:700px){
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav{
+    display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    flex-direction:row!important;align-items:stretch!important;
+    flex:0 0 auto!important;gap:2px!important;
+    padding:8px 0 2px!important;margin-top:auto!important;
+    border-top:1px solid rgba(91,168,255,.22)!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button{
+    display:flex!important;flex-direction:column!important;
+    justify-content:center!important;align-items:center!important;
+    gap:4px!important;width:100%!important;min-width:0!important;
+    height:53px!important;padding:4px 1px!important;border-radius:10px!important;
+    background:transparent!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav svg{
+    flex:0 0 21px!important;width:21px!important;height:21px!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav span{
+    display:block!important;max-width:100%!important;overflow:hidden!important;
+    text-overflow:ellipsis!important;white-space:nowrap!important;
+    font-size:10px!important;font-weight:500!important;line-height:1.15!important;
+  }
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="home"]{color:#59edb6!important}
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="map"]{color:#52f6dc!important}
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="chat"]{color:#5ba8ff!important}
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="agenda"]{color:#b16cff!important}
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button[data-view="profile"]{color:#7d4ed8!important}
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button.active,
+  .screen[data-screen="chat"] .olen-chat-sidebar.show .olen-side-mainnav button:hover{
+    background:rgba(91,168,255,.075)!important;
+  }
+}
+.screen[data-screen="chat"] .olen-chat-final-fade{
+  position:fixed!important;z-index:119!important;pointer-events:none!important;
+  background:linear-gradient(to bottom,rgba(2,8,6,0) 0%,rgba(2,8,6,.64) 61%,rgba(2,8,6,.94) 100%)!important;
+}
+.screen[data-screen="chat"] .olen-chat-final-fade[hidden]{display:none!important}
+.screen[data-screen="chat"] .olen-chat-jump-end{
+  position:fixed!important;z-index:121!important;display:grid!important;place-items:center!important;
+  width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+  padding:0!important;border-radius:50%!important;border:1px solid rgba(91,168,255,.54)!important;
+  background:#0d221e!important;color:#f3f9f7!important;box-shadow:0 5px 20px rgba(0,0,0,.24)!important;
+  cursor:pointer!important;
+}
+.screen[data-screen="chat"] .olen-chat-jump-end[hidden]{display:none!important}
+.screen[data-screen="chat"] .olen-chat-jump-end svg{
+  display:block!important;width:18px!important;height:18px!important;fill:none!important;
+  stroke:currentColor!important;stroke-width:1.8!important;stroke-linecap:round!important;stroke-linejoin:round!important;
+}
+.screen[data-screen="chat"] .olen-chat-jump-end:focus-visible{outline:2px solid #5ba8ff!important;outline-offset:3px!important}
+@media (prefers-reduced-motion:reduce){
+  .screen[data-screen="chat"] .olen-chat-jump-end{transition:none!important}
+}
