@@ -220,6 +220,7 @@ function updatePosition(c){
 }
 function beginGuidance(){
  if(!route||!last||!destination)return false;
+ document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
  active=true;updateInstruction(last);
  return true;
 }
@@ -233,6 +234,8 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
  const current=++serial;
  destination={...target,name:String(place.name||'Destino').slice(0,105)};
  route=null;curve=[];active=false;last=null;mode=travelMode;lastManeuverKey='';
+ // Preview from "Mapa" shows only the real route; "Ir" owns GPS navigation.
+ document.querySelector('.screen[data-screen="map"]')?.classList.toggle('olen-map-preview',!navigate);
  window.OLENPlaceExperience?.close?.();
  try{window.OLEN5?.router?.enter('map',{reason:navigate?'chat-place-go':'chat-place-map',destination:destination.name})}
  catch{document.querySelector('.nav[data-view="map"]')?.click()}
@@ -313,7 +316,11 @@ async function showBaseMap(){
  }
 }
 window.OLEN5?.core?.on?.('route:change',e=>{
- if(e?.to==='map')showBaseMap().catch(()=>{});
+ if(e?.to==='map'){
+   if(e.reason!=='chat-place-map')
+     document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
+   showBaseMap().catch(()=>{});
+ }
 });
 window.OLENMapRouting=Object.freeze({
  open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,
