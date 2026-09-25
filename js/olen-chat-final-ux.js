@@ -22,8 +22,10 @@
    const left=Math.max(0,Math.min(box.left,thread.left));
    const right=Math.min(window.innerWidth,Math.max(box.right,thread.right));
    fade.style.left=left+'px';fade.style.width=Math.max(0,right-left)+'px';
-   fade.style.top=Math.max(0,box.top-74)+'px';
-   fade.style.height=Math.max(90,box.height+86)+'px';
+   const desktopFade=window.matchMedia('(min-width:700px)').matches;
+   const fadeTop=Math.max(0,box.top-(desktopFade?116:74));
+   fade.style.top=fadeTop+'px';
+   fade.style.height=(desktopFade?Math.max(155,window.innerHeight-fadeTop):Math.max(90,box.height+86))+'px';
    fade.hidden=false;
    jump.style.left=Math.max(8,Math.min(window.innerWidth-46,box.right-46))+'px';
    jump.style.top=Math.max(8,box.top-52)+'px';
