@@ -17,10 +17,21 @@ function cleanText(value){
    .replace(/\s+/g,' ').trim();
 }
 function uniq(values,max=24){
- return [...new Set(values.flatMap(arr).map(v=>typeof v==='string'||typeof v==='number'?cleanText(v):
-   (v&&typeof v==='object'?cleanText(v.text||v.description||v.value||''):'' )).filter(Boolean))]
-   .filter(x=>x.length>1&&!/^(in[ií]cio|saber mais|aceitar cookies|gerir cookies|menu|termos e condições|política de privacidade|contacte-nos)$/i.test(x))
-   .slice(0,max);
+ const seen=new Set(),items=[];
+ const menu=/^(in[ií]cio|saber mais|aceitar cookies|gerir cookies|menu|termos e condições|política de privacidade|contacte-nos|pesquisar|voltar|subscrever|acessibilidade do site|mapa do site)$/i;
+ const noise=/((aceitar|gerir) cookies|pol[ií]tica de privacidade|termos e condi[cç][oõ]es|conte[uú]do principal)/gi;
+ for(const raw of values.flatMap(arr)){
+   const text=typeof raw==='string'||typeof raw==='number'?cleanText(raw):
+      (raw&&typeof raw==='object'?cleanText(raw.text||raw.description||raw.value||''):'');
+   if(text.length<2||menu.test(text))continue;
+   // Navigation/cookie-menu extracts are not factual descriptions of a place.
+   if((text.match(noise)||[]).length>=2)continue;
+   const id=text.toLocaleLowerCase('pt-PT').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/\s+/g,' ').trim();
+   if(seen.has(id))continue;
+   seen.add(id);items.push(text);
+   if(items.length>=max)break;
+ }
+ return items;
 }
 function first(p,...keys){for(const k of keys)if(p?.[k]!=null&&p[k]!==''&&(!Array.isArray(p[k])||p[k].length))return p[k];return null}
 function url(value){
@@ -167,7 +178,7 @@ function sections(p){
  ['hours','◷','Horários',first(p,'openingHours','lastEntry')],
  ['prices','€','Preços',first(p,'prices','familyTicket','discounts','freeEntry','ticketUrl','ticketsUrl','bookingUrl')],
  ['images','▧','Imagens',ps.length],
- ['history','≡','História',first(p,'history','description','summary')],
+ ['history','≡',p.history?'História':'Sobre',first(p,'history','description','summary')],
  ['access','♿','Acessibilidade',p.accessibility],
  ['services','＋','Serviços',p.services],
  ['rules','ⓘ','Regras',first(p,'rules','parking','publicTransport')],
@@ -247,7 +258,7 @@ function renderSection(id,imageIndex=0){
  let body='';
  if(id==='hours')body=hours(p);
  else if(id==='prices')body=prices(p);
- else if(id==='history')body=rows('História / Sobre',[p.history,p.description,p.summary]);
+ else if(id==='history')body=rows(p.history?'História':'Sobre',[p.history,p.description,p.summary]);
  else if(id==='access')body=rows('Acessibilidade',p.accessibility);
  else if(id==='services')body=rows('Serviços',p.services);
  else if(id==='rules')body=rows('Informação prática',[...arr(p.rules),...arr(p.parking),...arr(p.publicTransport)]);
