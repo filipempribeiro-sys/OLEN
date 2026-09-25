@@ -53,7 +53,7 @@ function photos(p){
 function category(raw){
  const v=cleanText(raw||'Local'),labels={
    viewpoint:'Miradouro',museum:'Museu',restaurant:'Restaurante',attraction:'Atração',
-   hotel:'Hotel',park:'Parque',beach:'Praia',trail:'Trilho',castle:'Castelo',
+   hotel:'Hotel',park:'Parque',beach:'Praia',trail:'Trilho',track:'Trilho',hiking:'Trilho',path:'Percurso',castle:'Castelo',
    palace:'Palácio',church:'Igreja',cafe:'Café',garden:'Jardim',monument:'Monumento',
    historic:'Património',tourism:'Turismo',amenity:'Local',artwork:'Arte pública',
    guest_house:'Alojamento',fast_food:'Restauração rápida',picnic_site:'Zona de piquenique',
