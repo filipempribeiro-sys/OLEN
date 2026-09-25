@@ -178,6 +178,22 @@
 .screen[data-screen="agenda"] .olen-today-callout .olen-today-arrow{color:#b16cff;margin-left:4px}
 }
 
+/* Pixel-centered calendar plus for tablet and desktop.
+   The original "+" remains in the accessible button but is not rendered;
+   two perpendicular strokes are geometrically centered in the circle. */
+@media (min-width:700px){
+ .screen[data-screen="agenda"]>.calendar .olen-calendar-add{
+  font-size:0!important;line-height:0!important;
+ }
+ .screen[data-screen="agenda"]>.calendar .olen-calendar-add::after{
+  content:""!important;display:block!important;position:absolute!important;
+  left:50%!important;top:50%!important;width:21px!important;height:21px!important;
+  transform:translate(-50%,-50%)!important;pointer-events:none!important;
+  background:
+   linear-gradient(#b16cff,#b16cff) center/21px 1.5px no-repeat,
+   linear-gradient(#b16cff,#b16cff) center/1.5px 21px no-repeat!important;
+ }
+}
 /* Responsive geometry only. All calendar appearance above is identical to mobile. */
 @media (min-width:700px){
  .screen[data-screen="agenda"].active{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-areas:"head" "calendar" "callout" "events"!important;grid-template-rows:auto auto auto minmax(0,1fr)!important;justify-items:center!important;align-content:start!important;gap:0!important;box-sizing:border-box!important;min-height:100dvh!important;height:auto!important;overflow:visible!important;padding:clamp(20px,4dvh,42px) clamp(24px,5vw,62px) 82px!important}
