@@ -1,4 +1,8 @@
 /* OLEN in-app map ownership; applies only while the actual tile map is mounted. */
+/* Chat 'Mapa' is a clean trail preview, not a simulated GO session. */
+.screen[data-screen="map"].olen-map-preview .rz-idle{display:none!important}
+.screen[data-screen="map"].olen-map-preview .rz-guide,.screen[data-screen="map"].olen-map-preview .rz-bottom{display:none!important}
+
 .rz-map.olen-real-map::before,.rz-map.olen-real-map::after,
 .rz-map.olen-real-map>.rz-route,.rz-map.olen-real-map>.rz-place,
 .rz-map.olen-real-map>.rz-warn,.rz-map.olen-real-map>.rz-dot{
