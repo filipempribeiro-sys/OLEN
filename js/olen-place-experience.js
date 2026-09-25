@@ -120,10 +120,11 @@ function cards(m,i){
  const source=cleanText(m.placeSource||'').replace(/Alpha Tools/gi,'Ferramentas OLEN');
  requestAnimationFrame(()=>document.querySelectorAll('.olen-place-carousel').forEach(updateCarousel));
  return '<section class="olen-place-section" aria-label="Locais escolhidos pela OLEN">'+
- '<div class="olen-place-heading"><b>Locais escolhidos pela OLEN</b><small>desliza ↔</small></div>'+
- '<div class="olen-place-carousel"><button class="olen-place-arrow olen-place-prev" type="button" data-olen-place-scroll="prev" aria-label="Ver cartões anteriores" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>'+
- '<div class="olen-place-track" tabindex="0" aria-label="Locais, deslocar horizontalmente">'+html+'</div>'+
- '<button class="olen-place-arrow olen-place-next" type="button" data-olen-place-scroll="next" aria-label="Ver próximos cartões"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div>'+
+ '<div class="olen-place-carousel"><div class="olen-place-heading"><b>Locais escolhidos pela OLEN</b>'+
+ '<span class="olen-place-swipe-hint">desliza ↔</span>'+
+ '<div class="olen-place-nav"><button class="olen-place-arrow olen-place-prev" type="button" data-olen-place-scroll="prev" aria-label="Ver cartões anteriores" disabled><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>'+
+ '<button class="olen-place-arrow olen-place-next" type="button" data-olen-place-scroll="next" aria-label="Ver próximos cartões"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button></div></div>'+
+ '<div class="olen-place-track" tabindex="0" aria-label="Locais, deslocar horizontalmente">'+html+'</div></div>'+
  (source?'<small class="olen-place-source">'+esc(source)+'</small>':'')+'</section>';
 }
 function ensureOverlay(){
