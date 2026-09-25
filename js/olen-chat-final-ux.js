@@ -23,7 +23,7 @@
    const right=Math.min(window.innerWidth,Math.max(box.right,thread.right));
    fade.style.left=left+'px';fade.style.width=Math.max(0,right-left)+'px';
    fade.style.top=Math.max(0,box.top-74)+'px';
-   fade.style.height=Math.max(75,Math.min(102,window.innerHeight-box.top+74))+'px';
+   fade.style.height=Math.max(90,box.height+86)+'px';
    fade.hidden=false;
    jump.style.left=Math.max(8,Math.min(window.innerWidth-46,box.right-46))+'px';
    jump.style.top=Math.max(8,box.top-52)+'px';
