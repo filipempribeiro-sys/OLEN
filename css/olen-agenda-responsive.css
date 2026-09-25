@@ -134,6 +134,22 @@
  }
  .screen[data-screen="agenda"]>.olen-today-callout:not(.show){display:none!important}
  .screen[data-screen="agenda"]>.olen-today-callout.show{display:block!important}
+ .screen[data-screen="agenda"]>.olen-today-callout .olen-today-accent{
+  background:linear-gradient(90deg,#bffaff 0%,#fff 46%,#f1a6ff 100%)!important;
+  -webkit-background-clip:text!important;background-clip:text!important;
+  -webkit-text-fill-color:transparent!important;
+ }
+ .screen[data-screen="agenda"]>.olen-today-callout .olen-today-arrow{
+  color:#b16cff!important;margin-left:4px!important;
+ }
+ .screen[data-screen="agenda"]>.calendar.olen-month-swipe-left .week,
+ .screen[data-screen="agenda"]>.calendar.olen-month-swipe-left .days{
+  animation:olenAgendaDesktopFromRight .20s ease-out!important;
+ }
+ .screen[data-screen="agenda"]>.calendar.olen-month-swipe-right .week,
+ .screen[data-screen="agenda"]>.calendar.olen-month-swipe-right .days{
+  animation:olenAgendaDesktopFromLeft .20s ease-out!important;
+ }
  .screen[data-screen="agenda"]>.olen-today-callout::before{
   content:""!important;position:absolute!important;left:4px!important;top:50%!important;
   width:3px!important;height:26px!important;border-radius:3px!important;
@@ -185,3 +201,5 @@
  }
  .screen[data-screen="agenda"]>.calendar .olen-calendar-add{bottom:19px!important}
 }
+@keyframes olenAgendaDesktopFromRight{from{transform:translateX(18px);opacity:.35}to{transform:translateX(0);opacity:1}}
+@keyframes olenAgendaDesktopFromLeft{from{transform:translateX(-18px);opacity:.35}to{transform:translateX(0);opacity:1}}
