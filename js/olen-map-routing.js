@@ -150,8 +150,7 @@ function getNearest(location){
 }
 function stepFor(positionIndex){
  const steps=Array.isArray(route?.maneuvers)?route.maneuvers:[];
- return steps.find(s=>Number.isSafeInteger(s.pointIndex)&&s.pointIndex>positionIndex)||
-   steps.find(s=>Number.isSafeInteger(s.pointIndex)&&s.pointIndex>=positionIndex)||null;
+ return steps.find(s=>Number.isSafeInteger(s.pointIndex)&&s.pointIndex>=positionIndex)||null;
 }
 function updateInstruction(pos){
  if(!active||!route||!curve.length)return;
