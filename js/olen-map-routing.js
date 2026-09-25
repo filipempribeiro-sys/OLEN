@@ -269,8 +269,24 @@ async function prepareManual(name,travelMode='walk'){
    return open(first,{navigate:true,travelMode});
  }catch(e){notice(e?.message||'Não foi possível confirmar o destino.',true);return false}
 }
+async function showBaseMap(){
+ const existing=!!map;
+ try{
+   if(!existing&&!destination)notice('A preparar o mapa da OLEN…');
+   await ensureMap();
+   draw();
+   if(!existing&&!destination)notice('Mapa OLEN pronto. Escolhe GO para preparar um percurso real.');
+   return true;
+ }catch(e){
+   notice(String(e?.message||'Não foi possível carregar o mapa da OLEN.'),true);
+   return false;
+ }
+}
+window.OLEN5?.core?.on?.('route:change',e=>{
+ if(e?.to==='map')showBaseMap().catch(()=>{});
+});
 window.OLENMapRouting=Object.freeze({
- open,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,
+ open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,
  get state(){return {destination:destination?{...destination}:null,routeReady:!!route,
   route:route?{...route}:null,navigationActive:active,mode};}
 });
