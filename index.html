@@ -2122,7 +2122,7 @@ document.addEventListener('click',function(e){const tab=e.target.closest('.nav[d
 document.addEventListener('click',function(e){const tab=e.target.closest('.nav[data-view],.desk-nav[data-view]');if(tab&&tab.dataset.view!=='chat')chatWasVisible=false},true);
 if(document.querySelector('.screen[data-screen="chat"]')?.classList.contains('active'))newChat();window.OLENChat={openSidebar:openSide,closeSidebar:closeSide,newConversation:newChat,render:renderChat,
  getCurrent:()=>draftChat||load().find(x=>x.id===activeId())||null,getActive:activeId};})();
-</script><script src="js/olen-maneuvers.js"></script><script src="js/olen-gps-track.js"></script><script src="js/olen-go-experience-bridge.js"></script><script src="./js/olen-go-runtime.js?v=20260926-p0-isolated"></script>
+</script><script src="js/olen-maneuvers.js"></script><script src="js/olen-gps-track.js"></script><script src="js/olen-go-experience-bridge.js"></script><script src="js/olen-go-history.js"></script><script src="./js/olen-go-runtime.js?v=20260926-p0-isolated"></script>
 <script id="olen-global-aurora-white">
 (function(){
   var SKIP=new Set(["SCRIPT","STYLE","SVG","PATH","RECT","CIRCLE","LINE","POLYLINE","POLYGON","INPUT","TEXTAREA","SELECT","OPTION"]);
