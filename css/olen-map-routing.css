@@ -52,3 +52,7 @@
  #olenMapStatus.olen-map-status{max-width:calc(100% - 24px);font-size:11px;top:10px}
  .rz-map.olen-real-map .leaflet-control-zoom{margin-bottom:110px!important}
 }
+
+/* GPX import belongs to the existing GO sheet; no global button overrides. */
+#rzGoPop .rz-import-gpx{display:block;width:100%;margin:10px 0 4px;padding:10px 14px;border:1px solid rgba(82,246,220,.35);border-radius:12px;background:rgba(82,246,220,.08);color:inherit;font:inherit;font-size:13px;font-weight:650;cursor:pointer}
+#rzGoPop .rz-import-gpx:disabled{opacity:.55;cursor:progress}
