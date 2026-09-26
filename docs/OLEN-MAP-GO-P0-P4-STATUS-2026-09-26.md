@@ -36,7 +36,8 @@ Data: 2026-09-26. Esta matriz distingue código, testes isolados e validação r
 | Ficha outdoor/guardados | 🔴 | não existe UI completa no ramo ativo | ficha, biblioteca e storage de trilhos |
 | Reports georreferenciados | 🟡 | `js/olen-go-reports.js` + UI, guarda local com GPS válido; 4 testes | fotografias e circuito comunitário com moderação |
 | STOP/avaliação/histórico | 🟡 | grava histórico local, Experience rating e resumo | UI de histórico e comentários persistidos na app |
-| Fotos/meteorologia/altimetria | 🔴 | sem integração com ficha de trilho | dados e UI apropriados |
+| Fotografias/meteorologia | 🔴 | sem integração com ficha de trilho | dados e UI apropriados |
+| Altimetria GPX | 🟡 | `js/olen-trail-metrics.js` calcula subida/descida quando há elevação; 4 testes | DEM oficial/licenciado, UI de perfil e verificação em trilhos reais |
 
 ## P2 — Mapa, motor e dados oficiais
 | Requisito | Estado | Implementação/evidência | Falta para fechar |
@@ -46,7 +47,7 @@ Data: 2026-09-26. Esta matriz distingue código, testes isolados e validação r
 | Relevo DEM | 🔴 | não integrado | dados raster-dem licenciados e performance |
 | Voz e perfis por transporte | 🔴 | GO atual mantém manobras visuais; voz não instalada | TTS, testes de cada modo e background |
 | Tablet/desktop | 🟡 | mantém stylesheet responsive anterior | screenshots e regressões a vários tamanhos |
-| Dificuldade/elevação/météo | 🔴 | não concluídos | dados, método e ficha com origem do grau |
+| Dificuldade/elevação/météo | 🟡 | métricas GPX locais quando existem; dificuldade permanece desconhecida | método fundamentado, meteorologia real e ficha completa |
 | ICNF/FCMP/regionais | 🔴 | nenhuma ligação oficial live | licença, metadados, WFS/WMS e procedimento institucional |
 | Homologação/acesso | 🟡 | UI OSM/GPX nunca atribui selo oficial e distingue homologação não verificada | integração comprovada de fontes oficiais e estados por segmento |
 
@@ -69,7 +70,7 @@ Data: 2026-09-26. Esta matriz distingue código, testes isolados e validação r
 | Produção/merge/checkpoint final | 🔴 | não realizado intencionalmente | validação e autorização de publicação |
 
 ## Testes executados
-- 39/39 casos de lógica aprovados em ambiente JavaScript isolado: GPS 10, Experience 5, histórico 6, GPX 5, Trail Guide 4, catálogo 5, reports 4.
+- 44/44 casos de lógica aprovados em ambiente JavaScript isolado: GPS 10, Experience 6, histórico 6, GPX 5, Trail Guide 4, catálogo 5, reports 4, altimetria 4.
 - Sintaxe dos módulos e runtime verificada; presença de scripts e IDs verificada no HTML.
 - Sem teste de DOMParser real em browser, consulta Overpass live, GPS físico, visual mobile/tablet/desktop, Worker de rotas live ou homologação oficial.
 - Risco conhecido: dependência dos serviços externos OSM/Overpass e do Worker; não declarar gratuitidade irrestrita de infraestrutura.
