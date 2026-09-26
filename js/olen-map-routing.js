@@ -347,6 +347,11 @@ window.OLEN5?.core?.on?.('route:stable',e=>{
    showBaseMap().catch(()=>{});
  }
 });
+function reportGpsError(error){
+ const denied=Number(error?.code)===1;
+ notice(denied?'A localização foi recusada. O GO foi interrompido para não apresentar uma navegação sem GPS.':
+ 'Sinal GPS indisponível ou impreciso. A distância não é atualizada até regressarem posições válidas.',true);
+}
 async function controlMap(action){
  try{
   await ensureMap();
@@ -380,7 +385,7 @@ async function controlMap(action){
  }catch(error){notice(error?.message||'Controlo do mapa indisponível.',true);return false}
 }
 window.OLENMapRouting=Object.freeze({
- open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,controlMap,
+ open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,controlMap,reportGpsError,
  get state(){return {destination:destination?{...destination}:null,routeReady:!!route,
   route:route?{...route}:null,navigationActive:active,mode};}
 });
