@@ -2122,7 +2122,7 @@ document.addEventListener('click',function(e){const tab=e.target.closest('.nav[d
 document.addEventListener('click',function(e){const tab=e.target.closest('.nav[data-view],.desk-nav[data-view]');if(tab&&tab.dataset.view!=='chat')chatWasVisible=false},true);
 if(document.querySelector('.screen[data-screen="chat"]')?.classList.contains('active'))newChat();window.OLENChat={openSidebar:openSide,closeSidebar:closeSide,newConversation:newChat,render:renderChat,
  getCurrent:()=>draftChat||load().find(x=>x.id===activeId())||null,getActive:activeId};})();
-</script><script src="js/olen-maneuvers.js"></script><script src="js/olen-gps-track.js"></script><script id="rz-runtime">(()=>{"use strict";
+</script><script src="js/olen-maneuvers.js"></script><script src="js/olen-gps-track.js"></script><script src="js/olen-go-experience-bridge.js"></script><script id="rz-runtime">(()=>{"use strict";
 const $=x=>document.getElementById(x),show=(id,on)=>{const e=$(id);if(e)e.hidden=!on};
 let mode="walk",watch=null,last=null,total=0,t0=0,timer=null,currentName="Destino",rating=0;
 const track=window.OLENGpsTrack?.createRecorder((()=>{try{return window.localStorage}catch(_){return null}})());
@@ -2155,7 +2155,7 @@ function start(){
  if(first?.instruction&&window.OLENNavigationGuide)
    window.OLENNavigationGuide.set({type:"straight",instruction:first.instruction,
      road:first.road||"",distance:window.OLENMapRouting.formatDistance(first.distanceMeters||0)});
- t0=Date.now();total=0;last=null;rating=0;track?.start({name:currentName,mode,startedAt:t0});tick();
+ t0=Date.now();total=0;last=null;rating=0;track?.start({name:currentName,mode,startedAt:t0});window.OLENGoExperience?.attach?.(track?.snapshot(),activeRoute);tick();
  clearInterval(timer);timer=setInterval(tick,1000);
  if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);
  try{watch=navigator.geolocation?.watchPosition?.(gps,error=>{
@@ -2168,11 +2168,11 @@ function start(){
  return true;
 }
 function fillSummary(){const secs=elapsed(),distance=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzFinishTitle").textContent=currentName;$("rzFinishRoute").textContent="Ponto de partida → "+currentName;$("rzFinishTime").textContent=fmt(secs);$("rzFinishDistance").textContent=distance;$("rzFinishMode").textContent=modes[mode][1]+" "+modes[mode][0];$("rzFinishStars").querySelectorAll("button").forEach(b=>b.textContent=Number(b.dataset.star)<=rating?"★":"☆")}
-function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);track?.finish();window.OLENMapRouting?.stopGuidance?.();fillSummary();show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false);navigationHeader(false);show("rzIdle",true);show("rzFinishPop",true)}
+function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);track?.finish();window.OLENGoExperience?.finish?.(track?.snapshot(),{rating,comment:$("rzFinishComment")?.value||""});window.OLENMapRouting?.stopGuidance?.();fillSummary();show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false);navigationHeader(false);show("rzIdle",true);show("rzFinishPop",true)}
 function closeSummary(){show("rzFinishPop",false)}
 $("rzGo").onclick=()=>show("rzGoPop",true);$("rzClose").onclick=()=>show("rzGoPop",false);$("rzPrepare").onclick=start;$("rzStop").onclick=stop;
 $("rzFinishClose").onclick=$("rzFinishDone").onclick=closeSummary;
-$("rzFinishStars").querySelectorAll("button").forEach(b=>b.onclick=()=>{rating=Number(b.dataset.star);fillSummary()});
+$("rzFinishStars").querySelectorAll("button").forEach(b=>b.onclick=()=>{rating=Number(b.dataset.star);window.OLENGoExperience?.setRating?.(track?.snapshot(),rating,$("rzFinishComment")?.value||"");fillSummary()});
 $("rzShareCommunity").disabled=true;
 $("rzShareExternal").onclick=async()=>{const txt="A minha experiência OLEN: "+currentName+" · "+$("rzFinishDistance").textContent+" · "+$("rzFinishTime").textContent;if(navigator.share){try{await navigator.share({title:"Experiência OLEN",text:txt})}catch(_){}}else if(navigator.clipboard){navigator.clipboard.writeText(txt);$("rzShareExternal").innerHTML="✓ <b>Copiado</b>";setTimeout(()=>$("rzShareExternal").innerHTML="↗ <b>Partilhar</b>",1400)}};
 $("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);
