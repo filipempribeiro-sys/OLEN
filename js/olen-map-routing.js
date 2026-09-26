@@ -237,6 +237,7 @@ function updatePosition(c){
  refreshTrack();
  if(active)updateInstruction(pos);
  if(trailActive&&trailGuide){
+   if(following&&map&&map.getZoom()>11)map.panTo([pos.lat,pos.lon],{animate:false});
    const state=trailGuide.locate(pos);
    if(state.offTrail)notice('Estás a mais de 100 m do trilho selecionado. Confirma o percurso antes de prosseguir.',true);
    else {notice('');const label=$('rzGuideText'),next=$('rzNextDistance');
@@ -253,6 +254,7 @@ function beginTrailGuidance(){
  const label=$('rzGuideText'),road=$('rzRoadName');
  if(label)label.textContent='Segue o trilho GPX selecionado.';
  if(road)road.textContent='Percurso importado · não homologado';
+ const status=$('rzStatus');if(status)status.textContent='GO ativo · '+trail.name+' · A pé';
  return true;
 }
 function stopTrailGuidance(){trailActive=false;return true}
