@@ -43,3 +43,10 @@ test('completed unrelated Experience is not overwritten',()=>{
  assert.equal(bridge.finish({...activity,id:'another'}),null);
  assert.equal(engine.getActive().lifecycle,'ACTIVE');
 });
+
+test('Trail GO preserves source and does not invent official homologation',()=>{
+ const engine=makeEngine();global.window={OLEN5:{experienceEngine:engine}};
+ bridge.attach(activity,{selectedTrail:{id:'osm:relation:123',name:'Trilho OSM',provenance:{type:'openstreetmap',official:false}}});
+ assert.equal(engine.getActive().route.trail.id,'osm:relation:123');
+ assert.equal(engine.getActive().route.trail.provenance.official,false);
+});
