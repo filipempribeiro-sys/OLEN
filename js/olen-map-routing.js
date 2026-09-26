@@ -361,8 +361,9 @@ async function controlMap(action){
    notice(following?'A acompanhar a posição GPS.':'Acompanhamento do mapa desativado.');return true;
   }
   if(action==='Recentrar'){
-   const pos=last||await findPosition();
-   updatePosition(pos);map.setView([pos.lat,pos.lon],Math.max(map.getZoom(),15),{animate:false});
+   const pos=active&&last?last:await findPosition();
+   if(!active)updatePosition(pos);
+   map.setView([pos.lat,pos.lon],Math.max(map.getZoom(),15),{animate:false});
    notice('Mapa centrado na tua localização.');return true;
   }
   if(action==='Pesquisar'){
