@@ -282,7 +282,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
  if(!target){notice('Este local não tem coordenadas confirmadas.',true);return false}
  const current=++serial;
  destination={...target,name:String(place.name||'Destino').slice(0,105)};
- route=null;curve=[];active=false;last=null;mode=travelMode;lastManeuverKey='';
+ route=null;curve=[];active=false;trail=null;trailGuide=null;trailActive=false;last=null;mode=travelMode;lastManeuverKey='';
  // Preview from "Mapa" shows only the real route; "Ir" owns GPS navigation.
  document.querySelector('.screen[data-screen="map"]')?.classList.toggle('olen-map-preview',!navigate);
  window.OLENPlaceExperience?.close?.();
