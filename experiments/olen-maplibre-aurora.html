@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OLEN · Protótipo isolado MapLibre Aurora</title>
+<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.css">
+<style>
+:root{color-scheme:dark;--blue:#60adff;--aurora:#60edc8;--bg:#061c1d}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;font-family:system-ui,sans-serif;background:var(--bg);color:#f5fffc}
+#map{position:absolute;inset:0}header{position:absolute;z-index:5;top:14px;left:14px;right:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;max-width:720px;padding:10px;border:1px solid #79eacd55;border-radius:15px;background:#061d20d9;backdrop-filter:blur(12px)}
+header strong{margin-right:auto;letter-spacing:.06em}button,.file{font:inherit;border:1px solid #60edc855;color:#e8fff8;background:#163b39;padding:9px 13px;border-radius:11px;cursor:pointer}
+button[aria-pressed="true"]{background:#23614f;border-color:var(--aurora)}.file input{display:none}
+#status{position:absolute;z-index:5;bottom:26px;left:14px;right:14px;max-width:720px;padding:10px 13px;border-radius:11px;background:#061d20e9;font-size:12px}
+.maplibregl-ctrl-attrib{background:#061d20e9!important;color:#e0f7ef!important}.maplibregl-ctrl-attrib a{color:#a3ead8!important}
+@media(min-width:800px){header{left:24px;top:24px}#status{left:24px;bottom:24px}}
+</style>
+</head>
+<body>
+<div id="map" role="application" aria-label="Protótipo de mapa OLEN Aurora"></div>
+<header><strong>OLEN · MAPA AURORA</strong><button id="explore" aria-pressed="true">Explorar</button><button id="go" aria-pressed="false">GO 3D</button><label class="file">Ver GPX<input id="gpx" type="file" accept=".gpx,application/gpx+xml"></label></header>
+<div id="status" role="status" aria-live="polite">Protótipo independente: não substitui o Mapa/GO ativo nem efetua navegação.</div>
+<script src="https://unpkg.com/maplibre-gl@5.6.1/dist/maplibre-gl.js"></script>
+<script src="../js/olen-trails-gpx.js"></script>
+<script>
+(function(){
+'use strict';
+const status=document.getElementById('status');
+const map=new maplibregl.Map({container:'map',style:'https://tiles.openfreemap.org/styles/liberty',
+ center:[-9.1393,38.7223],zoom:11,pitch:0,bearing:0,attributionControl:true});
+const styles={
+ explore:{water:'#123f56',park:'#205342',land:'#173f37',road:'#75908f'},
+ go:{water:'#102f49',park:'#1b473c',land:'#112e30',road:'#8fb9b3'}
+};
+let view='explore',feature=null;
+function recolor(){
+ if(!map.isStyleLoaded())return;
+ const palette=styles[view];
+ for(const layer of map.getStyle().layers||[]){
+  const id=String(layer.id||'').toLowerCase();
+  try{
+   if(layer.type==='fill'&&/water/.test(id))map.setPaintProperty(layer.id,'fill-color',palette.water);
+   else if(layer.type==='fill'&&/park|forest|wood/.test(id))map.setPaintProperty(layer.id,'fill-color',palette.park);
+   else if(layer.type==='background')map.setPaintProperty(layer.id,'background-color',palette.land);
+   else if(layer.type==='line'&&/road|street|highway/.test(id))map.setPaintProperty(layer.id,'line-color',palette.road);
+  }catch(_){ /* Provider style layers may use different expressions. */ }
+ }
+ if(feature){
+  const data={type:'Feature',properties:{source:'user-import',official:false},geometry:feature};
+  if(map.getSource('olen-trail'))map.getSource('olen-trail').setData(data);
+  else{
+   map.addSource('olen-trail',{type:'geojson',data});
+   map.addLayer({id:'olen-trail-line',type:'line',source:'olen-trail',
+      paint:{'line-color':'#60edc8','line-width':5,'line-opacity':.96}});
+  }
+ }
+}
+map.on('load',recolor);map.on('styledata',()=>{if(!map.loaded())return;recolor()});
+map.on('error',()=>{status.textContent='Não foi possível carregar todos os dados do mapa. Verifica a ligação.'});
+function switchView(next){
+ view=next;document.getElementById('explore').setAttribute('aria-pressed',String(next==='explore'));
+ document.getElementById('go').setAttribute('aria-pressed',String(next==='go'));
+ map.easeTo({pitch:next==='go'?55:0,zoom:Math.max(map.getZoom(),next==='go'?15:11),duration:700});
+ recolor();status.textContent=next==='go'?'Câmara GO 3D demonstrativa; sem navegação ativa.':'Exploração Aurora; sem navegação ativa.';
+}
+document.getElementById('explore').onclick=()=>switchView('explore');
+document.getElementById('go').onclick=()=>switchView('go');
+document.getElementById('gpx').onchange=async event=>{
+ const file=event.target.files?.[0];if(!file)return;
+ try{
+  if(file.size>OLENGPX.MAX_BYTES)throw Error('GPX demasiado grande.');
+  const parsed=OLENGPX.parse(await file.text());feature=OLENGPX.geometry(parsed);
+  recolor();
+  const points=parsed.segments.flat(),bounds=new maplibregl.LngLatBounds();
+  points.forEach(p=>bounds.extend([p.longitude,p.latitude]));
+  map.fitBounds(bounds,{padding:90,maxZoom:16});
+  status.textContent='GPX local: '+parsed.name+' · '+parsed.pointCount+' pontos · homologação por verificar.';
+ }catch(error){status.textContent=error.message||'GPX inválido.'}
+ finally{event.target.value=''}
+};
+})();
+</script>
+</body>
+</html>
