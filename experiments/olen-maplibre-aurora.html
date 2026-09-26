@@ -54,7 +54,7 @@ function recolor(){
   }
  }
 }
-map.on('load',recolor);map.on('styledata',()=>{if(!map.loaded())return;recolor()});
+map.on('load',recolor);
 map.on('error',()=>{status.textContent='Não foi possível carregar todos os dados do mapa. Verifica a ligação.'});
 function switchView(next){
  view=next;document.getElementById('explore').setAttribute('aria-pressed',String(next==='explore'));
