@@ -23,7 +23,7 @@ test('first valid fix is saved without inventing distance',()=>{
 test('genuine movement increases distance',()=>{
   const recorder=createRecorder(memory());recorder.start({startedAt:1000});
   recorder.ingest(fix(38.72,-9.13,2000));
-  const next=recorder.ingest(fix(38.7205,-9.13,12000));
+  const next=recorder.ingest(fix(38.7205,-9.13,15000));
   assert.equal(next.accepted,true);assert.ok(next.state.distanceMeters>40);
 });
 test('GPS teleport is rejected and leaves last valid point untouched',()=>{
@@ -59,4 +59,12 @@ test('empty or invalid storage never invents an activity',()=>{
 test('haversine distance is zero for same point',()=>{
   assert.equal(distance({latitude:38,longitude:-9},{latitude:38,longitude:-9}),0);
   assert.equal(normalize({latitude:Infinity,longitude:0,accuracy:5}),null);
+});
+
+test('walking cannot accumulate implausible high-speed movement',()=>{
+  const recorder=createRecorder(memory());recorder.start({startedAt:1000,mode:'walk'});
+  recorder.ingest(fix(38.72,-9.13,2000));
+  const jump=recorder.ingest(fix(38.721,-9.13,4000));
+  assert.equal(jump.accepted,false);assert.equal(jump.reason,'gps-jump');
+  assert.equal(recorder.snapshot().distanceMeters,0);
 });
