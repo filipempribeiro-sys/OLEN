@@ -23,6 +23,12 @@ function meters(a,b){
  return 12742000*Math.asin(Math.min(1,Math.sqrt(v)));
 }
 function formatDistance(m){return m>=1000?(m/1000).toFixed(1).replace('.',',')+' km':Math.round(m)+' m'}
+function routeError(error){
+ if(error?.name==='AbortError')return 'O serviço de rotas demorou demasiado tempo. Tenta novamente.';
+ if(error instanceof TypeError&&/fetch|network|rede|carregar/i.test(String(error.message)))
+   return 'Não foi possível contactar o serviço de destinos/rotas OLEN. Confirma a ligação ao Worker e as permissões CORS antes de tentar novamente.';
+ return String(error?.message||'Não foi possível preparar o percurso.');
+}
 function notice(message,error=false){
  let el=$('olenMapStatus');if(!el)return;
  el.textContent=message||'';
@@ -333,7 +339,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
  }catch(e){
    if(current!==serial)return false;
    route=null;curve=[];active=false;draw();
-   notice(String(e?.name==='AbortError'?'O cálculo do percurso demorou demasiado tempo.':e?.message||'Não foi possível calcular o percurso.'),true);
+   notice(routeError(e),true);
    return false;
  }
 }
@@ -347,6 +353,7 @@ async function prepareManual(name,travelMode='walk'){
    let d;
    try{
      const r=await fetch(API+'/api/geocode?query='+encodeURIComponent(q),{cache:'no-store',signal:controller.signal});
+     if(!r.ok)throw new Error('O serviço de destinos devolveu HTTP '+r.status+'. Não foi iniciada nenhuma rota.');
      d=await r.json();
    }finally{clearTimeout(timer)}
    const list=Array.isArray(d?.data)?d.data:[];
@@ -356,9 +363,9 @@ async function prepareManual(name,travelMode='walk'){
    if(!window.confirm('Destino encontrado: '+first.name+(first.admin1?', '+first.admin1:'')+'. Preparar rota?')){
      notice('Escolhe o destino pretendido.');return false;
    }
-   const panel=$('rzGoPop');if(panel)panel.hidden=true;
+   // A janela de preparação só fecha quando existe rota validada e GO iniciado.
    return open(first,{navigate:true,travelMode});
- }catch(e){notice(e?.message||'Não foi possível confirmar o destino.',true);return false}
+ }catch(e){notice(routeError(e),true);return false}
 }
 async function showBaseMap(){
  const existing=!!map;
