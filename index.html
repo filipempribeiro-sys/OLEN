@@ -2196,7 +2196,7 @@ window.OLENLegacyGo=Object.freeze({
    version:window.OLENManeuvers.version
  });
 })();
-document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(btn){btn.addEventListener("click",function(){var was=btn.classList.contains("selected");document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(b){b.classList.remove("selected")});if(!was)btn.classList.add("selected")})});
+document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(btn){btn.addEventListener("click",async function(){if(btn.disabled)return;btn.disabled=true;try{const action=btn.getAttribute("aria-label");const ok=await window.OLENMapRouting?.controlMap?.(action);if(ok){document.querySelectorAll(".rz-tools button[data-rz-tool]").forEach(function(b){b.classList.remove("selected")});btn.classList.add("selected")}}finally{btn.disabled=false}})});
 </script>
 <script id="olen-global-aurora-white">
 (function(){
