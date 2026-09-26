@@ -2158,8 +2158,12 @@ function start(){
  t0=Date.now();total=0;last=null;rating=0;track?.start({name:currentName,mode,startedAt:t0});tick();
  clearInterval(timer);timer=setInterval(tick,1000);
  if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);
- watch=navigator.geolocation?.watchPosition?.(gps,()=>{},{
-   enableHighAccuracy:true,maximumAge:2000,timeout:8000})??null;
+ try{watch=navigator.geolocation?.watchPosition?.(gps,error=>{
+   if(error?.code===1)stop();
+   window.OLENMapRouting?.reportGpsError?.(error);
+ },{enableHighAccuracy:true,maximumAge:2000,timeout:8000})??null;}
+ catch(error){stop();window.OLENMapRouting?.reportGpsError?.(error);return false}
+ if(watch===null){stop();window.OLENMapRouting?.reportGpsError?.({code:1});return false}
  window.OLENMapRouting?.beginGuidance?.();
  return true;
 }
