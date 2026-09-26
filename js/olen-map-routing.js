@@ -253,7 +253,7 @@ function beginTrailGuidance(){
  document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
  const label=$('rzGuideText'),road=$('rzRoadName');
  if(label)label.textContent='Segue o trilho GPX selecionado.';
- if(road)road.textContent='Percurso importado · não homologado';
+ if(road)road.textContent='Homologação por verificar';
  const status=$('rzStatus');if(status)status.textContent='GO ativo · '+trail.name+' · A pé';
  return true;
 }
@@ -265,8 +265,8 @@ async function previewTrail(parsed){
  if(!activated)throw new Error('Não foi possível abrir o Mapa/GO da OLEN.');
  await ensureMap();
  trail=parsed;trailGuide=nextGuide;trailActive=false;route=null;destination=null;active=false;curve=[];
- draw();notice('Trilho GPX importado · '+formatDistance(trailGuide.totalMeters)+' · origem: utilizador (sem homologação).');
- return {name:trail.name,totalMeters:trailGuide.totalMeters,pointCount:trail.pointCount};
+ draw();notice('Trilho selecionado · '+formatDistance(trailGuide.totalMeters)+' · origem: '+(trail.provenance?.type||'utilizador')+' · homologação por verificar.');
+ return {name:trail.name,totalMeters:trailGuide.totalMeters,pointCount:trail.pointCount||trail.segments.reduce((n,seg)=>n+seg.length,0)};
 }
 function beginGuidance(){ 
  if(!route||!last||!destination)return false;
