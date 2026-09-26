@@ -6,7 +6,7 @@
 const API='https://olen-alpha-ai.filipe-m-p-ribeiro.workers.dev';
 const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
-let library=null,map=null,tile=null,routeLine=null,destinationMarker=null,userMarker=null;
+let library=null,map=null,tile=null,routeLine=null,trackLine=null,destinationMarker=null,userMarker=null;
 let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='';
 function $(id){return document.getElementById(id)}
 function coord(v){
@@ -214,6 +214,15 @@ function updatePosition(c){
      radius:7,color:'#fff',fillColor:'#5ba8ff',fillOpacity:1,weight:3
    }).addTo(map);
    else userMarker.setLatLng([pos.lat,pos.lon]);
+ }
+ const activity=window.OLENGoActivity?.current;
+ if(map&&window.L&&activity){
+   if(trackLine){map.removeLayer(trackLine);trackLine=null}
+   if(activity.points?.length>1){
+     trackLine=window.L.polyline(activity.points.map(p=>[p.latitude,p.longitude]),{
+       color:'#62bcff',weight:4,opacity:.95,interactive:false
+     }).addTo(map);
+   }
  }
  if(active)updateInstruction(pos);
  return true;
