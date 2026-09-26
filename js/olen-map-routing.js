@@ -423,7 +423,7 @@ async function controlMap(action){
 }
 window.OLENMapRouting=Object.freeze({
  open,showBaseMap,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,
- get state(){return {destination:destination?{...destination}:null,selectedTrail:trail?{name:trail.name,pointCount:trail.pointCount}:null,trailReady:!!trailGuide,routeReady:!!route,
+ get state(){return {destination:destination?{...destination}:null,selectedTrail:trail?{id:trail.id||null,name:trail.name,pointCount:trail.pointCount||trail.segments.reduce((n,seg)=>n+seg.length,0),provenance:trail.provenance||{type:'user-import',official:false}}:null,trailReady:!!trailGuide,routeReady:!!route,
   route:route?{...route}:null,navigationActive:active,mode};}
 });
 })();
