@@ -8,7 +8,8 @@
 })(typeof window!=='undefined'?window:null,function(){
   'use strict';
   const KEY='olen:go:activity:v1';
-  const MAX_ACCURACY=65,MAX_SPEED=65,MAX_POINTS=20000;
+  const MAX_ACCURACY=65,MAX_POINTS=20000;
+  const MODE_MAX_SPEED=Object.freeze({walk:5,bike:23,scooter:20,moto:65,car:65,camper:45,transit:65});
   const clone=x=>JSON.parse(JSON.stringify(x));
   function distance(a,b){
     const r=Math.PI/180,dy=(b.latitude-a.latitude)*r,dx=(b.longitude-a.longitude)*r;
@@ -40,13 +41,15 @@
       if(!state?.active)return {accepted:false,reason:'inactive',state:snapshot()};
       const p=normalize(raw);
       if(!p||p.accuracy>MAX_ACCURACY){state.rejected++;persist();return {accepted:false,reason:'accuracy-or-coordinates',state:snapshot()}}
+      if(state.points.length>=MAX_POINTS){state.rejected++;persist();return {accepted:false,reason:'point-limit',state:snapshot()}}
       const previous=state.points[state.points.length-1];
       if(previous){
         const dt=(p.timestamp-previous.timestamp)/1000;
         if(dt<=0){state.rejected++;return {accepted:false,reason:'timestamp',state:snapshot()}}
         const meters=distance(previous,p);
         const tolerance=Math.min(20,Math.max(previous.accuracy,p.accuracy));
-        if(meters>Math.max(50,MAX_SPEED*dt+tolerance)){
+        const speedLimit=MODE_MAX_SPEED[state.mode]??MODE_MAX_SPEED.walk;
+        if(meters>Math.max(25,speedLimit*dt+tolerance)){
           state.rejected++;persist();return {accepted:false,reason:'gps-jump',state:snapshot()};
         }
         // Jitter inside the measured horizontal uncertainty is not movement.
@@ -55,7 +58,6 @@
         }
         state.distanceMeters+=meters;
       }
-      if(state.points.length>=MAX_POINTS){persist();return {accepted:false,reason:'point-limit',state:snapshot()}}
       state.points.push(p);persist();
       return {accepted:true,reason:'ok',state:snapshot()};
     }
