@@ -3,6 +3,7 @@
 const $=x=>document.getElementById(x),show=(id,on)=>{const e=$(id);if(e)e.hidden=!on};
 let mode="walk",watch=null,last=null,total=0,t0=0,timer=null,currentName="Destino",rating=0;
 const track=window.OLENGpsTrack?.createRecorder((()=>{try{return window.localStorage}catch(_){return null}})());
+const history=window.OLENGoHistory?.create((()=>{try{return window.localStorage}catch(_){return null}})());
 const modes={walk:["A pé","🚶"],bike:["Bicicleta","🚲"],scooter:["Trotineta","🛴"],moto:["Moto","🏍️"],car:["Carro","🚗"],camper:["Autocaravana","🚐"],transit:["Transportes","🚆"],boat:["Barco","⛵"],air:["Aviação","✈️"]};
 const guide=$("rzGuide"),map=$("rzGuide")?.parentElement,host=$("rzGuideHost");
 function dist(a,b){const p=Math.PI/180,R=6371000,x=(b.latitude-a.latitude)*p,y=(b.longitude-a.longitude)*p,q=Math.sin(x/2)**2+Math.cos(a.latitude*p)*Math.cos(b.latitude*p)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(q))}
@@ -45,7 +46,7 @@ function start(){
  return true;
 }
 function fillSummary(){const secs=elapsed(),distance=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzFinishTitle").textContent=currentName;$("rzFinishRoute").textContent="Ponto de partida → "+currentName;$("rzFinishTime").textContent=fmt(secs);$("rzFinishDistance").textContent=distance;$("rzFinishMode").textContent=modes[mode][1]+" "+modes[mode][0];$("rzFinishStars").querySelectorAll("button").forEach(b=>b.textContent=Number(b.dataset.star)<=rating?"★":"☆")}
-function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);track?.finish();window.OLENGoExperience?.finish?.(track?.snapshot(),{rating,comment:$("rzFinishComment")?.value||""});window.OLENMapRouting?.stopGuidance?.();fillSummary();show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false);navigationHeader(false);show("rzIdle",true);show("rzFinishPop",true)}
+function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);track?.finish();history?.save(track?.snapshot());window.OLENGoExperience?.finish?.(track?.snapshot(),{rating,comment:$("rzFinishComment")?.value||""});window.OLENMapRouting?.stopGuidance?.();fillSummary();show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false);navigationHeader(false);show("rzIdle",true);show("rzFinishPop",true)}
 function closeSummary(){show("rzFinishPop",false)}
 $("rzGo").onclick=()=>show("rzGoPop",true);$("rzClose").onclick=()=>show("rzGoPop",false);$("rzPrepare").onclick=start;$("rzStop").onclick=stop;
 $("rzFinishClose").onclick=$("rzFinishDone").onclick=closeSummary;
@@ -54,7 +55,7 @@ $("rzShareCommunity").disabled=true;
 $("rzShareExternal").onclick=async()=>{const txt="A minha experiência OLEN: "+currentName+" · "+$("rzFinishDistance").textContent+" · "+$("rzFinishTime").textContent;if(navigator.share){try{await navigator.share({title:"Experiência OLEN",text:txt})}catch(_){}}else if(navigator.clipboard){navigator.clipboard.writeText(txt);$("rzShareExternal").innerHTML="✓ <b>Copiado</b>";setTimeout(()=>$("rzShareExternal").innerHTML="↗ <b>Partilhar</b>",1400)}};
 $("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);
 document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$("rzModeLabel").textContent=modes[mode][0];document.querySelectorAll("#rzModes button").forEach(x=>x.classList.toggle("selected",x===b))});document.querySelector("#rzModes [data-mode=walk]").classList.add("selected");
-window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null}});
+window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null},history(){return history?.list()||[]},getCompleted(id){return history?.get(id)||null}});
 window.OLENLegacyGo=Object.freeze({
  startRoute(name,requestedMode="walk"){
   const selected=modes[requestedMode]?requestedMode:"walk";mode=selected;
