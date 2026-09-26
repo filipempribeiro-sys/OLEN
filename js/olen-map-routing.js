@@ -6,9 +6,9 @@
 const API='https://olen-alpha-ai.filipe-m-p-ribeiro.workers.dev';
 const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
-let library=null,map=null,tile=null,routeLine=null,trackLine=null,destinationMarker=null,userMarker=null;
+let library=null,map=null,tile=null,routeLine=null,trackLine=null,trailLine=null,destinationMarker=null,userMarker=null;
 let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='';
-let following=true,trackVisible=true;
+let following=true,trackVisible=true,trail=null,trailGuide=null,trailActive=false;
 function $(id){return document.getElementById(id)}
 function coord(v){
  if(!v||typeof v!=='object')return null;
@@ -84,6 +84,13 @@ function draw(){
    userMarker=L.circleMarker([last.lat,last.lon],{
      radius:7,color:'#fff',fillColor:'#5ba8ff',fillOpacity:1,weight:3
    }).addTo(map);
+ }
+ if(trailLine){map.removeLayer(trailLine);trailLine=null}
+ if(trail?.segments?.length){
+   const paths=trail.segments.map(seg=>seg.map(p=>[p.latitude,p.longitude])).filter(seg=>seg.length>1);
+   if(paths.length){trailLine=L.polyline(paths,{color:'#f4c96a',weight:5,opacity:.95,interactive:false}).addTo(map);
+     if(!route){const area=trailLine.getBounds();if(area.isValid())map.fitBounds(area.pad(.15),{animate:false,maxZoom:16})}
+   }
  }
  if(route?.geometry?.type==='LineString'&&route.geometry.coordinates.length>=2){
    routeLine=L.geoJSON(route.geometry,{style:{color:'#4ce6bb',weight:5,opacity:.94,lineCap:'round'}}).addTo(map);
@@ -229,9 +236,37 @@ function updatePosition(c){
  }
  refreshTrack();
  if(active)updateInstruction(pos);
+ if(trailActive&&trailGuide){
+   const state=trailGuide.locate(pos);
+   if(state.offTrail)notice('Estás a mais de 100 m do trilho selecionado. Confirma o percurso antes de prosseguir.',true);
+   else {notice('');const label=$('rzGuideText'),next=$('rzNextDistance');
+     if(label)label.textContent='Segue o trilho GPX selecionado.';
+     if(next)next.textContent=formatDistance(state.remainingMeters);
+   }
+ }
  return true;
 }
-function beginGuidance(){
+function beginTrailGuidance(){
+ if(!trailGuide)return false;
+ active=false;trailActive=true;following=true;
+ document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
+ const label=$('rzGuideText'),road=$('rzRoadName');
+ if(label)label.textContent='Segue o trilho GPX selecionado.';
+ if(road)road.textContent='Percurso importado · não homologado';
+ return true;
+}
+function stopTrailGuidance(){trailActive=false;return true}
+async function previewTrail(parsed){
+ if(!parsed?.segments?.length||!window.OLENTrailGuide)throw new Error('GPX sem percurso utilizável.');
+ const nextGuide=window.OLENTrailGuide.build(parsed.segments);
+ const activated=window.OLENOpenScreen?.('map','gpx-import')===true;
+ if(!activated)throw new Error('Não foi possível abrir o Mapa/GO da OLEN.');
+ await ensureMap();
+ trail=parsed;trailGuide=nextGuide;trailActive=false;route=null;destination=null;active=false;curve=[];
+ draw();notice('Trilho GPX importado · '+formatDistance(trailGuide.totalMeters)+' · origem: utilizador (sem homologação).');
+ return {name:trail.name,totalMeters:trailGuide.totalMeters,pointCount:trail.pointCount};
+}
+function beginGuidance(){ 
  if(!route||!last||!destination)return false;
  following=true;refreshTrack();
  document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
@@ -385,8 +420,8 @@ async function controlMap(action){
  }catch(error){notice(error?.message||'Controlo do mapa indisponível.',true);return false}
 }
 window.OLENMapRouting=Object.freeze({
- open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,controlMap,reportGpsError,
- get state(){return {destination:destination?{...destination}:null,routeReady:!!route,
+ open,showBaseMap,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,
+ get state(){return {destination:destination?{...destination}:null,selectedTrail:trail?{name:trail.name,pointCount:trail.pointCount}:null,trailReady:!!trailGuide,routeReady:!!route,
   route:route?{...route}:null,navigationActive:active,mode};}
 });
 })();
