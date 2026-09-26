@@ -265,7 +265,9 @@ async function previewTrail(parsed){
  if(!activated)throw new Error('Não foi possível abrir o Mapa/GO da OLEN.');
  await ensureMap();
  trail=parsed;trailGuide=nextGuide;trailActive=false;route=null;destination=null;active=false;curve=[];
- draw();notice('Trilho selecionado · '+formatDistance(trailGuide.totalMeters)+' · origem: '+(trail.provenance?.type||'utilizador')+' · homologação por verificar.');
+ draw();const metrics=window.OLENTrailMetrics?.calculate?.(trail.segments);
+ const ascent=metrics?.ascentMeters==null?'':(' · subida '+formatDistance(metrics.ascentMeters));
+ notice('Trilho selecionado · '+formatDistance(trailGuide.totalMeters)+ascent+' · origem: '+(trail.provenance?.type||'utilizador')+' · homologação por verificar.');
  return {name:trail.name,totalMeters:trailGuide.totalMeters,pointCount:trail.pointCount||trail.segments.reduce((n,seg)=>n+seg.length,0)};
 }
 function beginGuidance(){ 
