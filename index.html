@@ -2125,7 +2125,7 @@ if(document.querySelector('.screen[data-screen="chat"]')?.classList.contains('ac
 </script><script src="js/olen-maneuvers.js"></script><script src="js/olen-gps-track.js"></script><script id="rz-runtime">(()=>{"use strict";
 const $=x=>document.getElementById(x),show=(id,on)=>{const e=$(id);if(e)e.hidden=!on};
 let mode="walk",watch=null,last=null,total=0,t0=0,timer=null,currentName="Destino",rating=0;
-const track=window.OLENGpsTrack?.createRecorder(window.localStorage);
+const track=window.OLENGpsTrack?.createRecorder((()=>{try{return window.localStorage}catch(_){return null}})());
 const modes={walk:["A pé","🚶"],bike:["Bicicleta","🚲"],scooter:["Trotineta","🛴"],moto:["Moto","🏍️"],car:["Carro","🚗"],camper:["Autocaravana","🚐"],transit:["Transportes","🚆"],boat:["Barco","⛵"],air:["Aviação","✈️"]};
 const guide=$("rzGuide"),map=$("rzGuide")?.parentElement,host=$("rzGuideHost");
 function dist(a,b){const p=Math.PI/180,R=6371000,x=(b.latitude-a.latitude)*p,y=(b.longitude-a.longitude)*p,q=Math.sin(x/2)**2+Math.cos(a.latitude*p)*Math.cos(b.latitude*p)*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(q))}
