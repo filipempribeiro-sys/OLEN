@@ -8,6 +8,7 @@ const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
 let library=null,map=null,tile=null,routeLine=null,trackLine=null,destinationMarker=null,userMarker=null;
 let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='';
+let following=true,trackVisible=true;
 function $(id){return document.getElementById(id)}
 function coord(v){
  if(!v||typeof v!=='object')return null;
@@ -91,9 +92,20 @@ function draw(){
  }else if(destination){
    map.setView([destination.lat,destination.lon],15,{animate:false});
  }
+ refreshTrack();
  requestAnimationFrame(()=>map?.invalidateSize());
 }
-function findPosition(){
+function refreshTrack(){
+ if(!map||!window.L)return;
+ const points=window.OLENGoActivity?.current?.points||[];
+ if(points.length<2){if(trackLine){map.removeLayer(trackLine);trackLine=null}return}
+ const latlngs=points.map(p=>[p.latitude,p.longitude]);
+ if(!trackLine){trackLine=window.L.polyline(latlngs,{color:'#62bcff',weight:4,opacity:.95,interactive:false});}
+ else trackLine.setLatLngs(latlngs);
+ if(trackVisible&&!map.hasLayer(trackLine))trackLine.addTo(map);
+ else if(!trackVisible&&map.hasLayer(trackLine))map.removeLayer(trackLine);
+}
+function findPosition(){ 
  if(!navigator.geolocation)return Promise.reject(new Error('Este dispositivo não disponibiliza localização GPS.'));
  return new Promise((resolve,reject)=>{
    navigator.geolocation.getCurrentPosition(p=>{
@@ -204,7 +216,7 @@ function updateInstruction(pos){
  const trip=$('rzBottom')?.querySelector('.rz-trip'),labels=trip?.querySelectorAll('span b');
  if(labels?.[0])labels[0].textContent=new Date(Date.now()+remaining/Math.max(route.distanceMeters,1)*route.durationSeconds*1000).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
  if(labels?.[1])labels[1].textContent=formatDistance(remaining);
- if(map&&last&&window.L&&map.getZoom()>11)map.panTo([pos.lat,pos.lon],{animate:false});
+ if(following&&map&&last&&window.L&&map.getZoom()>11)map.panTo([pos.lat,pos.lon],{animate:false});
 }
 function updatePosition(c){
  const pos=coord(c);if(!pos)return false;
@@ -215,20 +227,13 @@ function updatePosition(c){
    }).addTo(map);
    else userMarker.setLatLng([pos.lat,pos.lon]);
  }
- const activity=window.OLENGoActivity?.current;
- if(map&&window.L&&activity){
-   if(trackLine){map.removeLayer(trackLine);trackLine=null}
-   if(activity.points?.length>1){
-     trackLine=window.L.polyline(activity.points.map(p=>[p.latitude,p.longitude]),{
-       color:'#62bcff',weight:4,opacity:.95,interactive:false
-     }).addTo(map);
-   }
- }
+ refreshTrack();
  if(active)updateInstruction(pos);
  return true;
 }
 function beginGuidance(){
  if(!route||!last||!destination)return false;
+ following=true;refreshTrack();
  document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
  active=true;updateInstruction(last);
  return true;
@@ -342,8 +347,39 @@ window.OLEN5?.core?.on?.('route:stable',e=>{
    showBaseMap().catch(()=>{});
  }
 });
+async function controlMap(action){
+ try{
+  await ensureMap();
+  if(action==='Camadas'){
+   if(!trackLine){notice('Ainda não existe um tracking para mostrar ou ocultar.');return false}
+   trackVisible=!trackVisible;refreshTrack();
+   notice(trackVisible?'Tracking visível.':'Tracking oculto. A gravação continua ativa.');return true;
+  }
+  if(action==='Direção'){
+   following=!following;
+   if(following&&last)map.panTo([last.lat,last.lon],{animate:false});
+   notice(following?'A acompanhar a posição GPS.':'Acompanhamento do mapa desativado.');return true;
+  }
+  if(action==='Recentrar'){
+   const pos=last||await findPosition();
+   updatePosition(pos);map.setView([pos.lat,pos.lon],Math.max(map.getZoom(),15),{animate:false});
+   notice('Mapa centrado na tua localização.');return true;
+  }
+  if(action==='Pesquisar'){
+   const panel=$('rzGoPop');if(!panel)return false;
+   panel.hidden=false;$('rzDestination')?.focus();return true;
+  }
+  if(action==='OLEN'){
+   if(routeLine?.getBounds()?.isValid())map.fitBounds(routeLine.getBounds().pad(.18),{animate:false,maxZoom:16});
+   else if(trackLine?.getBounds()?.isValid())map.fitBounds(trackLine.getBounds().pad(.18),{animate:false,maxZoom:16});
+   else map.setView([38.7223,-9.1393],11,{animate:false});
+   notice('Vista geral do percurso.');return true;
+  }
+  return false;
+ }catch(error){notice(error?.message||'Controlo do mapa indisponível.',true);return false}
+}
 window.OLENMapRouting=Object.freeze({
- open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,
+ open,showBaseMap,prepareManual,beginGuidance,stopGuidance,updatePosition,formatDistance,controlMap,
  get state(){return {destination:destination?{...destination}:null,routeReady:!!route,
   route:route?{...route}:null,navigationActive:active,mode};}
 });
