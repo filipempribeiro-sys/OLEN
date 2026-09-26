@@ -18,6 +18,11 @@
          route:{destination:route?.destination||null,mode:activity.mode}},{activate:true});
      }
      linkedId=current.id;
+     if(route?.selectedTrail){
+       e.updateDomain(linkedId,'route',{trail:{id:route.selectedTrail.id||null,
+         name:route.selectedTrail.name,provenance:route.selectedTrail.provenance||{type:'user-import',official:false}},
+         mode:activity.mode},{source:'map-go',reason:'trail-selected'});
+     }
      e.updateDomain(linkedId,'go',{activityId:activity.id,startedAt:new Date(activity.startedAt).toISOString(),
        mode:activity.mode,status:'ACTIVE'},{source:'map-go'});
      if(current.lifecycle!=='ACTIVE')e.transition(linkedId,'ACTIVE',{source:'map-go'});
