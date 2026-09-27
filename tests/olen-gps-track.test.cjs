@@ -68,3 +68,24 @@ test('walking cannot accumulate implausible high-speed movement',()=>{
   assert.equal(jump.accepted,false);assert.equal(jump.reason,'gps-jump');
   assert.equal(recorder.snapshot().distanceMeters,0);
 });
+
+
+test('GPS loss starts a new segment without fabricating movement',()=>{
+ const recorder=createRecorder(memory());recorder.start({startedAt:1000,mode:'walk'});
+ recorder.ingest(fix(38.72,-9.13,2000));
+ const afterGap=recorder.ingest(fix(38.721,-9.13,122000));
+ assert.equal(afterGap.accepted,true);
+ assert.equal(afterGap.state.points[1].breakBefore,true);
+ assert.equal(afterGap.state.distanceMeters,0);
+ const again=recorder.ingest(fix(38.7211,-9.13,132000));
+ assert.equal(again.accepted,true);assert.ok(again.state.distanceMeters>10);
+});
+test('resuming a stored activity does not connect unrelated GPS fixes',()=>{
+ const storage=memory(),first=createRecorder(storage);first.start({startedAt:1000,mode:'walk'});
+ first.ingest(fix(38.72,-9.13,2000));
+ const reopened=createRecorder(storage);reopened.recover();
+ assert.equal(reopened.markSegmentBreak(),true);
+ const afterResume=reopened.ingest(fix(38.7202,-9.13,12000));
+ assert.equal(afterResume.state.distanceMeters,0);
+ assert.equal(afterResume.state.points[1].breakBefore,true);
+});
