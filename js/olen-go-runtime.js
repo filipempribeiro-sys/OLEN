@@ -1,7 +1,7 @@
 /* OLEN GO runtime: isolated active legacy-compatible controller. */
 (()=>{"use strict";
 const $=x=>document.getElementById(x),show=(id,on)=>{const e=$(id);if(e)e.hidden=!on};
-let mode="walk",watch=null,last=null,total=0,t0=0,timer=null,currentName="Destino",rating=0;
+let mode="walk",watch=null,last=null,total=0,t0=0,timer=null,currentName="Destino",rating=0,preparing=false;
 const track=window.OLENGpsTrack?.createRecorder((()=>{try{return window.localStorage}catch(_){return null}})());
 const history=window.OLENGoHistory?.create((()=>{try{return window.localStorage}catch(_){return null}})());
 const modes={walk:["A pé","🚶"],bike:["Bicicleta","🚲"],scooter:["Trotineta","🛴"],moto:["Moto","🏍️"],car:["Carro","🚗"],camper:["Autocaravana","🚐"],transit:["Transportes","🚆"],boat:["Barco","⛵"],air:["Aviação","✈️"]};
@@ -56,7 +56,12 @@ function start(){
  }
  if(!state?.routeReady||!state?.destination||
     (selected&&selected!==state.destination.name)||mode!==state.mode){
-   window.OLENMapRouting?.prepareManual?.(selected,mode);
+   if(preparing)return false;
+   const button=$("rzPrepare"),original=button?.textContent||'Preparar rota';
+   preparing=true;if(button){button.disabled=true;button.textContent='A preparar rota…'}
+   Promise.resolve().then(()=>window.OLENMapRouting?.prepareManual?.(selected,mode))
+     .catch(error=>window.OLENMapRouting?.reportRouteError?.(error))
+     .finally(()=>{preparing=false;if(button){button.disabled=false;button.textContent=original}});
    return false;
  }
  return beginSession(state,false);
