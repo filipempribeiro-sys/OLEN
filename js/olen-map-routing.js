@@ -162,9 +162,9 @@ async function alphaRoute(start,target,selectedMode){
   const data=await response.json(),option=data?.routes?.[0];
   if(data?.code!=='Ok'||!option?.geometry||!Number.isFinite(option.distance)||
      !Number.isFinite(option.duration))throw new Error('O serviço alternativo não devolveu uma rota válida.');
-  return {ok:true,mode:selectedMode,geometry:option.geometry,distanceMeters:option.distance,
-   durationSeconds:option.duration,maneuvers:[],
-   source:selectedMode==='walk'?'OpenStreetMap · pedestrian routing (ALPHA)':'OSRM · road routing (ALPHA)'};
+  if(!window.OLENOSRMAdapter?.fromRoute)throw new Error('O adaptador de rotas da ALPHA não está disponível.');
+  return window.OLENOSRMAdapter.fromRoute(option,selectedMode,
+   selectedMode==='walk'?'OpenStreetMap · pedestrian routing (ALPHA)':'OSRM · road routing (ALPHA)');
  }finally{clearTimeout(timer)}
 }
 async function resolveRoute(start,target,selectedMode){
@@ -215,6 +215,8 @@ function stepFor(positionIndex){
 /* Translate Valhalla's documented maneuver types into OLEN's real icon library.
    Unknown types deliberately display straight rather than claim an invented turn. */
 function maneuverType(type){
+ if(typeof type==='string'&&new Set(['start','finish','straight','slight-right','turn-right',
+   'sharp-right','uturn','sharp-left','turn-left','slight-left','merge','roundabout','ferry']).has(type))return type;
  const n=Number(type);
  if([4,5,6].includes(n))return 'finish';
  if([1,2,3].includes(n))return 'start';
