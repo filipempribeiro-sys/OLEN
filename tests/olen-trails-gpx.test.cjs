@@ -24,3 +24,14 @@ test('GPX geometry preserves disjoint segments',()=>{
 test('single segment is a GeoJSON LineString',()=>{
  assert.equal(geometry({segments:[[{latitude:38,longitude:-9}]]}).type,'LineString');
 });
+
+
+test('GPX export preserves separate GPS segments after signal outage',()=>{
+ const xml=exportTrack({name:'Atividade',points:[
+  {latitude:38.72,longitude:-9.13,timestamp:1000},
+  {latitude:38.721,longitude:-9.13,timestamp:2000,breakBefore:true},
+  {latitude:38.7211,longitude:-9.13,timestamp:3000}
+ ]});
+ assert.equal((xml.match(/<trkseg>/g)||[]).length,2);
+ assert.equal((xml.match(/<\/trkseg>/g)||[]).length,2);
+});
