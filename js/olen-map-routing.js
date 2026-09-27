@@ -145,6 +145,41 @@ async function authenticatedPost(path,payload){
    return body;
  }finally{clearTimeout(timer)}
 }
+/* ALPHA-compatible road/foot provider fallback. Uses only an actual routable
+   geometry returned by OSRM, never a straight line between GPS and destination.
+   Unsupported travel modes remain blocked when OLEN's Worker is unavailable. */
+async function alphaRoute(start,target,selectedMode){
+ const endpoint=selectedMode==='walk'
+   ?'https://routing.openstreetmap.de/routed-foot/route/v1/driving/'
+   :selectedMode==='car'?'https://router.project-osrm.org/route/v1/driving/':null;
+ if(!endpoint)throw new Error('O modo selecionado necessita do motor OLEN.');
+ const coords=[start,target].map(c=>c.lon.toFixed(6)+','+c.lat.toFixed(6)).join(';');
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),23000);
+ try{
+  const response=await fetch(endpoint+coords+'?overview=full&geometries=geojson&steps=true',{
+   signal:controller.signal,cache:'no-store'});
+  if(!response.ok)throw new Error('O serviço alternativo devolveu HTTP '+response.status);
+  const data=await response.json(),option=data?.routes?.[0];
+  if(data?.code!=='Ok'||!option?.geometry||!Number.isFinite(option.distance)||
+     !Number.isFinite(option.duration))throw new Error('O serviço alternativo não devolveu uma rota válida.');
+  return {ok:true,mode:selectedMode,geometry:option.geometry,distanceMeters:option.distance,
+   durationSeconds:option.duration,maneuvers:[],
+   source:selectedMode==='walk'?'OpenStreetMap · pedestrian routing (ALPHA)':'OSRM · road routing (ALPHA)'};
+ }finally{clearTimeout(timer)}
+}
+async function resolveRoute(start,target,selectedMode){
+ try{
+  return await authenticatedPost('/api/olen/route',{start:{lat:start.lat,lon:start.lon},
+   destination:{lat:target.lat,lon:target.lon},mode:selectedMode});
+ }catch(workerError){
+  if(selectedMode!=='walk'&&selectedMode!=='car')throw workerError;
+  try{return await alphaRoute(start,target,selectedMode)}
+  catch(alternativeError){
+   throw new Error('Não foi possível calcular a rota no Worker nem no serviço de rotas da ALPHA: '+
+     String(alternativeError?.message||'Serviço indisponível').slice(0,125));
+  }
+ }
+}
 function validated(routeResult,start,target,selectedMode){
  const geo=routeResult?.geometry;
  if(!routeResult?.ok||routeResult.mode!==selectedMode||
@@ -319,8 +354,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
    if(current!==serial)return false;
    last=position;draw();
    notice('A calcular o percurso confirmado…');
-   const candidate=await authenticatedPost('/api/olen/route',{start:{lat:position.lat,lon:position.lon},
-     destination:{lat:target.lat,lon:target.lon},mode});
+   const candidate=await resolveRoute(position,target,mode);
    if(current!==serial)return false;
    if(!validated(candidate,position,target,mode))
      throw new Error('O serviço não devolveu um traçado verificável. Não será iniciada navegação.');
