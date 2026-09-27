@@ -18,6 +18,7 @@
    const parsed=window.OLENGPX.parse(await selected.text());
    const summary=await window.OLENMapRouting.previewTrail(parsed);
    destination.value=summary.name;prepare.textContent='Seguir trilho';
+   const chooser=document.getElementById('rzGeocodeChoices');if(chooser){chooser.hidden=true;chooser.value=''}
    const modes=document.getElementById('rzModes'),label=document.getElementById('rzModeLabel');
    if(modes)modes.hidden=true;if(label)label.textContent='A pé · Trail GO';
    const metrics=window.OLENTrailMetrics?.calculate?.(parsed.segments);
