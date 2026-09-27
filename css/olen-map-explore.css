@@ -33,3 +33,13 @@
 #rzGoPop .olen-trail-facts-grid strong{font-size:12px;color:#e9fff6;overflow-wrap:anywhere}
 #rzGoPop .olen-trail-facts p{margin:0;font-size:11px;line-height:1.32;color:#bed5cc}
 #rzGoPop .olen-trail-facts a{font-size:11px;color:#81f2cb;overflow-wrap:anywhere}
+
+/* Four independent ALPHA map layers in compact OLEN modal. */
+.olen-map-layers-overlay[hidden]{display:none!important}
+.olen-map-layers-overlay .olen-map-layers-sheet{width:min(400px,calc(100vw - 36px));background:#0c2825;border-color:rgba(95,235,191,.23)}
+.olen-map-layers-sheet header small{color:#87e5c4}
+.olen-map-layer-list{display:grid;gap:8px;margin-top:12px}
+.olen-map-layer-list label{display:flex;align-items:center;gap:13px;border:1px solid rgba(116,245,203,.16);background:#12362e;border-radius:13px;padding:13px;cursor:pointer}
+.olen-map-layer-list input[type=checkbox]{width:19px;height:19px;min-width:19px;padding:0;margin:0;accent-color:#59e4b3}
+.olen-map-layer-list span{display:grid;gap:4px;color:#f0fff8;font-size:14px;font-weight:700}
+.olen-map-layer-list small{font-size:11px;font-weight:400;color:#b6cfc4;line-height:1.3}
