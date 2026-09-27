@@ -14,7 +14,10 @@ function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude,ac
  const fix=track?.ingest(p);if(!fix?.accepted)return;
  total=fix.state.distanceMeters;last=n;
  $("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";
- $("rzSpeed").textContent=Math.max(0,Math.round((c.speed||0)*3.6));
+ const points=fix.state.points,previous=points.at(-2),current=points.at(-1);
+ const seconds=previous&&current?(current.timestamp-previous.timestamp)/1000:0;
+ const safeKmh=seconds>0?dist(previous,current)/seconds*3.6:0;
+ $("rzSpeed").textContent=Math.max(0,Math.round(safeKmh));
  window.OLENMapRouting?.updatePosition?.(n)}
 function navigationHeader(on){const h=$("rzHeader"),tools=document.querySelector(".rz-map>.rz-tools");if(!h||!guide)return;h.classList.toggle("rz-navigating",on);if(tools)tools.classList.toggle("rz-tools-go-centered",on);if(on&&host)host.appendChild(guide);else if(!on&&map)map.insertBefore(guide,map.querySelector(".rz-tools"))}
 function beginSession(routeState,trailMode=false,{resume=false,free=false}={}){
