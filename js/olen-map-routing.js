@@ -6,9 +6,9 @@
 const API='https://olen-alpha-ai.filipe-m-p-ribeiro.workers.dev';
 const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
-let library=null,map=null,tile=null,routeLine=null,trackLine=null,trailLine=null,destinationMarker=null,userMarker=null;
+let library=null,map=null,tile=null,routeLine=null,trackLine=null,trailLine=null,destinationMarker=null,userMarker=null,reportMarkers=[];
 let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='';
-let following=true,trackVisible=true,trail=null,trailGuide=null,trailActive=false;
+let following=true,trackVisible=true,trailVisible=true,routeVisible=true,reportsVisible=true,trail=null,trailGuide=null,trailActive=false;
 function $(id){return document.getElementById(id)}
 function coord(v){
  if(!v||typeof v!=='object')return null;
@@ -95,17 +95,19 @@ function draw(){
  if(trail?.segments?.length){
    const paths=trail.segments.map(seg=>seg.map(p=>[p.latitude,p.longitude])).filter(seg=>seg.length>1);
    if(paths.length){trailLine=L.polyline(paths,{color:'#f4c96a',weight:5,opacity:.95,interactive:false}).addTo(map);
+     if(!trailVisible)map.removeLayer(trailLine);
      if(!route){const area=trailLine.getBounds();if(area.isValid())map.fitBounds(area.pad(.15),{animate:false,maxZoom:16})}
    }
  }
  if(route?.geometry?.type==='LineString'&&route.geometry.coordinates.length>=2){
    routeLine=L.geoJSON(route.geometry,{style:{color:'#4ce6bb',weight:5,opacity:.94,lineCap:'round'}}).addTo(map);
+   if(!routeVisible)map.removeLayer(routeLine);
    const bounds=routeLine.getBounds();
    if(bounds.isValid())map.fitBounds(bounds.pad(.18),{animate:false,maxZoom:16});
  }else if(destination){
    map.setView([destination.lat,destination.lon],15,{animate:false});
  }
- refreshTrack();
+ refreshTrack();refreshReports();
  requestAnimationFrame(()=>map?.invalidateSize());
 }
 function refreshTrack(){
@@ -117,6 +119,27 @@ function refreshTrack(){
  else trackLine.setLatLngs(latlngs);
  if(trackVisible&&!map.hasLayer(trackLine))trackLine.addTo(map);
  else if(!trackVisible&&map.hasLayer(trackLine))map.removeLayer(trackLine);
+}
+function refreshReports(){
+ if(!map||!window.L)return;
+ reportMarkers.forEach(marker=>map.removeLayer(marker));reportMarkers=[];
+ if(!reportsVisible)return;
+ for(const report of (window.OLENLocalReports?.list?.()||[]).slice(0,100)){
+   const lat=Number(report.latitude),lon=Number(report.longitude);
+   if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180)continue;
+   const marker=window.L.circleMarker([lat,lon],{radius:6,color:'#f6d6ac',fillColor:'#e8a45f',fillOpacity:.9,weight:2}).addTo(map);
+   const popup=document.createElement('div');popup.textContent=String(report.type||'Report local')+' · '+String(report.description||'Sem descrição')+' · Não publicado';
+   marker.bindPopup(popup);reportMarkers.push(marker);
+ }
+}
+function setLayerVisible(layer,visible){
+ if(!['route','trails','tracking','reports'].includes(layer))return false;
+ const value=!!visible;
+ if(layer==='route'){routeVisible=value;if(routeLine&&map){if(value&&!map.hasLayer(routeLine))routeLine.addTo(map);else if(!value&&map.hasLayer(routeLine))map.removeLayer(routeLine)}}
+ if(layer==='trails'){trailVisible=value;if(trailLine&&map){if(value&&!map.hasLayer(trailLine))trailLine.addTo(map);else if(!value&&map.hasLayer(trailLine))map.removeLayer(trailLine)}}
+ if(layer==='tracking'){trackVisible=value;refreshTrack()}
+ if(layer==='reports'){reportsVisible=value;refreshReports()}
+ return true;
 }
 function findPosition(){ 
  if(!navigator.geolocation)return Promise.reject(new Error('Este dispositivo não disponibiliza localização GPS.'));
@@ -490,9 +513,8 @@ async function controlMap(action){
  try{
   await ensureMap();
   if(action==='Camadas'){
-   if(!trackLine){notice('Ainda não existe um tracking para mostrar ou ocultar.');return false}
-   trackVisible=!trackVisible;refreshTrack();
-   notice(trackVisible?'Tracking visível.':'Tracking oculto. A gravação continua ativa.');return true;
+   const panel=$('rzLayersPop');if(!panel)return false;
+   panel.hidden=false;return true;
   }
   if(action==='Direção'){
    following=!following;
@@ -523,9 +545,9 @@ $('rzDestination')?.addEventListener('input',()=>{
  if(choices){choices.hidden=true;choices.value='';choices.dataset.query=''}
 });
 window.OLENMapRouting=Object.freeze({
- open,showBaseMap,lookupDestination,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,reportRouteError,
+ open,showBaseMap,lookupDestination,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,reportRouteError,setLayerVisible,refreshReports,
  searchCenter(){const c=destination||last||(map?.getCenter?.()||null);return c?{latitude:c.lat,longitude:c.lon??c.lng,name:destination?.name||null}:null},
  get state(){return {destination:destination?{...destination}:null,selectedTrail:trail?{id:trail.id||null,name:trail.name,pointCount:trail.pointCount||trail.segments.reduce((n,seg)=>n+seg.length,0),provenance:trail.provenance||{type:'user-import',official:false}}:null,trailReady:!!trailGuide,routeReady:!!route,
-  route:route?{...route}:null,navigationActive:active,mode};}
+  route:route?{...route}:null,navigationActive:active,mode,layers:{route:routeVisible,trails:trailVisible,tracking:trackVisible,reports:reportsVisible}};}
 });
 })();
