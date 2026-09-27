@@ -1115,9 +1115,9 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
 .rz-trip{
   height:68px!important;
   display:grid!important;
-  grid-template-columns:1fr 1fr 58px!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr) 76px!important;
   align-items:center!important;
-  padding:0 8px!important;
+  padding:0 10px!important;
   border:.5px solid rgba(82,246,220,.52)!important;
   border-radius:21px!important;
   background:transparent!important;
@@ -1129,7 +1129,8 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   display:flex!important;
   flex-direction:column!important;
   justify-content:center!important;
-  padding:0 10px!important;
+  min-width:0!important;
+  padding:0 8px!important;
   border-right:.5px solid rgba(82,246,220,.34)!important;
 }
 .rz-stop{
@@ -1198,7 +1199,23 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   pointer-events:none!important;
 }
 
-.rz-bottom[hidden]{display:none!important}
+/* STOP owns the HUD state: no controls displayed outside active GO. */
+#rzBottom[hidden]{display:none!important}
+@media(max-width:430px){
+  .screen[data-screen="map"] .rz-trip{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) 66px!important;
+    padding:0 6px!important;
+  }
+  .screen[data-screen="map"] .rz-trip span{padding:0 5px!important}
+  .screen[data-screen="map"] .rz-stop{width:44px!important;height:44px!important}
+}
+@media(max-width:360px){
+  .screen[data-screen="map"] .rz-trip{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) 60px!important;
+  }
+  .screen[data-screen="map"] .rz-trip span{padding:0 3px!important}
+  .screen[data-screen="map"] .rz-stop{width:42px!important;height:42px!important}
+}
 
 /* OLEN GLOBAL AURORA-WHITE — identity layer for text that would otherwise render white.
    Area accents keep precedence. Close controls are explicitly excluded/protected. */
