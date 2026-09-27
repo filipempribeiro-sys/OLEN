@@ -7,6 +7,7 @@ const vm=require('node:vm');
 const fs=require('node:fs');
 const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../js/olen-map-routing.js'),'utf8');
+const adapter=require('../js/olen-osrm-adapter.js');
 function resolver(fetcher){
  const cache=new Map(),status={textContent:'',hidden:true,classList:{toggle(){}}};
  const window={localStorage:{getItem:k=>cache.get(k)||null,setItem:(k,v)=>cache.set(k,v)}};
@@ -45,17 +46,21 @@ test('ALPHA pedestrian and car fallback accepts only real route geometry',async(
   calls.push(String(url));
   return {ok:true,json:async()=>({code:'Ok',routes:[{
    distance:1500,duration:1100,
-   geometry:{type:'LineString',coordinates:[[-9.13,38.72],[-9.12,38.73]]}
+   geometry:{type:'LineString',coordinates:[[-9.13,38.72],[-9.12,38.73]]},
+   legs:[{steps:[{maneuver:{type:'depart',location:[-9.13,38.72]},name:'Rua Inicial',distance:500},
+    {maneuver:{type:'turn',modifier:'right',location:[-9.12,38.73]},name:'Rua Final',distance:1000}]}]
   }]})};
  };
  const meter=(a,b)=>Math.hypot(a.lat-b.lat,a.lon-b.lon)*111000;
- const provider=new Function('fetch','authenticatedPost','AbortController','setTimeout','clearTimeout','meters',
+ const provider=new Function('window','fetch','authenticatedPost','AbortController','setTimeout','clearTimeout','meters',
   actual+'\nreturn {resolveRoute,validated};')(
-   network,async()=>{throw new TypeError('Failed to fetch')},
+   {OLENOSRMAdapter:adapter},network,async()=>{throw new TypeError('Failed to fetch')},
    AbortController,()=>1,()=>{},meter);
  const walk=await provider.resolveRoute(start,dest,'walk');
  const car=await provider.resolveRoute(start,dest,'car');
  assert.equal(provider.validated(walk,start,dest,'walk'),true);
+ assert.equal(walk.maneuvers[1].type,'turn-right');
+ assert.equal(walk.maneuvers[1].road,'Rua Final');
  assert.equal(provider.validated(car,start,dest,'car'),true);
  assert.ok(calls[0].includes('/routed-foot/route/'));
  assert.ok(calls[1].includes('router.project-osrm.org'));
