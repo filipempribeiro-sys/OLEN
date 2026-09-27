@@ -17,7 +17,10 @@ function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude,ac
  $("rzSpeed").textContent=Math.max(0,Math.round((c.speed||0)*3.6));
  window.OLENMapRouting?.updatePosition?.(n)}
 function navigationHeader(on){const h=$("rzHeader"),tools=document.querySelector(".rz-map>.rz-tools");if(!h||!guide)return;h.classList.toggle("rz-navigating",on);if(tools)tools.classList.toggle("rz-tools-go-centered",on);if(on&&host)host.appendChild(guide);else if(!on&&map)map.insertBefore(guide,map.querySelector(".rz-tools"))}
-function beginSession(routeState,trailMode=false){
+function beginSession(routeState,trailMode=false,{resume=false,free=false}={}){
+ const recovered=resume?track?.recover():null;
+ if(resume&&(!recovered?.active||recovered.name!=='Atividade livre'))return false;
+ if(!resume&&track?.snapshot()?.active)return false;
  currentName=trailMode?routeState.selectedTrail.name:routeState.destination.name;
  mode=trailMode?'walk':routeState.mode;
  show("rzGoPop",false);show("rzIdle",false);show("rzBottom",true);
@@ -33,9 +36,11 @@ function beginSession(routeState,trailMode=false){
      window.OLENNavigationGuide.set({type:"straight",instruction:first.instruction,
        road:first.road||"",distance:window.OLENMapRouting.formatDistance(first.distanceMeters||0)});
  }
- t0=Date.now();total=0;last=null;rating=0;
- track?.start({name:currentName,mode,startedAt:t0});
+ t0=recovered?.startedAt||Date.now();total=recovered?.distanceMeters||0;
+ last=recovered?.points?.at(-1)||null;rating=0;
+ if(!recovered)track?.start({name:currentName,mode,startedAt:t0});
  window.OLENGoExperience?.attach?.(track?.snapshot(),routeState);
+ $("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";
  tick();clearInterval(timer);timer=setInterval(tick,1000);
  if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);
  try{watch=navigator.geolocation?.watchPosition?.(gps,error=>{
@@ -44,7 +49,8 @@ function beginSession(routeState,trailMode=false){
  },{enableHighAccuracy:true,maximumAge:2000,timeout:8000})??null;}
  catch(error){stop();window.OLENMapRouting?.reportGpsError?.(error);return false}
  if(watch===null){stop();window.OLENMapRouting?.reportGpsError?.({code:1});return false}
- if(trailMode)window.OLENMapRouting?.beginTrailGuidance?.();
+ if(free){show("rzGuide",false);const status=$("rzStatus");if(status)status.textContent="Tracking ativo · A pé"}
+ else if(trailMode)window.OLENMapRouting?.beginTrailGuidance?.();
  else window.OLENMapRouting?.beginGuidance?.();
  return true;
 }
@@ -74,7 +80,7 @@ function startFreeTracking(){
   return false;
  }
  mode="walk";
- const started=beginSession({destination:{name:"Atividade livre"},mode},false);
+ const started=beginSession({destination:{name:"Atividade livre"},mode},false,{free:true});
  if(started){
   const label=$("rzGuideText"),road=$("rzRoadName"),status=$("rzStatus");
   show("rzGuide",false);
@@ -83,6 +89,12 @@ function startFreeTracking(){
   if(status)status.textContent="Tracking ativo · A pé";
  }
  return started;
+}
+function resumeFreeTracking(){
+ const previous=track?.recover();
+ if(!previous?.active||previous.name!=="Atividade livre")return false;
+ mode=previous.mode;
+ return beginSession({destination:{name:"Atividade livre"},mode},false,{free:true,resume:true});
 }
 function fillSummary(){const secs=elapsed(),distance=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzFinishTitle").textContent=currentName;$("rzFinishRoute").textContent="Ponto de partida → "+currentName;$("rzFinishTime").textContent=fmt(secs);$("rzFinishDistance").textContent=distance;$("rzFinishMode").textContent=modes[mode][1]+" "+modes[mode][0];$("rzFinishStars").querySelectorAll("button").forEach(b=>b.textContent=Number(b.dataset.star)<=rating?"★":"☆")}
 function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);track?.finish();history?.save(track?.snapshot());window.OLENGoExperience?.finish?.(track?.snapshot(),{rating,comment:$("rzFinishComment")?.value||""});window.OLENMapRouting?.stopGuidance?.();window.OLENMapRouting?.stopTrailGuidance?.();fillSummary();show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false);navigationHeader(false);show("rzIdle",true);show("rzFinishPop",true)}
@@ -94,7 +106,7 @@ $("rzShareCommunity").disabled=true;
 $("rzShareExternal").onclick=async()=>{const txt="A minha experiência OLEN: "+currentName+" · "+$("rzFinishDistance").textContent+" · "+$("rzFinishTime").textContent;if(navigator.share){try{await navigator.share({title:"Experiência OLEN",text:txt})}catch(_){}}else if(navigator.clipboard){navigator.clipboard.writeText(txt);$("rzShareExternal").innerHTML="✓ <b>Copiado</b>";setTimeout(()=>$("rzShareExternal").innerHTML="↗ <b>Partilhar</b>",1400)}};
 $("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);
 document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$("rzModeLabel").textContent=modes[mode][0];document.querySelectorAll("#rzModes button").forEach(x=>x.classList.toggle("selected",x===b))});document.querySelector("#rzModes [data-mode=walk]").classList.add("selected");
-window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null},history(){return history?.list()||[]},getCompleted(id){return history?.get(id)||null},startFreeTracking,stop});
+window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null},history(){return history?.list()||[]},getCompleted(id){return history?.get(id)||null},startFreeTracking,resumeFreeTracking,stop});
 window.OLENLegacyGo=Object.freeze({
  startRoute(name,requestedMode="walk"){
   const selected=modes[requestedMode]?requestedMode:"walk";mode=selected;
