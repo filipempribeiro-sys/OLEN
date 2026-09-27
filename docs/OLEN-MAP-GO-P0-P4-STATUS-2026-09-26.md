@@ -77,3 +77,16 @@ Data: 2026-09-26. Esta matriz distingue código, testes isolados e validação r
 
 ## Próximo critério de liberação
 Executar smoke browser em páginas reais, verificar GPX de várias origens, recusa/reentrada GPS, rota rodoviária e Trail GO em terreno, export/recuperação de sessão, UI responsive e regressões de Chat/Agenda/Home/Perfil. Só depois considerar merge.
+
+## Adenda 2026-09-27 — regressões observadas no Preview
+O utilizador confirmou no navegador que a compilação do Preview `5a6d1a96` carregava Leaflet, mas `Preparar rota` devolvia `Failed to fetch`, a janela não concluía o GO e a pesquisa de trilhos pedia GPS sem resultados. O utilizador comprovou em separado que o Worker responde `ok:true` a `/api/health` e geocodifica Zambujeira ao abrir diretamente `/api/geocode?query=Zambujeira`. Estes testes diretos não provam que os pedidos CORS da página sejam aceites.
+
+### Recuperação de fluxos ALPHA no ramo de integração
+- `js/olen-map-routing.js`: Worker em primeiro lugar, Nominatim direto usado pela ALPHA como alternativa para geocodificação, com cache local de 24h; rotas reais pedonais e de carro dos serviços usados na ALPHA quando o Worker falha. Sem geometria validada não inicia GO. Para bicicleta/moto/trotineta, sem alternativa comprovada, continua a falhar de forma explícita.
+- `js/olen-trail-discovery-ui.js`: destino escrito/preparado tem precedência, GPS é opcional para descobrir trilhos; na falta de ambos, usa o centro do mapa identificado como tal. Não inventa posição GPS para tracking.
+- `js/olen-trails-catalog.js`: em falha de Overpass pode devolver geometria OSM previamente guardada, marcada como cache desatualizada; sem cache não inventa trilhos.
+- `index.html`: query strings dos dois scripts alterados atualizadas para evitar a recuperação de JavaScript antigo no próximo deployment.
+- `tests/olen-map-routing-regression.test.cjs`: testes automatizados adicionados para regressão de geocodificação e provedores de rotas. Ainda não executados em Node nesta execução; testes equivalentes de funções reais com respostas de rede simuladas passaram isoladamente.
+- Testes da pesquisa OSM: 6/6 aprovados em JavaScript isolado, incluindo cache durante falha do serviço. Total dos casos de lógica que foram executados: 45/45.
+- Não há validação de chamadas live CORS/OSRM/Overpass no domínio `olen-chat-teste.pages.dev`, nem publicação confirmada dos commits desta adenda. Não confundir a publicação prévia do Preview `5a6d1a96` com esta versão.
+- A paridade ALPHA → OLEN continua aberta: MapLibre ativo, cartões outdoor, biblioteca, recuperação de sessão, reports completos, mapa offline e navegação física não estão aceites. A autorização de publicação do utilizador não substitui estas evidências de teste.
