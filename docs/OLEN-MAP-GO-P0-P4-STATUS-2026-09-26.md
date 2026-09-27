@@ -1,4 +1,7 @@
 # OLEN — Mapa/GO · matriz de execução e evidência
+
+> **Atualização de 27/09/2026:** esta matriz é o histórico da execução inicial. A matriz de paridade e evidência mais recente está em [OLEN-MAP-GO-ALPHA-PARITY-2026-09-27.md](./OLEN-MAP-GO-ALPHA-PARITY-2026-09-27.md). Os 44/44 testes abaixo referem-se ao checkpoint anterior, não ao código atual.
+
 Data: 2026-09-26. Esta matriz distingue código, testes isolados e validação real. NÃO equivale a aprovação para produção.
 
 ## Referências e proteção
