@@ -1,0 +1,23 @@
+/* ALPHA exploration tools adapted to OLEN's approved full-screen Map/GO.
+   Isolated to the new Explore entry/modal; no global mobile or footer overrides. */
+.screen[data-screen="map"] .rz-idle>.rz-explore-entry{grid-column:1/-1;height:34px!important;min-height:34px!important;border:0;background:rgba(3,27,25,.72);color:#9cf1d7;font-size:12px!important;font-weight:650;border-radius:17px!important;letter-spacing:.02em}
+.olen-explore-overlay[hidden]{display:none!important}
+.olen-explore-overlay .olen-explore-sheet{width:min(440px,calc(100vw - 36px));max-height:min(680px,calc(100dvh - 42px));display:flex;flex-direction:column;gap:12px;background:#0c2825;border-color:rgba(95,235,191,.21);padding:20px}
+.olen-explore-sheet header{flex-shrink:0}.olen-explore-sheet header small{color:#87e5c4}.olen-explore-sheet h2{font-size:22px;line-height:1.14;margin:8px 0 2px}
+.olen-explore-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex-shrink:0}
+.olen-explore-tabs button{min-width:0;min-height:42px;padding:7px 4px;font:inherit;font-size:12px;font-weight:650;background:#123932;color:#c9e9dc;border:1px solid rgba(116,245,203,.18);border-radius:12px}
+.olen-explore-tabs button[aria-current="true"]{color:#082a20;background:#6ce5b9;border-color:#6ce5b9}
+.olen-explore-body{min-height:0;overflow-y:auto;overscroll-behavior:contain;display:grid;align-content:start;gap:12px;padding:2px 1px 5px}
+.olen-explore-body p{margin:0;color:#c3d7d0;font-size:13px;line-height:1.4}
+.olen-explore-body h3{margin:0;font-size:16px;color:#f3fff9}
+.olen-explore-body .olen-explore-action{display:block;width:100%;min-height:46px;border-radius:13px;border:1px solid rgba(95,235,191,.26);background:#184138;color:#f3fff9;font:inherit;font-weight:700;font-size:14px;text-align:center;padding:10px 12px}
+.olen-explore-body .olen-explore-action.primary{background:#54dbab;color:#062d21;border:0}
+.olen-explore-body .olen-explore-action:disabled{opacity:.48}
+.olen-explore-body .olen-explore-statgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.olen-explore-body .olen-explore-stat{padding:11px;border-radius:12px;border:1px solid rgba(136,229,201,.18);background:#102f2c}
+.olen-explore-stat strong{display:block;font-size:18px;margin-bottom:4px}
+.olen-explore-stat small{color:#a5c8be;font-size:11px}
+.olen-explore-body .olen-history-entry{padding:12px;border:1px solid rgba(136,229,201,.17);border-radius:12px;background:#102f2c;display:grid;gap:8px}
+.olen-history-entry strong{font-size:14px}.olen-history-entry small{font-size:11px;color:#b3c9c0}
+.olen-explore-body .olen-history-entry button{justify-self:start;border:1px solid rgba(95,235,191,.3);background:#19443b;color:#dcfff0;border-radius:9px;padding:7px 10px;font:inherit;font-size:12px}
+@media(min-width:700px){.screen[data-screen="map"] .rz-idle>.rz-explore-entry{height:34px!important;min-height:34px!important;font-size:12px!important}}
