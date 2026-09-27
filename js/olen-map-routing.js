@@ -430,13 +430,26 @@ async function prepareManual(name,travelMode='walk'){
  try{
    notice('A confirmar o destino no mapa…');
    const list=await lookupDestination(q);
-   const first=list[0];
-   if(!first)throw new Error('Não foi possível confirmar este destino. Escolhe outro local.');
-   if(!window.confirm('Destino encontrado: '+first.name+(first.admin1?', '+first.admin1:'')+'. Preparar rota?')){
-     notice('Escolhe o destino pretendido.');return false;
-   }
+   if(!list.length)throw new Error('Não foi possível confirmar este destino. Escolhe outro local.');
+   const chooser=$('rzGeocodeChoices');
+   let chosen=list[0];
+   if(list.length>1&&chooser){
+     if(chooser.hidden||chooser.dataset.query!==q){
+       chooser.replaceChildren();
+       const hint=document.createElement('option');hint.value='';hint.textContent='Escolhe a localidade correta';chooser.appendChild(hint);
+       list.forEach((item,i)=>{const option=document.createElement('option');option.value=String(i);
+         option.textContent=[item.name,item.admin1,item.country].filter(Boolean).join(' · ');
+         chooser.appendChild(option)});
+       chooser.value='';chooser.dataset.query=q;chooser.hidden=false;
+       notice('Encontrámos '+list.length+' localidades. Escolhe a correta e carrega novamente em Preparar rota.');
+       return false;
+     }
+     if(chooser.value===''){notice('Seleciona a localidade correta antes de preparar a rota.',true);return false}
+     chosen=list[Number(chooser.value)];
+     if(!chosen)throw new Error('A localidade selecionada já não está disponível. Pesquisa novamente.');
+   }else if(chooser){chooser.hidden=true;chooser.value='';}
    // A janela de preparação só fecha quando existe rota validada e GO iniciado.
-   return open(first,{navigate:true,travelMode});
+   return open(chosen,{navigate:true,travelMode});
  }catch(e){notice(routeError(e),true);return false}
 }
 async function showBaseMap(){
@@ -503,6 +516,10 @@ async function controlMap(action){
   return false;
  }catch(error){notice(error?.message||'Controlo do mapa indisponível.',true);return false}
 }
+$('rzDestination')?.addEventListener('input',()=>{
+ const choices=$('rzGeocodeChoices');
+ if(choices){choices.hidden=true;choices.value='';choices.dataset.query=''}
+});
 window.OLENMapRouting=Object.freeze({
  open,showBaseMap,lookupDestination,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,reportRouteError,
  searchCenter(){const c=destination||last||(map?.getCenter?.()||null);return c?{latitude:c.lat,longitude:c.lon??c.lng,name:destination?.name||null}:null},
