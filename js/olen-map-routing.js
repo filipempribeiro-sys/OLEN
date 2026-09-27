@@ -343,22 +343,60 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
    return false;
  }
 }
+/* Destination resolver: restore ALPHA's direct Nominatim path when the
+   optional OLEN Worker geocoder cannot be contacted by a Pages origin.
+   User-initiated only, bounded and cached; never infer coordinates from IP. */
+const GEOCODE_CACHE='olen:map:geocode:v1:';
+async function lookupDestination(name){
+ const q=String(name||'').trim();
+ if(q.length<2)return [];
+ const cacheKey=GEOCODE_CACHE+q.toLocaleLowerCase('pt-PT');
+ try{const record=JSON.parse(window.localStorage?.getItem(cacheKey)||'null');
+  if(Array.isArray(record?.items)&&Date.now()-record.at<86400000)return record.items;
+ }catch(_){}
+ let results=[],workerError=null;
+ try{
+  const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+  try{
+   const r=await fetch(API+'/api/geocode?query='+encodeURIComponent(q),{cache:'no-store',signal:controller.signal});
+   if(!r.ok)throw new Error('HTTP '+r.status);
+   const body=await r.json();
+   results=(Array.isArray(body?.data)?body.data:[]).map(x=>({
+     name:x.name,latitude:Number(x.latitude),longitude:Number(x.longitude),
+     admin1:x.admin1||'',country:x.country||'',source:'OLEN Worker'
+   })).filter(coord);
+  }finally{clearTimeout(timer)}
+ }catch(error){workerError=error}
+ if(!results.length){
+  try{
+   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+   try{
+    const url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&addressdetails=1&q='+encodeURIComponent(q);
+    const r=await fetch(url,{headers:{Accept:'application/json'},signal:controller.signal});
+    if(!r.ok)throw new Error('Nominatim HTTP '+r.status);
+    const body=await r.json();
+    results=(Array.isArray(body)?body:[]).map(x=>({
+      name:String(x.display_name||x.name||q).slice(0,160),
+      latitude:Number(x.lat),longitude:Number(x.lon),
+      admin1:x.address?.state||x.address?.county||'',country:x.address?.country||'',source:'OpenStreetMap Nominatim'
+    })).filter(coord);
+   }finally{clearTimeout(timer)}
+  }catch(error){
+   throw new Error('Não foi possível consultar os destinos OLEN nem a pesquisa OSM. Verifica a ligação e volta a tentar. ('+
+     String(workerError?.message||'Worker indisponível').slice(0,65)+')');
+  }
+ }
+ try{window.localStorage?.setItem(cacheKey,JSON.stringify({at:Date.now(),items:results}))}catch(_){}
+ return results;
+}
 async function prepareManual(name,travelMode='walk'){
  const q=String(name||'').trim();
  if(q.length<2){notice('Indica primeiro o destino.',true);return false}
  if(!VALID_MODES.has(travelMode)){notice('Este modo ainda não tem um motor de navegação confirmado.',true);return false}
  try{
    notice('A confirmar o destino no mapa…');
-   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),16000);
-   let d;
-   try{
-     const r=await fetch(API+'/api/geocode?query='+encodeURIComponent(q),{cache:'no-store',signal:controller.signal});
-     if(!r.ok)throw new Error('O serviço de destinos devolveu HTTP '+r.status+'. Não foi iniciada nenhuma rota.');
-     d=await r.json();
-   }finally{clearTimeout(timer)}
-   const list=Array.isArray(d?.data)?d.data:[];
-   const first=list.map(x=>({name:x.name,latitude:x.latitude,longitude:x.longitude,admin1:x.admin1}))
-     .find(x=>coord(x));
+   const list=await lookupDestination(q);
+   const first=list[0];
    if(!first)throw new Error('Não foi possível confirmar este destino. Escolhe outro local.');
    if(!window.confirm('Destino encontrado: '+first.name+(first.admin1?', '+first.admin1:'')+'. Preparar rota?')){
      notice('Escolhe o destino pretendido.');return false;
@@ -431,7 +469,7 @@ async function controlMap(action){
  }catch(error){notice(error?.message||'Controlo do mapa indisponível.',true);return false}
 }
 window.OLENMapRouting=Object.freeze({
- open,showBaseMap,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,
+ open,showBaseMap,lookupDestination,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,
  searchCenter(){const c=destination||last||(map?.getCenter?.()||null);return c?{latitude:c.lat,longitude:c.lon,name:destination?.name||null}:null},
  get state(){return {destination:destination?{...destination}:null,selectedTrail:trail?{id:trail.id||null,name:trail.name,pointCount:trail.pointCount||trail.segments.reduce((n,seg)=>n+seg.length,0),provenance:trail.provenance||{type:'user-import',official:false}}:null,trailReady:!!trailGuide,routeReady:!!route,
   route:route?{...route}:null,navigationActive:active,mode};}
