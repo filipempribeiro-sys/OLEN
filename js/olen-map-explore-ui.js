@@ -53,10 +53,18 @@
    finally{button.disabled=false}
   },true);
   body.appendChild(button);
-  const activeTrack=window.OLENGoActivity?.current?.active;
-  body.appendChild(action(activeTrack?'Parar e guardar atividade':'Iniciar tracking livre',()=>{
-   if(activeTrack){window.OLENGoActivity?.stop?.();closeModal();return}
-   const started=window.OLENGoActivity?.startFreeTracking?.();
+  const live=window.OLENGoActivity?.trackingLive===true;
+  const interrupted=window.OLENGoActivity?.interrupted===true;
+  const existing=window.OLENGoActivity?.current;
+  if(existing?.active){
+   info('Atividade em curso · '+window.OLENMapRouting.formatDistance(existing.distanceMeters||0)+
+    (interrupted?' · interrompida, disponível para recuperação.':' · tracking GPS ativo.'));
+  }
+  body.appendChild(action(live?'Parar e guardar atividade':
+    interrupted?'Retomar atividade interrompida':'Iniciar tracking livre',()=>{
+   if(live){window.OLENGoActivity?.stop?.();closeModal();return}
+   const started=interrupted?window.OLENGoActivity?.resumeFreeTracking?.():
+     window.OLENGoActivity?.startFreeTracking?.();
    if(started)closeModal();
    else info('Não foi possível iniciar o tracking. Confirma as permissões de localização.');
   }));
