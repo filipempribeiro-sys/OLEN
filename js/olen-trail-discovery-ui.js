@@ -77,10 +77,20 @@
    const selected={...trail,pointCount:trail.segments.reduce((n,seg)=>n+seg.length,0)};
    await window.OLENMapRouting.previewTrail(selected);
    destination.value=trail.name;prepare.textContent='Seguir trilho';
+   const modes=document.getElementById('rzModes'),label=document.getElementById('rzModeLabel');
+   if(modes)modes.hidden=true;
+   if(label)label.textContent='A pé · Trail GO';
    showFacts(trail);
    notice('Trilho OSM selecionado. Homologação e acesso não verificados; confirma antes de partir.');
   }catch(error){notice(error?.message||'Não foi possível apresentar o trilho.',true)}
  }
+ destination.addEventListener('input',()=>{
+  if(destination.value===window.OLENMapRouting?.state?.selectedTrail?.name)return;
+  if(facts)facts.hidden=true;
+  const modes=document.getElementById('rzModes'),label=document.getElementById('rzModeLabel');
+  if(modes)modes.hidden=false;
+  if(label)label.textContent=String(document.querySelector('#rzModes button.selected')?.textContent||'A pé').trim();
+ });
  choices.addEventListener('change',()=>{if(choices.value!=='')choose(Number(choices.value))});
  button.addEventListener('click',async()=>{
   if(busy)return;busy=true;button.disabled=true;
