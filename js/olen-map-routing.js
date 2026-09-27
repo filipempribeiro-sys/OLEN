@@ -465,6 +465,7 @@ window.OLEN5?.core?.on?.('route:stable',e=>{
    showBaseMap().catch(()=>{});
  }
 });
+function reportRouteError(error){notice(routeError(error),true)}
 function reportGpsError(error){
  const denied=Number(error?.code)===1;
  notice(denied?'A localização foi recusada. O GO foi interrompido para não apresentar uma navegação sem GPS.':
@@ -503,7 +504,7 @@ async function controlMap(action){
  }catch(error){notice(error?.message||'Controlo do mapa indisponível.',true);return false}
 }
 window.OLENMapRouting=Object.freeze({
- open,showBaseMap,lookupDestination,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,
+ open,showBaseMap,lookupDestination,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,reportRouteError,
  searchCenter(){const c=destination||last||(map?.getCenter?.()||null);return c?{latitude:c.lat,longitude:c.lon??c.lng,name:destination?.name||null}:null},
  get state(){return {destination:destination?{...destination}:null,selectedTrail:trail?{id:trail.id||null,name:trail.name,pointCount:trail.pointCount||trail.segments.reduce((n,seg)=>n+seg.length,0),provenance:trail.provenance||{type:'user-import',official:false}}:null,trailReady:!!trailGuide,routeReady:!!route,
   route:route?{...route}:null,navigationActive:active,mode};}
