@@ -107,6 +107,9 @@
     goSheet();$('rzDiscoverTrails')?.click();
    },true));
    body.appendChild(action('Importar trilho GPX',()=>{goSheet();$('rzImportGPX')?.click()}));
+   body.appendChild(action('Camadas do mapa',async()=>{
+    closeModal();await window.OLENMapRouting?.controlMap?.('Camadas');
+   }));
   }else if(tab==='routes'){
    body.appendChild(node('h3','Planear uma rota'));
    info('Escolhe destino e modo de transporte. Só iniciamos GO depois de receber um traçado real validado.');
