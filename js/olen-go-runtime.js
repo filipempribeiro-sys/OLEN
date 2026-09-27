@@ -16,7 +16,7 @@ function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude,ac
  $("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";
  const points=fix.state.points,previous=points.at(-2),current=points.at(-1);
  const seconds=previous&&current?(current.timestamp-previous.timestamp)/1000:0;
- const safeKmh=seconds>0?dist(previous,current)/seconds*3.6:0;
+ const safeKmh=seconds>0&&!current.breakBefore?dist(previous,current)/seconds*3.6:0;
  $("rzSpeed").textContent=Math.max(0,Math.round(safeKmh));
  window.OLENMapRouting?.updatePosition?.(n)}
 function navigationHeader(on){const h=$("rzHeader"),tools=document.querySelector(".rz-map>.rz-tools");if(!h||!guide)return;h.classList.toggle("rz-navigating",on);if(tools)tools.classList.toggle("rz-tools-go-centered",on);if(on&&host)host.appendChild(guide);else if(!on&&map)map.insertBefore(guide,map.querySelector(".rz-tools"))}
@@ -42,6 +42,7 @@ function beginSession(routeState,trailMode=false,{resume=false,free=false}={}){
  t0=recovered?.startedAt||Date.now();total=recovered?.distanceMeters||0;
  last=recovered?.points?.at(-1)||null;rating=0;
  if(!recovered)track?.start({name:currentName,mode,startedAt:t0});
+ else track?.markSegmentBreak?.();
  window.OLENGoExperience?.attach?.(track?.snapshot(),routeState);
  $("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";
  tick();clearInterval(timer);timer=setInterval(tick,1000);
