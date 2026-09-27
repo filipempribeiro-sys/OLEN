@@ -66,7 +66,9 @@
    const hint=document.createElement('option');hint.value='';hint.textContent='Escolhe um trilho';choices.appendChild(hint);
    found.forEach((trail,i)=>{const option=document.createElement('option');option.value=String(i);option.textContent=trail.name;choices.appendChild(option)});
    choices.hidden=!found.length;choices.value='';
-   notice(found.length?found.length+' trilhos OSM encontrados na zona de '+location.label+'. Homologação por verificar.':
+   const cached=result.source==='stale-cache';
+   notice(found.length?(cached?'A pesquisa OSM está indisponível: a mostrar '+found.length+' trilhos guardados anteriormente na zona de '+location.label+'.':
+      found.length+' trilhos OSM encontrados na zona de '+location.label+'.')+' Homologação por verificar.':
     'Não foram encontrados trilhos mapeados na zona de '+location.label+'.');
   }catch(error){notice(error?.message||'Não foi possível pesquisar trilhos agora.',true)}
   finally{busy=false;button.disabled=false}
