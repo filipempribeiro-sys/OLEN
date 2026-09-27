@@ -74,7 +74,7 @@ function start(){
 }
 
 function startFreeTracking(){
- if(track?.snapshot()?.active)return false;
+ if((track?.snapshot()||track?.recover())?.active)return false;
  if(typeof navigator.geolocation?.watchPosition!=='function'){
   window.OLENMapRouting?.reportGpsError?.({code:2});
   return false;
@@ -106,7 +106,7 @@ $("rzShareCommunity").disabled=true;
 $("rzShareExternal").onclick=async()=>{const txt="A minha experiência OLEN: "+currentName+" · "+$("rzFinishDistance").textContent+" · "+$("rzFinishTime").textContent;if(navigator.share){try{await navigator.share({title:"Experiência OLEN",text:txt})}catch(_){}}else if(navigator.clipboard){navigator.clipboard.writeText(txt);$("rzShareExternal").innerHTML="✓ <b>Copiado</b>";setTimeout(()=>$("rzShareExternal").innerHTML="↗ <b>Partilhar</b>",1400)}};
 $("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);
 document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$("rzModeLabel").textContent=modes[mode][0];document.querySelectorAll("#rzModes button").forEach(x=>x.classList.toggle("selected",x===b))});document.querySelector("#rzModes [data-mode=walk]").classList.add("selected");
-window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null},history(){return history?.list()||[]},getCompleted(id){return history?.get(id)||null},startFreeTracking,resumeFreeTracking,stop});
+window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null},history(){return history?.list()||[]},getCompleted(id){return history?.get(id)||null},get trackingLive(){return watch!==null},get interrupted(){return watch===null&&(track?.snapshot()||track?.recover())?.active===true},startFreeTracking,resumeFreeTracking,stop});
 window.OLENLegacyGo=Object.freeze({
  startRoute(name,requestedMode="walk"){
   const selected=modes[requestedMode]?requestedMode:"walk";mode=selected;
