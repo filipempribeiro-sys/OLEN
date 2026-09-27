@@ -28,3 +28,15 @@ test('HTTP failures do not fabricate trails',async()=>{
  const catalog=create({request:async()=>({ok:false})});
  await assert.rejects(()=>catalog.nearby(center));
 });
+
+test('cached ALPHA trail geometry survives a temporary Overpass outage',async()=>{
+ const storage=memory(),catalog=create({storage,now:()=>1000,
+   request:async()=>({ok:true,json:async()=>({elements:[relation]})})});
+ await catalog.nearby(center);
+ const offline=create({storage,now:()=>1000+7*60*60*1000,
+   request:async()=>{throw new TypeError('Failed to fetch')}});
+ const cached=await offline.nearby(center);
+ assert.equal(cached.source,'stale-cache');
+ assert.equal(cached.trails[0].id,'osm:relation:123');
+ assert.equal(cached.trails[0].provenance.homologated,false);
+});
