@@ -16,7 +16,7 @@
   facts.replaceChildren();facts.hidden=false;
   const title=document.createElement('h3');title.textContent=trail.name;facts.appendChild(title);
   const entries=[
-    ['Referência',trail.reference],['Rede',trail.network],['Distância indicada',trail.distanceTag],
+    ['Referência',trail.reference],['Rede',trail.network],['Pontos GPS',trail.pointCount],['Distância indicada',trail.distanceTag],
     ['Subida indicada',trail.elevationGainTag],['Descida indicada',trail.elevationLossTag],
     ['Duração indicada',trail.durationTag],['Formato',trail.roundtrip==='yes'?'Circular':trail.roundtrip==='no'?'Linear':null],
     ['Partida',trail.from],['Chegada',trail.to],['Operador indicado',trail.operator],
@@ -29,11 +29,14 @@
   });
   if(grid.childElementCount)facts.appendChild(grid);
   if(trail.description){const description=document.createElement('p');description.textContent=trail.description;facts.appendChild(description)}
-  const source=document.createElement('a');
-  source.href=trail.provenance?.sourceUrl||'https://www.openstreetmap.org/copyright';
-  source.target='_blank';source.rel='noopener noreferrer';source.textContent='Ver origem do percurso no OpenStreetMap';
-  facts.appendChild(source);
-  const warning=document.createElement('p');warning.textContent='Fonte cartográfica OSM · acesso, estado do piso e homologação oficial não verificados.';
+  if(trail.provenance?.sourceUrl){
+   const source=document.createElement('a');source.href=trail.provenance.sourceUrl;
+   source.target='_blank';source.rel='noopener noreferrer';source.textContent='Ver origem do percurso no OpenStreetMap';
+   facts.appendChild(source);
+  }
+  const warning=document.createElement('p');warning.textContent=trail.provenance?.type==='openstreetmap'?
+   'Fonte cartográfica OSM · acesso, estado do piso e homologação oficial não verificados.':
+   'GPX importado do dispositivo · publicação e homologação oficial não verificadas.';
   facts.appendChild(warning);
  }
  function notice(text,error=false){
@@ -110,4 +113,5 @@
   }catch(error){notice(error?.message||'Não foi possível pesquisar trilhos agora.',true)}
   finally{busy=false;button.disabled=false}
  });
+ window.OLENTrailFacts=Object.freeze({show:showFacts,hide(){if(facts)facts.hidden=true}});
 })();
