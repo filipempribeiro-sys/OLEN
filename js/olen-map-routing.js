@@ -268,7 +268,7 @@ function updateInstruction(pos){
 }
 function updatePosition(c){
  const pos=coord(c);if(!pos)return false;
- last={...pos,accuracy:Number(c?.accuracy)||null};
+ last={...pos,accuracy:Number(c?.accuracy)||null,timestamp:Number(c?.timestamp)||Date.now()};
  if(map&&window.L){
    if(!userMarker)userMarker=window.L.circleMarker([pos.lat,pos.lon],{
      radius:7,color:'#fff',fillColor:'#5ba8ff',fillOpacity:1,weight:3
@@ -485,7 +485,7 @@ async function controlMap(action){
    notice(following?'A acompanhar a posição GPS.':'Acompanhamento do mapa desativado.');return true;
   }
   if(action==='Recentrar'){
-   const pos=active&&last?last:await findPosition();
+   const pos=last&&Number.isFinite(last.timestamp)&&Date.now()-last.timestamp<10000?last:await findPosition();
    if(!active)updatePosition(pos);
    map.setView([pos.lat,pos.lon],Math.max(map.getZoom(),15),{animate:false});
    notice('Mapa centrado na tua localização.');return true;
