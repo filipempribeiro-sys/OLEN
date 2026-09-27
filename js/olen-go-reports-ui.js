@@ -29,6 +29,7 @@
        const item=reports.save({type,level:['information','caution','danger'][severity?.selectedIndex||0],
          description:description?.value||'',position:position.coords});
        if(!item)throw new Error('Não foi possível guardar o report neste dispositivo.');
+       window.OLENMapRouting?.refreshReports?.();
        note.textContent='Report guardado localmente. Ainda não foi publicado na comunidade.';
        if(description)description.value='';
        popup.hidden=true;
