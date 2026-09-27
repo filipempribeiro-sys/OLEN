@@ -67,6 +67,23 @@ function start(){
  return beginSession(state,false);
 }
 
+function startFreeTracking(){
+ if(track?.snapshot()?.active)return false;
+ if(typeof navigator.geolocation?.watchPosition!=='function'){
+  window.OLENMapRouting?.reportGpsError?.({code:2});
+  return false;
+ }
+ mode="walk";
+ const started=beginSession({destination:{name:"Atividade livre"},mode},false);
+ if(started){
+  const label=$("rzGuideText"),road=$("rzRoadName"),status=$("rzStatus");
+  show("rzGuide",false);
+  if(label)label.textContent="Tracking livre · sem rota planeada";
+  if(road)road.textContent="Registo GPS da atividade";
+  if(status)status.textContent="Tracking ativo · A pé";
+ }
+ return started;
+}
 function fillSummary(){const secs=elapsed(),distance=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";$("rzFinishTitle").textContent=currentName;$("rzFinishRoute").textContent="Ponto de partida → "+currentName;$("rzFinishTime").textContent=fmt(secs);$("rzFinishDistance").textContent=distance;$("rzFinishMode").textContent=modes[mode][1]+" "+modes[mode][0];$("rzFinishStars").querySelectorAll("button").forEach(b=>b.textContent=Number(b.dataset.star)<=rating?"★":"☆")}
 function stop(){if(watch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(watch);watch=null;clearInterval(timer);track?.finish();history?.save(track?.snapshot());window.OLENGoExperience?.finish?.(track?.snapshot(),{rating,comment:$("rzFinishComment")?.value||""});window.OLENMapRouting?.stopGuidance?.();window.OLENMapRouting?.stopTrailGuidance?.();fillSummary();show("rzBottom",false);show("rzGuide",false);show("rzLive",false);show("rzWarn",false);show("rzDot",false);navigationHeader(false);show("rzIdle",true);show("rzFinishPop",true)}
 function closeSummary(){show("rzFinishPop",false)}
@@ -77,7 +94,7 @@ $("rzShareCommunity").disabled=true;
 $("rzShareExternal").onclick=async()=>{const txt="A minha experiência OLEN: "+currentName+" · "+$("rzFinishDistance").textContent+" · "+$("rzFinishTime").textContent;if(navigator.share){try{await navigator.share({title:"Experiência OLEN",text:txt})}catch(_){}}else if(navigator.clipboard){navigator.clipboard.writeText(txt);$("rzShareExternal").innerHTML="✓ <b>Copiado</b>";setTimeout(()=>$("rzShareExternal").innerHTML="↗ <b>Partilhar</b>",1400)}};
 $("rzReportIdle").onclick=$("rzReportActive").onclick=()=>show("rzReportPop",true);$("rzReportClose").onclick=()=>show("rzReportPop",false);
 document.querySelectorAll("#rzModes button").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;$("rzModeLabel").textContent=modes[mode][0];document.querySelectorAll("#rzModes button").forEach(x=>x.classList.toggle("selected",x===b))});document.querySelector("#rzModes [data-mode=walk]").classList.add("selected");
-window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null},history(){return history?.list()||[]},getCompleted(id){return history?.get(id)||null}});
+window.OLENGoActivity=Object.freeze({get current(){return track?.snapshot()||null},recover(){return track?.recover()||null},history(){return history?.list()||[]},getCompleted(id){return history?.get(id)||null},startFreeTracking,stop});
 window.OLENLegacyGo=Object.freeze({
  startRoute(name,requestedMode="walk"){
   const selected=modes[requestedMode]?requestedMode:"walk";mode=selected;
