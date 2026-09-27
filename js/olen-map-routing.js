@@ -114,7 +114,13 @@ function refreshTrack(){
  if(!map||!window.L)return;
  const points=window.OLENGoActivity?.current?.points||[];
  if(points.length<2){if(trackLine){map.removeLayer(trackLine);trackLine=null}return}
- const latlngs=points.map(p=>[p.latitude,p.longitude]);
+ const segments=[];let segment=[];
+ for(const p of points){
+  if(p.breakBefore&&segment.length){segments.push(segment);segment=[]}
+  segment.push([p.latitude,p.longitude]);
+ }
+ if(segment.length)segments.push(segment);
+ const latlngs=segments.length===1?segments[0]:segments;
  if(!trackLine){trackLine=window.L.polyline(latlngs,{color:'#62bcff',weight:4,opacity:.95,interactive:false});}
  else trackLine.setLatLngs(latlngs);
  if(trackVisible&&!map.hasLayer(trackLine))trackLine.addTo(map);
