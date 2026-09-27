@@ -10,6 +10,32 @@
  const store=(()=>{try{return window.localStorage}catch(_){return null}})();
  const catalog=window.OLENTrailsCatalog?.create({storage:store});
  let found=[],busy=false;
+ const facts=document.getElementById('rzTrailFacts');
+ function showFacts(trail){
+  if(!facts)return;
+  facts.replaceChildren();facts.hidden=false;
+  const title=document.createElement('h3');title.textContent=trail.name;facts.appendChild(title);
+  const entries=[
+    ['Referência',trail.reference],['Rede',trail.network],['Distância indicada',trail.distanceTag],
+    ['Subida indicada',trail.elevationGainTag],['Descida indicada',trail.elevationLossTag],
+    ['Duração indicada',trail.durationTag],['Formato',trail.roundtrip==='yes'?'Circular':trail.roundtrip==='no'?'Linear':null],
+    ['Partida',trail.from],['Chegada',trail.to],['Operador indicado',trail.operator],
+    ['Levantamento indicado',trail.surveyDate]
+  ];
+  const grid=document.createElement('div');grid.className='olen-trail-facts-grid';
+  entries.filter(([,value])=>Boolean(value)).forEach(([label,value])=>{
+    const item=document.createElement('div'),name=document.createElement('small'),content=document.createElement('strong');
+    name.textContent=label;content.textContent=String(value);item.append(name,content);grid.appendChild(item);
+  });
+  if(grid.childElementCount)facts.appendChild(grid);
+  if(trail.description){const description=document.createElement('p');description.textContent=trail.description;facts.appendChild(description)}
+  const source=document.createElement('a');
+  source.href=trail.provenance?.sourceUrl||'https://www.openstreetmap.org/copyright';
+  source.target='_blank';source.rel='noopener noreferrer';source.textContent='Ver origem do percurso no OpenStreetMap';
+  facts.appendChild(source);
+  const warning=document.createElement('p');warning.textContent='Fonte cartográfica OSM · acesso, estado do piso e homologação oficial não verificados.';
+  facts.appendChild(warning);
+ }
  function notice(text,error=false){
   const status=document.getElementById('olenMapStatus');
   if(status){status.textContent=text;status.hidden=!text;status.classList.toggle('error',error)}
@@ -51,6 +77,7 @@
    const selected={...trail,pointCount:trail.segments.reduce((n,seg)=>n+seg.length,0)};
    await window.OLENMapRouting.previewTrail(selected);
    destination.value=trail.name;prepare.textContent='Seguir trilho';
+   showFacts(trail);
    notice('Trilho OSM selecionado. Homologação e acesso não verificados; confirma antes de partir.');
   }catch(error){notice(error?.message||'Não foi possível apresentar o trilho.',true)}
  }
