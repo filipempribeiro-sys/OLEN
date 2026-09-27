@@ -50,8 +50,11 @@
   const lines=['<?xml version="1.0" encoding="UTF-8"?>',
    '<gpx version="1.1" creator="OLEN" xmlns="http://www.topografix.com/GPX/1/1">',
    '<metadata><name>'+name+'</name></metadata>','<trk><name>'+name+'</name><trkseg>'];
+  let first=true;
   for(const p of points){
    const [longitude,latitude]=coordinate(p?.latitude,p?.longitude);
+   if(!first&&p.breakBefore)lines.push('</trkseg><trkseg>');
+   first=false;
    let line='<trkpt lat="'+latitude+'" lon="'+longitude+'">';
    if(Number.isFinite(p.elevation))line+='<ele>'+p.elevation+'</ele>';
    if(Number.isFinite(p.timestamp)&&p.timestamp>0)line+='<time>'+new Date(p.timestamp).toISOString()+'</time>';
