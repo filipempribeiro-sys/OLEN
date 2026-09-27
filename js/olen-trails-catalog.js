@@ -70,6 +70,15 @@
       .sort((a,b)=>a.metersFromSearch-b.metersFromSearch).slice(0,MAX_TRAILS);
     const at=now();try{storage?.setItem(cacheKey,JSON.stringify({at,trails}))}catch(_){}
     return {trails,source:'openstreetmap',at};
+   }catch(error){
+    // ALPHA behavior: keep the last real OSM geometry when Overpass is down.
+    // A stale result is explicitly labelled; never present it as live data.
+    try{
+     const saved=JSON.parse(storage?.getItem(cacheKey)||'null');
+     if(Array.isArray(saved?.trails)&&saved.trails.length&&Number.isFinite(saved.at))
+      return {trails:saved.trails,source:'stale-cache',at:saved.at};
+    }catch(_){}
+    throw error;
    }finally{if(timeout!==null)clearTimeout(timeout)}
   }
   return Object.freeze({nearby});
