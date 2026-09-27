@@ -33,7 +33,10 @@
    id:'osm:relation:'+rel.id,name:String(tags.name||tags.ref||'Trilho OSM '+rel.id).slice(0,160),
    reference:String(tags.ref||'').slice(0,80),network:String(tags.network||'').slice(0,70),
    operator:String(tags.operator||'').slice(0,160),distanceTag:String(tags.distance||'').slice(0,50),
-   elevationGainTag:String(tags.ascent||'').slice(0,50),durationTag:String(tags.duration||'').slice(0,50),
+   elevationGainTag:String(tags.ascent||'').slice(0,50),elevationLossTag:String(tags.descent||'').slice(0,50),
+   durationTag:String(tags.duration||'').slice(0,50),roundtrip:String(tags.roundtrip||'').slice(0,12),
+   description:String(tags.description||'').slice(0,800),from:String(tags.from||'').slice(0,130),
+   to:String(tags.to||'').slice(0,130),surveyDate:String(tags['survey:date']||'').slice(0,30),
    center,metersFromSearch:distance(origin,center),segments,
    provenance:{type:'openstreetmap',sourceUrl,license:'ODbL',retrievedAt:new Date().toISOString(),
      official:false,homologated:false,accessStatus:'unknown'}
