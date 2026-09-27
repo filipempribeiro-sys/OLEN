@@ -21,3 +21,15 @@
 .olen-history-entry strong{font-size:14px}.olen-history-entry small{font-size:11px;color:#b3c9c0}
 .olen-explore-body .olen-history-entry button{justify-self:start;border:1px solid rgba(95,235,191,.3);background:#19443b;color:#dcfff0;border-radius:9px;padding:7px 10px;font:inherit;font-size:12px}
 @media(min-width:700px){.screen[data-screen="map"] .rz-idle>.rz-explore-entry{height:34px!important;min-height:34px!important;font-size:12px!important}}
+
+/* Technical trail facts replace the mode grid when a walking route is chosen. */
+#rzGoPop .rz-modes[hidden]{display:none!important}
+#rzGoPop .olen-trail-facts[hidden]{display:none!important}
+#rzGoPop .olen-trail-facts{border:1px solid rgba(116,245,203,.18);border-radius:13px;background:#12362e;padding:10px 12px;margin-top:8px;display:grid;gap:7px}
+#rzGoPop .olen-trail-facts h3{font-size:14px;font-weight:750;margin:0;color:#ecfff6}
+#rzGoPop .olen-trail-facts-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+#rzGoPop .olen-trail-facts-grid>div{min-width:0;display:grid;gap:3px}
+#rzGoPop .olen-trail-facts-grid small{font-size:10px;color:#a7cabe}
+#rzGoPop .olen-trail-facts-grid strong{font-size:12px;color:#e9fff6;overflow-wrap:anywhere}
+#rzGoPop .olen-trail-facts p{margin:0;font-size:11px;line-height:1.32;color:#bed5cc}
+#rzGoPop .olen-trail-facts a{font-size:11px;color:#81f2cb;overflow-wrap:anywhere}
