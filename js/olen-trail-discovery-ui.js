@@ -80,6 +80,7 @@
    const selected={...trail,pointCount:trail.segments.reduce((n,seg)=>n+seg.length,0)};
    await window.OLENMapRouting.previewTrail(selected);
    destination.value=trail.name;prepare.textContent='Seguir trilho';
+   const chooser=document.getElementById('rzGeocodeChoices');if(chooser){chooser.hidden=true;chooser.value=''}
    const modes=document.getElementById('rzModes'),label=document.getElementById('rzModeLabel');
    if(modes)modes.hidden=true;
    if(label)label.textContent='A pé · Trail GO';
