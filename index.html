@@ -1103,7 +1103,7 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
 </style>
 <style id="rz-lower-hud-step1">
 /* STEP 1 — only CHEGADA / RESTANTE / STOP + speed + report button */
-.rz-bottom{
+#rzBottom:not([hidden]){
   left:8px!important;
   right:8px!important;
   bottom:18px!important;
@@ -1112,7 +1112,7 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   gap:10px!important;
   align-items:center!important;
 }
-.rz-trip{
+#rzBottom:not([hidden]) .rz-trip{
   height:68px!important;
   display:grid!important;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr) 76px!important;
@@ -1120,11 +1120,12 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   padding:0 10px!important;
   border:.5px solid rgba(82,246,220,.52)!important;
   border-radius:21px!important;
-  background:transparent!important;
-  box-shadow:none!important;
-  backdrop-filter:none!important;
+  background:rgba(5,35,34,.94)!important;
+  box-shadow:0 4px 16px rgba(0,0,0,.24)!important;
+  -webkit-backdrop-filter:blur(8px)!important;
+  backdrop-filter:blur(8px)!important;
 }
-.rz-trip span{
+#rzBottom:not([hidden]) .rz-trip span{
   height:50px!important;
   display:flex!important;
   flex-direction:column!important;
@@ -1133,30 +1134,34 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   padding:0 8px!important;
   border-right:.5px solid rgba(82,246,220,.34)!important;
 }
-.rz-stop{
+#rzBottom:not([hidden]) .rz-stop{
   width:50px!important;
   height:50px!important;
   margin:0 auto!important;
   border-radius:50%!important;
   border:.5px solid #52f6dc!important;
-  background:transparent!important;
+  background:rgba(8,45,42,.96)!important;
+  color:#effff8!important;
+  -webkit-text-fill-color:#effff8!important;
   display:grid!important;
   place-items:center!important;
-  box-shadow:none!important;
+  box-shadow:0 2px 10px rgba(0,0,0,.19)!important;
 }
-.rz-speed{
+#rzBottom:not([hidden]) .rz-speed{
   position:relative!important;
   width:66px!important;
   height:66px!important;
   border-radius:50%!important;
   border:0!important;
-  background:transparent!important;
+  background:rgba(5,35,34,.94)!important;
+  color:#effff8!important;
+  -webkit-text-fill-color:#effff8!important;
   display:grid!important;
   place-items:center!important;
   align-content:center!important;
   box-shadow:none!important;
 }
-.rz-speed::before{
+#rzBottom:not([hidden]) .rz-speed::before{
   content:""!important;
   position:absolute!important;
   inset:0!important;
@@ -1168,7 +1173,7 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   mask-composite:exclude!important;
   pointer-events:none!important;
 }
-.rz-plus{
+#rzBottom:not([hidden]) .rz-plus{
   position:relative!important;
   width:66px!important;
   height:66px!important;
@@ -1176,7 +1181,7 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   padding:0!important;
   border:0!important;
   border-radius:50%!important;
-  background:transparent!important;
+  background:rgba(5,35,34,.94)!important;
   display:grid!important;
   place-items:center!important;
   font-size:46px!important;
@@ -1186,7 +1191,7 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   -webkit-text-fill-color:#52f6dc!important;
   box-shadow:0 0 18px rgba(82,246,220,.10)!important;
 }
-.rz-plus::before{
+#rzBottom:not([hidden]) .rz-plus::before{
   content:""!important;
   position:absolute!important;
   inset:0!important;
@@ -1199,6 +1204,23 @@ radial-gradient(ellipse at 2% 64%,rgba(0,58,66,.58) 0 18%,transparent 18.5%)}
   pointer-events:none!important;
 }
 
+#rzBottom:not([hidden]) .rz-trip b,
+#rzBottom:not([hidden]) .rz-speed b{
+  color:#f4fff9!important;
+  -webkit-text-fill-color:#f4fff9!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.4)!important;
+}
+#rzBottom:not([hidden]) .rz-trip small,
+#rzBottom:not([hidden]) .rz-speed small{
+  color:#c0e0d4!important;
+  -webkit-text-fill-color:#c0e0d4!important;
+  text-shadow:0 1px 2px rgba(0,0,0,.4)!important;
+}
+#rzBottom:not([hidden]) .rz-trip span:nth-child(2) b{
+  font-size:clamp(13px,3.7vw,16px)!important;
+  line-height:1.2!important;
+  overflow-wrap:normal!important;
+}
 /* STOP owns the HUD state: no controls displayed outside active GO. */
 #rzBottom[hidden]{display:none!important}
 @media(max-width:430px){
