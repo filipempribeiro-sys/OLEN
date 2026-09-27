@@ -8,7 +8,7 @@
 })(typeof window!=='undefined'?window:null,function(){
   'use strict';
   const KEY='olen:go:activity:v1';
-  const MAX_ACCURACY=65,MAX_POINTS=20000;
+  const MAX_ACCURACY=65,MAX_POINTS=20000,MAX_GAP_SECONDS=45;
   const MODE_MAX_SPEED=Object.freeze({walk:5,bike:23,scooter:20,moto:65,car:65,camper:45,transit:65});
   const clone=x=>JSON.parse(JSON.stringify(x));
   function distance(a,b){
@@ -34,7 +34,7 @@
       const now=Number(options.startedAt)||Date.now();
       state={version:1,id:String(options.id||now),name:String(options.name||'Destino').slice(0,105),
         mode:String(options.mode||'walk'),startedAt:now,finishedAt:null,active:true,
-        distanceMeters:0,points:[],rejected:0};
+        distanceMeters:0,points:[],rejected:0,segmentPending:false};
       persist();return snapshot();
     }
     function ingest(raw){
@@ -46,6 +46,11 @@
       if(previous){
         const dt=(p.timestamp-previous.timestamp)/1000;
         if(dt<=0){state.rejected++;return {accepted:false,reason:'timestamp',state:snapshot()}}
+        // A long GPS outage or explicit resume never implies travel between fixes.
+        if(state.segmentPending||dt>MAX_GAP_SECONDS){
+          p.breakBefore=true;state.segmentPending=false;state.points.push(p);persist();
+          return {accepted:true,reason:'segment-start',state:snapshot()};
+        }
         const meters=distance(previous,p);
         const tolerance=Math.min(20,Math.max(previous.accuracy,p.accuracy));
         const speedLimit=MODE_MAX_SPEED[state.mode]??MODE_MAX_SPEED.walk;
@@ -58,9 +63,11 @@
         }
         state.distanceMeters+=meters;
       }
+      if(state.segmentPending){p.breakBefore=!!previous;state.segmentPending=false}
       state.points.push(p);persist();
       return {accepted:true,reason:'ok',state:snapshot()};
     }
+    function markSegmentBreak(){if(!state?.active)return false;state.segmentPending=true;persist();return true}
     function finish(now=Date.now()){
       if(!state)return null;
       if(state.active){state.active=false;state.finishedAt=Math.max(state.startedAt,Number(now)||Date.now());persist()}
@@ -76,7 +83,7 @@
       return null;
     }
     function clear(){state=null;try{storage?.removeItem(KEY)}catch(_){}}
-    return Object.freeze({start,ingest,finish,recover,clear,snapshot});
+    return Object.freeze({start,ingest,markSegmentBreak,finish,recover,clear,snapshot});
   }
   return Object.freeze({createRecorder,distance,normalize,KEY});
 });
