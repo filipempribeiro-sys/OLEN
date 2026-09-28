@@ -47,9 +47,20 @@
      const d=distance(points[i],location);if(d<meters){meters=d;best=i}
     }
     if(best<0||meters>150)continue;
-    const [type,instruction]=direction(step.maneuver);
+    const [type,baseInstruction]=direction(step.maneuver);
+    const exit=Number(step.maneuver?.exit);
+    const exitNumber=Number.isInteger(exit)&&exit>=1&&exit<=12?exit:null;
+    const instruction=type==='roundabout'&&exitNumber!==null
+      ?'Na rotunda, segue pela '+exitNumber+'.ª saída.':baseInstruction;
     const road=String(step.name||'').slice(0,130);
+    const lanes=(Array.isArray(step.intersections)?step.intersections:[])
+      .flatMap(intersection=>Array.isArray(intersection.lanes)?intersection.lanes:[])
+      .slice(0,12).map(lane=>({valid:lane.valid===true,active:lane.active===true,
+        indications:Array.isArray(lane.indications)?lane.indications.filter(x=>typeof x==='string').slice(0,5):[]}));
     maneuvers.push({type,pointIndex:best,instruction,road,
+      ...(exitNumber===null?{}:{exitNumber}),
+      ...(step.driving_side==='left'||step.driving_side==='right'?{drivingSide:step.driving_side}:{}),
+      ...(lanes.length?{lanes}:{}),
       distanceMeters:Number.isFinite(step.distance)?Math.max(0,step.distance):0});
    }
   }
