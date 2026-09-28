@@ -22,6 +22,7 @@
   if(type==='merge')return ['merge','Entra na via indicada'];
   if(type==='on ramp'||type==='off ramp')return ['merge','Segue a ligação indicada'];
   const normalized=modifier.replace(/\s+/g,'-');
+  if(normalized==='straight'||type==='continue'||type==='new name')return ['straight','Continua no percurso indicado'];
   if(normalized==='right')return ['turn-right','Vira à direita'];
   if(normalized==='left')return ['turn-left','Vira à esquerda'];
   if(normalized==='slight-right')return ['slight-right','Segue ligeiramente à direita'];
@@ -29,7 +30,7 @@
   if(normalized==='sharp-right')return ['sharp-right','Vira acentuadamente à direita'];
   if(normalized==='sharp-left')return ['sharp-left','Vira acentuadamente à esquerda'];
   if(normalized==='uturn')return ['uturn','Inverte o sentido de marcha'];
-  return ['straight','Continua no percurso indicado'];
+  return ['unknown','Confirma a próxima indicação no mapa'];
  }
  function fromRoute(raw,mode,source){
   const geometry=raw?.geometry,points=geometry?.coordinates;
