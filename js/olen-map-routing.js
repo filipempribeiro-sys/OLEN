@@ -245,18 +245,26 @@ function stepFor(positionIndex){
    Unknown types must remain neutral; never invent a straight-ahead instruction. */
 function maneuverType(type){
  if(typeof type==='string'&&new Set(['start','finish','straight','slight-right','turn-right',
-   'sharp-right','uturn','sharp-left','turn-left','slight-left','merge','roundabout','ferry']).has(type))return type;
+   'sharp-right','uturn','sharp-left','turn-left','slight-left','merge','keep-right','keep-left',
+   'exit-right','roundabout','ferry','unknown']).has(type))return type;
  const n=Number(type);
- if([4,5,6].includes(n))return 'finish';
+ // Valhalla ManeuverType: keep safe one-to-one semantics. Ramp directions are
+ // deliberately neutral until their dedicated visual identity is audited.
  if([1,2,3].includes(n))return 'start';
- if([9,18,20,23].includes(n))return 'slight-right';
- if([10].includes(n))return 'turn-right';
- if([11].includes(n))return 'sharp-right';
+ if([4,5,6].includes(n))return 'finish';
+ if([7,8,22].includes(n))return 'straight';
+ if(n===9)return 'slight-right';
+ if(n===10)return 'turn-right';
+ if(n===11)return 'sharp-right';
  if([12,13].includes(n))return 'uturn';
- if([14].includes(n))return 'sharp-left';
- if([15].includes(n))return 'turn-left';
- if([16,19,21,24].includes(n))return 'slight-left';
- if([25].includes(n))return 'merge';
+ if(n===14)return 'sharp-left';
+ if(n===15)return 'turn-left';
+ if(n===16)return 'slight-left';
+ if([17,18,19,21].includes(n))return 'unknown';
+ if(n===20)return 'exit-right';
+ if(n===23)return 'keep-right';
+ if(n===24)return 'keep-left';
+ if(n===25)return 'merge';
  if([26,27].includes(n))return 'roundabout';
  if([28,29].includes(n))return 'ferry';
  return 'unknown';
