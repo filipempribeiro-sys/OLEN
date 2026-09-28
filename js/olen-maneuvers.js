@@ -10,6 +10,7 @@ function pad(n){return String(n).padStart(2,"0")}
 function asset(n){return BASE+"olen-maneuver-"+pad(n)+".png"}
 var visualKeys=["straight","turn-right","turn-left","slight-right","slight-left","sharp-left","sharp-right","curve-right","fork-left","fork-right","merge","keep-right","uturn","fork","split","straight-or-right","straight-or-left","keep-right-branch","keep-left-branch","curve-right-alt","straight-or-right-alt","motorway","exit-right","lane-straight","motorway-crossing","motorway-end","bend-right","keep-right-lane","keep-left-lane","branch-left","turn-right-alt","branch-right","turn-left-alt","branch-left-alt","fork-left-alt","turn-right-sharp-alt","keep-left-alt","uturn-right","uturn-left","roundabout","roundabout-alt","roundabout-four-way","roundabout-three-way","roundabout-exit","roundabout-more","roundabout-exit-1","roundabout-exit-2","roundabout-exit-3","roundabout-exit-4","roundabout-exit-5","roundabout-exit-5-alt","roundabout-exit-6","finish","start","location-pin","turn-right-marker","waypoint","information","warning","roadworks","incident","slippery-road","car","pedestrian","walking","ferry","ferry-alt","carpool","car-alt","fuel","motorway-junction","tunnel","mountain","cycle-crossing","lane-narrowing","car-front","road","waypoint-marker","truck","ferry-service","road-label","fuel-alt","motorway-alt","uturn-alt","mountain-alt","snow","camper","fuel-station","cafe","parking","lane-guidance"];
 var registry=Object.create(null);
+var UNKNOWN=Object.freeze({id:0,key:"unknown",asset:null,layer:"guidance",label:"Manobra não reconhecida"});
 visualKeys.forEach(function(key,index){var id=index+1;registry[id]=Object.freeze({id:id,key:key,asset:asset(id),layer:id<=52?"guidance":"context"})});
 registry[74]=Object.freeze({id:74,key:"camper",asset:asset(74),layer:"mobility",label:"Autocaravana"});
 [[92,"plane","Avião"],[93,"motorcycle","Mota"],[94,"scooter","Trotineta"],[95,"bicycle","Bicicleta"],[96,"helicopter","Helicóptero"]].forEach(function(x){registry[x[0]]=Object.freeze({id:x[0],key:x[1],asset:asset(x[0]),layer:"mobility",label:x[2]})});
@@ -28,13 +29,14 @@ function providerKey(input){
  };
  if(p.indexOf("google")>=0&&google[key])return google[key];
  if(p.indexOf("mapbox")>=0){
-   if(key==="turn"||key==="continue"||key==="new-name"||key==="roundabout-turn")return mod||"straight";
+   if(key==="turn"||key==="roundabout-turn")return mod||"unknown";
+   if(key==="continue"||key==="new-name")return "straight";
    if(key==="depart")return "start";
    if(key==="arrive")return "arrive";
    if(key==="merge")return "merge";
-   if(key==="fork")return mod==="left"?"fork-left":mod==="right"?"fork-right":"straight";
-   if(key==="end-of-road")return mod||"straight";
-   if(key==="on-ramp"||key==="off-ramp")return mod||"straight";
+   if(key==="fork")return mod==="left"?"fork-left":mod==="right"?"fork-right":"unknown";
+   if(key==="end-of-road")return mod||"unknown";
+   if(key==="on-ramp"||key==="off-ramp")return mod||"unknown";
    if(key==="roundabout"||key==="rotary"||key==="exit-roundabout"||key==="exit-rotary"){
      var ex=Number(input.exit||input.exitNumber||input.exit_number);
      return ex>=1&&ex<=6?"roundabout-exit-"+ex:"roundabout";
@@ -71,15 +73,15 @@ function providerKey(input){
  if(key==="roundabout"||key==="rotary"){var exit=Number(input.exit||input.exitNumber||input.exit_number);if(exit>=1&&exit<=6)return "roundabout-exit-"+exit;return "roundabout"}
  if(key==="arrive"||key==="arrival"||key==="destination")return "arrive";
  if(key==="depart"||key==="departure")return "start";
- if(key==="continue"||key==="new-name"||key==="name-change"||key==="notification")return "straight";
- if(key==="on-ramp"||key==="off-ramp"||key==="ramp")return mod||"straight";
+ if(key==="continue"||key==="new-name"||key==="name-change")return "straight";
+ if(key==="on-ramp"||key==="off-ramp"||key==="ramp")return mod||"unknown";
  if(key==="merge"||key==="ferry"||key==="uturn"||key==="u-turn")return key;
  return raw;
 }
-function resolve(input){if(typeof input==="number"&&registry[input])return registry[input];if(input&&typeof input==="object"){if(Number.isInteger(input.id)&&registry[input.id])return registry[input.id];input=providerKey(input)}var key=normalize(input),id=aliases[key];if(!id){for(var i=1;i<=96;i++)if(registry[i]&&registry[i].key===key){id=i;break}}return registry[id||1]}
-function ensureImage(){var oldSvg=document.getElementById("rzManeuverPath"),host=oldSvg&&oldSvg.closest("svg");if(!host)host=document.querySelector("#rzGuide svg");if(!host)return null;var img=document.getElementById("olenManeuverIcon");if(!img){img=document.createElement("img");img.id="olenManeuverIcon";img.alt="";img.setAttribute("aria-hidden","true");img.style.cssText="width:64px;height:64px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(65,255,222,.18));";host.insertAdjacentElement("afterend",img)}host.style.display="none";return img}
-function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img&&img.getAttribute("src")!==item.asset)img.setAttribute("src",item.asset);return item}
-function set(data){data=data||{};var item=render(data.id||data.type||data.key||data.maneuver||data.action||1),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");if(t&&data.instruction!=null)t.textContent=data.instruction;if(r&&data.road!=null)r.textContent=data.road;if(line)line.hidden=data.road===false||data.road==="";if(d&&data.distance!=null)d.textContent=data.distance;return item}
+function resolve(input){if(typeof input==="number"&&registry[input])return registry[input];if(input&&typeof input==="object"){if(Number.isInteger(input.id)&&registry[input.id])return registry[input.id];input=providerKey(input)}var key=normalize(input),id=aliases[key];if(!id){for(var i=1;i<=96;i++)if(registry[i]&&registry[i].key===key){id=i;break}}return registry[id]||UNKNOWN}
+function ensureImage(){var oldSvg=document.getElementById("rzManeuverPath"),host=oldSvg&&oldSvg.closest("svg");if(!host)host=document.querySelector("#rzGuide svg");if(!host)return null;var img=document.getElementById("olenManeuverIcon");if(!img){img=document.createElement("img");img.id="olenManeuverIcon";img.alt="";img.setAttribute("aria-hidden","true");img.style.cssText="width:64px;height:64px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(65,255,222,.18));";host.insertAdjacentElement("afterend",img)}img.onerror=function(){img.hidden=true};host.style.display="none";return img}
+function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img){if(!item.asset){img.hidden=true;img.removeAttribute("src")}else{img.hidden=false;if(img.getAttribute("src")!==item.asset)img.setAttribute("src",item.asset)}}return item}
+function set(data){data=data||{};var item=render(data),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");if(t&&data.instruction!=null)t.textContent=data.instruction;else if(t&&item.id===0)t.textContent="Confirma a próxima indicação no mapa.";if(r&&data.road!=null)r.textContent=data.road;if(line)line.hidden=data.road===false||data.road==="";if(d&&data.distance!=null)d.textContent=data.distance;return item}
 var api=Object.freeze({version:VERSION,registry:registry,aliases:aliases,asset:asset,providerKey:providerKey,resolve:resolve,render:render,set:set});
 global.OLENManeuvers=api;
 var previous=global.OLENNavigationGuide||{};
