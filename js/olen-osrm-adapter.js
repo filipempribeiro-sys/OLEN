@@ -53,10 +53,14 @@
     const instruction=type==='roundabout'&&exitNumber!==null
       ?'Na rotunda, segue pela '+exitNumber+'.ª saída.':baseInstruction;
     const road=String(step.name||'').slice(0,130);
-    const lanes=(Array.isArray(step.intersections)?step.intersections:[])
-      .flatMap(intersection=>Array.isArray(intersection.lanes)?intersection.lanes:[])
-      .slice(0,12).map(lane=>({valid:lane.valid===true,active:lane.active===true,
-        indications:Array.isArray(lane.indications)?lane.indications.filter(x=>typeof x==='string').slice(0,5):[]}));
+    // Lanes are left-to-right within ONE intersection, never across separate
+    // intersections: combining them would invent a lane index.
+    const intersection=(Array.isArray(step.intersections)?step.intersections:[])
+      .find(value=>Array.isArray(value.lanes)&&value.lanes.length);
+    const lanes=(intersection?.lanes||[]).slice(0,12).map(lane=>({
+      valid:lane.valid===true,active:lane.active===true,
+      indications:Array.isArray(lane.indications)?lane.indications.filter(x=>typeof x==='string').slice(0,5):[]
+    }));
     maneuvers.push({type,pointIndex:best,instruction,road,
       ...(exitNumber===null?{}:{exitNumber}),
       ...(step.driving_side==='left'||step.driving_side==='right'?{drivingSide:step.driving_side}:{}),
