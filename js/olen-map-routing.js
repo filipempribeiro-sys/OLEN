@@ -279,7 +279,7 @@ function updateInstruction(pos){
  const nextMeters=step?.pointIndex!=null&&curve[step.pointIndex]?
    Math.max(0,curve[step.pointIndex].meters-progress):remaining;
  const displayDistance=formatDistance(nextMeters);
- const resolvedType=remaining<25?'finish':(step?.provider?step.type:maneuverType(step?.type));
+ const resolvedType=remaining<25?'finish':(step?.provider&&typeof step.type==='string'?step.type:maneuverType(step?.type));
  const instructionKey=(step?.pointIndex??-1)+'|'+String(resolvedType)+'|'+
    (step?.exitNumber??step?.exit??'')+'|'+text;
  if(window.OLENNavigationGuide?.set){
