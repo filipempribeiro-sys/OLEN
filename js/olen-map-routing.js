@@ -209,6 +209,35 @@ async function resolveRoute(start,target,selectedMode){
   }
  }
 }
+function normalizeRouteManeuvers(routeResult){
+ if(!routeResult||typeof routeResult!=='object'||!Array.isArray(routeResult.maneuvers))return routeResult;
+ const provider=String(routeResult.provider||routeResult.engine||routeResult.source||'').toLowerCase();
+ const maneuvers=routeResult.maneuvers.map(step=>{
+  if(!step||typeof step!=='object')return step;
+  const rawIndex=step.pointIndex??step.beginShapeIndex??step.begin_shape_index;
+  const pointIndex=Number(rawIndex);
+  const rawExit=step.exitNumber??step.exit??step.roundaboutExitNumber??
+    step.roundabout_exit_count??step.roundaboutExitCount;
+  const exitNumber=Number(rawExit);
+  const streetNames=Array.isArray(step.street_names)?step.street_names:
+    Array.isArray(step.streetNames)?step.streetNames:[];
+  const beginStreetNames=Array.isArray(step.begin_street_names)?step.begin_street_names:
+    Array.isArray(step.beginStreetNames)?step.beginStreetNames:[];
+  const road=step.road??step.street??streetNames[0]??beginStreetNames[0]??'';
+  const instruction=step.instruction??step.instructions??'';
+  const looksValhalla=Number.isFinite(Number(step.type))||
+    'begin_shape_index' in step||'roundabout_exit_count' in step||provider.includes('valhalla');
+  return {
+   ...step,
+   ...(Number.isSafeInteger(pointIndex)&&pointIndex>=0?{pointIndex}:{}),
+   ...(Number.isInteger(exitNumber)&&exitNumber>=1&&exitNumber<=12?{exitNumber}:{}),
+   ...(road?{road:String(road).slice(0,160)}:{}),
+   ...(instruction?{instruction:String(instruction).slice(0,500)}:{}),
+   ...(!step.provider&&looksValhalla?{provider:'valhalla'}:{})
+  };
+ });
+ return {...routeResult,maneuvers};
+}
 function validated(routeResult,start,target,selectedMode){
  const geo=routeResult?.geometry;
  if(!routeResult?.ok||routeResult.mode!==selectedMode||
@@ -443,7 +472,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
    if(current!==serial)return false;
    last=position;draw();
    notice('A calcular o percurso confirmado…');
-   const candidate=await resolveRoute(position,target,mode);
+   const candidate=normalizeRouteManeuvers(await resolveRoute(position,target,mode));
    if(current!==serial)return false;
    if(!validated(candidate,position,target,mode))
      throw new Error('O serviço não devolveu um traçado verificável. Não será iniciada navegação.');
