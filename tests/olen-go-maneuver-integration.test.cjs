@@ -10,7 +10,7 @@ function driver(step){
  assert.ok(start>=0&&end>start);
  const nodes=new Map();
  function node(id){if(!nodes.has(id))nodes.set(id,{textContent:'',
-  querySelector(){return {textContent:''}},querySelectorAll(){return []}});return nodes.get(id)}
+  querySelector(){return {textContent:'',querySelectorAll(){return []}}},querySelectorAll(){return []}});return nodes.get(id)}
  const calls=[],window={OLENNavigationGuide:{set:data=>calls.push(data)},L:null};
  const route={distanceMeters:2000,durationSeconds:1200,maneuvers:step?[step]:[]};
  const curve=[{meters:0,point:{lat:38,lon:-9}},{meters:800,point:{lat:38.01,lon:-9.01}}];
