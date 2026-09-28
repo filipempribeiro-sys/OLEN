@@ -39,3 +39,16 @@ No URL habitual `https://olen-chat-teste.pages.dev/`, após deployment do commit
 
 ## Pós-primeira publicação — lane guidance
 A versão inicial publicada foi `9dd0955023987bb7d378d07b0fa5311ec65f99f5`. Seguiram-se commits isolados para assegurar que metadados `lanes` de interseções diferentes não são fundidos e que a faixa ativa/validada aparece na linha de indicação do HUD. Este documento continua a exigir validação de Cloudflare/telemóvel antes da aceitação final.
+
+
+## Fecho técnico adicional — preparação para validação do utilizador
+O ramo inicial de trabalho e o ramo que alimenta o Cloudflare estavam ambos em `74653c7b100b7ac2922b0d6842f3073e9108920b` ao início desta continuação. Foi criado ramo isolado `olen-maneuvers-field-safety-20260928` a partir desse commit. Não foram alterados o rollback bloqueado, `main`, o design/CSS, Chat, Agenda, Home ou Perfil.
+
+- Saída do percurso confirmado: ao ultrapassar 130 m do traçado, o router deixa de manter no HUD a última seta de viragem; emite estado neutro `unknown`, instrução explícita de confirmar a posição, distância `—` e limpa as indicações de faixa. Repetidos fixes fora da rota não reescrevem o HUD. Ao regressar ao traçado, a manobra real e a informação de faixa são recuperadas.
+- Mudança de GO rodoviário para Trail GO: a indicação visual da estrada anterior é anulada antes da primeira localização GPS do trilho; o texto passa a indicar o trilho GPX e que a homologação está por verificar.
+- Falha de imagem PNG: um asset que deu erro mantém-se escondido nas atualizações seguintes da mesma manobra. Um novo asset válido pode carregar, sem reutilizar uma seta falhada.
+- Inventário de assets: a árvore GitHub do commit de base não estava truncada e continha os 96 caminhos `assets/maneuvers/olen-maneuver-01.png` a `olen-maneuver-96.png`, sem números em falta. Isto verifica existência no Git, não identidade visual nem capacidade de o browser carregar todos os PNG.
+- Testes: 38/38 casos distribuídos por 6 suites executados com as fontes atuais recuperadas pelo conector GitHub, num ambiente JavaScript isolado com APIs Node simuladas. Sintaxe dos quatro módulos verificada. A execução Node nativa no repositório não foi possível neste ambiente porque a resolução DNS de `github.com` falhou. Não chamar a estes testes «testes GPS real», «browser visual» ou «homologação».
+- Critérios de validação no URL habitual: deployment Cloudflare do commit efetivamente publicado, troca sucessiva direita/esquerda/rotunda com saída numerada, ausência de seta fictícia quando não há dados, modo Trail GO sem seta rodoviária herdada, saída da rota com indicação neutra e recuperação depois do regresso, STOP limpa o HUD, GO/Reportar visíveis fora do GO. Os testes de terreno são do utilizador em contexto seguro e nunca manipulando o ecrã durante a condução.
+
+O objetivo desta publicação é **pronto para validação manual**, não certificação de navegação em produção ou Android Auto.
