@@ -210,3 +210,9 @@ test('unknown provider step clears stale road and stale distance safely',()=>{
  assert.equal(nodes.get('rzRoadLine').hidden,true);
  assert.equal(nodes.get('rzNextDistance').textContent,'—');
 });
+
+test('Mapbox numeric step distance is formatted as metres for the HUD',()=>{
+ const {guide,nodes}=load();
+ guide.set({provider:'mapbox',maneuver:{type:'turn',modifier:'right'},instruction:'Vira à direita',name:'Rua B',distance:236.9});
+ assert.equal(nodes.get('rzNextDistance').textContent,'237 m');
+});
