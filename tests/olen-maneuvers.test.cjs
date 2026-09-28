@@ -146,3 +146,37 @@ test('HERE action plus direction and TomTom instructionType use safe provider fi
  assert.equal(api.resolve({provider:'here',action:'keep',direction:'right'}).id,12);
  assert.equal(api.resolve({provider:'tomtom',instructionType:'TURN_RIGHT'}).id,2);
 });
+
+test('Google Routes documented maneuver enum has deterministic safe visual resolution',()=>{
+ const {api}=load();
+ const cases={
+  TURN_SLIGHT_LEFT:5,TURN_SHARP_LEFT:6,UTURN_LEFT:39,TURN_LEFT:3,
+  TURN_SLIGHT_RIGHT:4,TURN_SHARP_RIGHT:7,UTURN_RIGHT:38,TURN_RIGHT:2,
+  STRAIGHT:1,RAMP_LEFT:0,RAMP_RIGHT:0,MERGE:11,FORK_LEFT:9,FORK_RIGHT:10,
+  FERRY:66,FERRY_TRAIN:66,ROUNDABOUT_LEFT:40,ROUNDABOUT_RIGHT:40,DEPART:54,NAME_CHANGE:1,
+  MANEUVER_UNSPECIFIED:0
+ };
+ for(const [type,id] of Object.entries(cases))assert.equal(api.resolve({provider:'google',type}).id,id,type);
+});
+test('Mapbox documented maneuver types resolve safely, including numbered roundabouts',()=>{
+ const {api}=load();
+ const samples=[
+  [{provider:'mapbox',type:'turn',modifier:'right'},2],
+  [{provider:'mapbox',type:'new name'},1],
+  [{provider:'mapbox',type:'depart'},54],
+  [{provider:'mapbox',type:'arrive'},53],
+  [{provider:'mapbox',type:'merge',modifier:'right'},11],
+  [{provider:'mapbox',type:'on ramp',modifier:'right'},0],
+  [{provider:'mapbox',type:'off ramp',modifier:'left'},0],
+  [{provider:'mapbox',type:'fork',modifier:'left'},9],
+  [{provider:'mapbox',type:'end of road',modifier:'left'},3],
+  [{provider:'mapbox',type:'continue',modifier:'straight'},1],
+  [{provider:'mapbox',type:'roundabout',exitNumber:2},47],
+  [{provider:'mapbox',type:'rotary'},40],
+  [{provider:'mapbox',type:'roundabout turn',exitNumber:3},48],
+  [{provider:'mapbox',type:'notification',mode:'ferry'},66],
+  [{provider:'mapbox',type:'exit roundabout',exitNumber:4},49],
+  [{provider:'mapbox',type:'exit rotary',exitNumber:5},50]
+ ];
+ for(const [input,id] of samples)assert.equal(api.resolve(input).id,id,JSON.stringify(input));
+});
