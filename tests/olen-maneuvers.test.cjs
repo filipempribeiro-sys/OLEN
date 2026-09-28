@@ -6,7 +6,7 @@ const path=require('node:path');
 const source=fs.readFileSync(path.join(__dirname,'../js/olen-maneuvers.js'),'utf8');
 function load(){
  const nodes=new Map();
- const img={hidden:false,attrs:{},style:{},setAttribute(k,v){this.attrs[k]=v},
+ const img={hidden:false,attrs:{},style:{},dataset:{},setAttribute(k,v){this.attrs[k]=v},
   getAttribute(k){return this.attrs[k]||null},removeAttribute(k){delete this.attrs[k]}};
  const svg={style:{display:''},insertAdjacentElement(_where,element){nodes.set(element.id,element)}};
  const pathNode={closest:()=>svg};
@@ -115,4 +115,17 @@ test('uncertified motorway ramp types do not display ordinary turn arrows',()=>{
   {provider:'tomtom',type:'motorwayExitLeft'}
  ];
  for(const sample of samples)assert.equal(api.resolve(sample).key,'unknown');
+});
+
+test('a failed PNG remains hidden on repeated fixes but a different maneuver can load',()=>{
+ const {guide,img}=load();
+ guide.set({type:'turn-right',instruction:'Vira à direita'});
+ img.onerror();
+ assert.equal(img.hidden,true);
+ guide.set({type:'turn-right',instruction:'Vira à direita',distance:'20 m'});
+ assert.equal(img.hidden,true);
+ guide.set({type:'turn-left',instruction:'Vira à esquerda'});
+ assert.equal(img.attrs.src,'assets/maneuvers/olen-maneuver-03.png');
+ img.onload();
+ assert.equal(img.hidden,false);
 });
