@@ -105,3 +105,14 @@ test('camelCase and SCREAMING_SNAKE_CASE provider variants are equivalent',()=>{
  assert.equal(api.resolve({provider:'google',type:'TURN_RIGHT'}).id,2);
  assert.equal(api.resolve({provider:'mapbox',type:'roundaboutTurn',exitNumber:2}).id,47);
 });
+
+test('uncertified motorway ramp types do not display ordinary turn arrows',()=>{
+ const {api}=load();
+ const samples=[
+  {provider:'google',type:'RAMP_RIGHT'},
+  {provider:'mapbox',type:'on ramp',modifier:'right'},
+  {provider:'tomtom',type:'TAKE_EXIT'},
+  {provider:'tomtom',type:'motorwayExitLeft'}
+ ];
+ for(const sample of samples)assert.equal(api.resolve(sample).key,'unknown');
+});
