@@ -88,6 +88,10 @@ function ensureImage(){var oldSvg=document.getElementById("rzManeuverPath"),host
 img.onload=function(){img.dataset.olenFailedAsset="";img.hidden=false};
 host.style.display="none";return img}
 function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img){
+ var side=normalize(maneuver&&typeof maneuver==="object"?(maneuver.drivingSide||maneuver.driving_side||""):"");
+ var isRoundabout=item.key==="roundabout"||item.key.indexOf("roundabout-exit-")===0;
+ img.style.transform=isRoundabout&&side==="left"?"scaleX(-1)":"";
+ img.style.transformOrigin="50% 50%";
  if(!item.asset){img.hidden=true;img.removeAttribute("src")}
  else if(img.dataset.olenFailedAsset===item.asset){img.hidden=true}
  else{img.hidden=false;if(img.getAttribute("src")!==item.asset)img.setAttribute("src",item.asset)}
