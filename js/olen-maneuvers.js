@@ -5,7 +5,7 @@
    Extra assets: 92 plane, 93 motorcycle, 94 scooter, 95 bicycle, 96 helicopter.
 */
 (function(global){"use strict";
-var VERSION="1.0.0",BASE="assets/maneuvers/";
+var VERSION="1.1.0",BASE="assets/maneuvers/";
 function pad(n){return String(n).padStart(2,"0")}
 function asset(n){return BASE+"olen-maneuver-"+pad(n)+".png"}
 var visualKeys=["straight","turn-right","turn-left","slight-right","slight-left","sharp-left","sharp-right","curve-right","fork-left","fork-right","merge","keep-right","uturn","fork","split","straight-or-right","straight-or-left","keep-right-branch","keep-left-branch","curve-right-alt","straight-or-right-alt","motorway","exit-right","lane-straight","motorway-crossing","motorway-end","bend-right","keep-right-lane","keep-left-lane","branch-left","turn-right-alt","branch-right","turn-left-alt","branch-left-alt","fork-left-alt","turn-right-sharp-alt","keep-left-alt","uturn-right","uturn-left","roundabout","roundabout-alt","roundabout-four-way","roundabout-three-way","roundabout-exit","roundabout-more","roundabout-exit-1","roundabout-exit-2","roundabout-exit-3","roundabout-exit-4","roundabout-exit-5","roundabout-exit-5-alt","roundabout-exit-6","finish","start","location-pin","turn-right-marker","waypoint","information","warning","roadworks","incident","slippery-road","car","pedestrian","walking","ferry","ferry-alt","carpool","car-alt","fuel","motorway-junction","tunnel","mountain","cycle-crossing","lane-narrowing","car-front","road","waypoint-marker","truck","ferry-service","road-label","fuel-alt","motorway-alt","uturn-alt","mountain-alt","snow","camper","fuel-station","cafe","parking","lane-guidance"];
