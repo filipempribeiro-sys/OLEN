@@ -66,3 +66,11 @@ test('lane indices never combine different OSRM intersections',()=>{
  assert.equal(result.maneuvers[0].lanes.length,2);
  assert.equal(result.maneuvers[0].lanes[1].active,true);
 });
+
+test('OSRM fork directions map safely while ramps remain neutral until audited',()=>{
+ assert.equal(direction({type:'fork',modifier:'left'})[0],'fork-left');
+ assert.equal(direction({type:'fork',modifier:'right'})[0],'fork-right');
+ assert.equal(direction({type:'fork'})[0],'unknown');
+ assert.equal(direction({type:'on ramp',modifier:'right'})[0],'unknown');
+ assert.equal(direction({type:'off ramp',modifier:'left'})[0],'unknown');
+});
