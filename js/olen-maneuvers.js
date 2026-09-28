@@ -16,6 +16,7 @@ registry[74]=Object.freeze({id:74,key:"camper",asset:asset(74),layer:"mobility",
 [[92,"plane","Avião"],[93,"motorcycle","Mota"],[94,"scooter","Trotineta"],[95,"bicycle","Bicicleta"],[96,"helicopter","Helicóptero"]].forEach(function(x){registry[x[0]]=Object.freeze({id:x[0],key:x[1],asset:asset(x[0]),layer:"mobility",label:x[2]})});
 var aliases=Object.freeze({"straight":1,"continue":1,"depart":1,"right":2,"turn-right":2,"left":3,"turn-left":3,"slight-right":4,"slight-left":5,"sharp-left":6,"sharp-right":7,"curve-right":8,"fork-left":9,"fork-right":10,"merge":11,"keep-right":12,"uturn":13,"u-turn":13,"keep-left":37,"roundabout":40,"roundabout-exit-1":46,"roundabout-exit-2":47,"roundabout-exit-3":48,"roundabout-exit-4":49,"roundabout-exit-5":50,"roundabout-exit-6":52,"finish":53,"arrive":53,"arrival":53,"start":54,"location":55,"location-pin":55,"waypoint":57,"information":58,"warning":59,"roadworks":60,"incident":61,"slippery-road":62,"car":63,"pedestrian":64,"walking":65,"walk":65,"ferry":66,"carpool":68,"fuel":70,"tunnel":72,"mountain":73,"camper":74,"motorhome":74,"autocaravana":74,"truck":79,"snow":86,"cafe":89,"parking":90,"lane-guidance":91,"plane":92,"air":92,"airplane":92,"aviao":92,"motorcycle":93,"moto":93,"mota":93,"scooter":94,"trotineta":94,"bicycle":95,"bike":95,"bicicleta":95,"helicopter":96,"helicoptero":96});
 function normalize(value){return String(value==null?"":value).trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[_\s]+/g,"-")}
+function roundaboutKey(input){var ex=Number(input?.exitNumber??input?.exit_number??input?.exit??input?.roundaboutExitNumber);return Number.isInteger(ex)&&ex>=1&&ex<=6?"roundabout-exit-"+ex:"roundabout"}
 function providerKey(input){
  if(!input||typeof input!=="object")return input;
  var p=normalize(input.provider||input.source||"");
@@ -27,9 +28,10 @@ function providerKey(input){
   "straight":"straight","ramp-left":"left","ramp-right":"right","merge":"merge","fork-left":"fork-left","fork-right":"fork-right",
   "ferry":"ferry","ferry-train":"ferry","roundabout-left":"roundabout","roundabout-right":"roundabout","depart":"start","name-change":"straight"
  };
- if(p.indexOf("google")>=0&&google[key])return google[key];
+ if(p.indexOf("google")>=0&&google[key])return google[key]==="roundabout"?roundaboutKey(input):google[key];
  if(p.indexOf("mapbox")>=0){
-   if(key==="turn"||key==="roundabout-turn")return mod||"unknown";
+   if(key==="roundabout-turn")return roundaboutKey(input);
+   if(key==="turn")return mod||"unknown";
    if(key==="continue"||key==="new-name")return "straight";
    if(key==="depart")return "start";
    if(key==="arrive")return "arrive";
@@ -38,8 +40,7 @@ function providerKey(input){
    if(key==="end-of-road")return mod||"unknown";
    if(key==="on-ramp"||key==="off-ramp")return mod||"unknown";
    if(key==="roundabout"||key==="rotary"||key==="exit-roundabout"||key==="exit-rotary"){
-     var ex=Number(input.exit||input.exitNumber||input.exit_number);
-     return ex>=1&&ex<=6?"roundabout-exit-"+ex:"roundabout";
+     return roundaboutKey(input);
    }
    if(key==="notification"&&normalize(input.mode)==="ferry")return "ferry";
  }
@@ -51,7 +52,7 @@ function providerKey(input){
   "sharp-left-turn":"sharp-left","sharp-right-turn":"sharp-right","u-turn":"uturn",
   "roundabout-enter":"roundabout","roundabout-exit":"roundabout","ferry":"ferry"
  };
- if(p.indexOf("here")>=0&&here[key])return here[key];
+ if(p.indexOf("here")>=0&&here[key])return here[key]==="roundabout"?roundaboutKey(input):here[key];
  var tomtom={
   "depart":"start","arrive":"arrive","arrive-left":"arrive","arrive-right":"arrive",
   "straight":"straight","continue-straight":"straight","keep-right":"keep-right","keep-left":"keep-left",
@@ -65,12 +66,12 @@ function providerKey(input){
   "entrance-ramp":"straight","waypoint-left":"waypoint","waypoint-right":"waypoint","waypoint-reached":"waypoint"
  };
  if(p.indexOf("tomtom")>=0&&tomtom[key]){
-   if(key.indexOf("roundabout")===0){var tx=Number(input.exit||input.exitNumber||input.exit_number||input.roundaboutExitNumber);if(tx>=1&&tx<=6)return "roundabout-exit-"+tx}
+   if(key.indexOf("roundabout")===0)return roundaboutKey(input);
    return tomtom[key];
  }
  if((key==="turn"||key==="turning")&&mod)return mod;
  if((key==="fork"||key==="keep")&&mod)return key+"-"+mod.replace(/^keep-/,"");
- if(key==="roundabout"||key==="rotary"){var exit=Number(input.exit||input.exitNumber||input.exit_number);if(exit>=1&&exit<=6)return "roundabout-exit-"+exit;return "roundabout"}
+ if(key==="roundabout"||key==="rotary")return roundaboutKey(input);
  if(key==="arrive"||key==="arrival"||key==="destination")return "arrive";
  if(key==="depart"||key==="departure")return "start";
  if(key==="continue"||key==="new-name"||key==="name-change")return "straight";
