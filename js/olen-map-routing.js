@@ -290,8 +290,9 @@ function maneuverType(type){
  if(n===14)return 'sharp-left';
  if(n===15)return 'turn-left';
  if(n===16)return 'slight-left';
- if([17,18,19,21].includes(n))return 'unknown';
+ if([17,18,19].includes(n))return 'unknown';
  if(n===20)return 'exit-right';
+ if(n===21)return 'exit-left';
  if(n===23)return 'keep-right';
  if(n===24)return 'keep-left';
  if(n===25)return 'merge';
