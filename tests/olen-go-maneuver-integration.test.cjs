@@ -67,3 +67,17 @@ test('missing lane data preserves original GO arrival hint',()=>{
  assert.equal(hint.innerHTML,'até à próxima<br>indicação');
  assert.equal(hint.dataset.olenLaneCue,'0');
 });
+
+test('switching from road GO to Trail GO explicitly clears the previous turn image',()=>{
+ const first=runtime.indexOf('if(trailMode){',runtime.indexOf('function beginSession('));
+ const last=runtime.indexOf('t0=recovered?.startedAt',first);
+ assert.ok(first>=0&&last>first);
+ const calls=[],labels=new Map();
+ const $=id=>{if(!labels.has(id))labels.set(id,{textContent:''});return labels.get(id)};
+ const win={OLENNavigationGuide:{set:data=>calls.push(data)}};
+ new Function('window','$','trailMode','free',runtime.slice(first,last))(win,$,true,false);
+ assert.equal(calls.length,1);
+ assert.equal(calls[0].type,'unknown');
+ assert.equal(calls[0].road,'Percurso importado · homologação por verificar');
+ assert.equal(calls[0].distance,'—');
+});
