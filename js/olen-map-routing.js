@@ -269,6 +269,18 @@ function maneuverType(type){
  if([28,29].includes(n))return 'ferry';
  return 'unknown';
 }
+function laneDirectionLabel(lane){
+ const raw=String(lane?.validIndication||'').trim().toLowerCase()||
+   (Array.isArray(lane?.indications)&&lane.indications.length===1?String(lane.indications[0]).trim().toLowerCase():'');
+ const labels={
+  'straight':'em frente','left':'esquerda','right':'direita','uturn':'inversão',
+  'slight left':'ligeiramente à esquerda','slight-left':'ligeiramente à esquerda',
+  'slight right':'ligeiramente à direita','slight-right':'ligeiramente à direita',
+  'sharp left':'acentuada à esquerda','sharp-left':'acentuada à esquerda',
+  'sharp right':'acentuada à direita','sharp-right':'acentuada à direita'
+ };
+ return labels[raw]||'';
+}
 function updateLaneCue(step){
  const hint=$('rzNextDistance')?.parentElement?.querySelector('small');
  if(!hint)return;
@@ -283,10 +295,12 @@ function updateLaneCue(step){
   hint.removeAttribute('aria-label');return;
  }
  const ids=chosen.map(item=>item.index);
- const label=(ids.length===1?'Faixa ':'Faixas ')+ids.join(', ')+'/'+lanes.length;
+ const base=(ids.length===1?'Faixa ':'Faixas ')+ids.join(', ')+'/'+lanes.length;
+ const directions=[...new Set(chosen.map(item=>laneDirectionLabel(item.lane)).filter(Boolean))];
+ const label=directions.length===1?base+' · '+directions[0]:base;
  hint.textContent=label;
  hint.dataset.olenLaneCue='1';
- hint.title=label+' · da esquerda para a direita';
+ hint.title=label+' · contagem da esquerda para a direita';
  hint.setAttribute('aria-label',hint.title);
 }
 function updateInstruction(pos){
