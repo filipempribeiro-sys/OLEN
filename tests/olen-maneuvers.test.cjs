@@ -190,3 +190,23 @@ test('left-hand roundabout mirrors only the roundabout asset and resets afterwar
  guide.set({type:'turn-right',drivingSide:'left',instruction:'Vira à direita'});
  assert.equal(img.style.transform,'');
 });
+
+test('provider-native text, road and distance populate HUD without stale values',()=>{
+ const {guide,nodes}=load();
+ guide.set({type:'turn-right',instruction:'Vira à direita',road:'Rua Antiga',distance:'30 m'});
+ guide.set({provider:'google',navigationInstruction:{maneuver:'TURN_LEFT',instructions:'Vira à esquerda'},
+  name:'Avenida Nova',distanceMeters:1250});
+ assert.equal(nodes.get('rzGuideText').textContent,'Vira à esquerda');
+ assert.equal(nodes.get('rzRoadName').textContent,'Avenida Nova');
+ assert.equal(nodes.get('rzNextDistance').textContent,'1,3 km');
+ assert.equal(nodes.get('rzRoadLine').hidden,false);
+});
+test('unknown provider step clears stale road and stale distance safely',()=>{
+ const {guide,nodes}=load();
+ guide.set({type:'turn-right',instruction:'Vira à direita',road:'Rua Antiga',distance:'30 m'});
+ guide.set({provider:'tomtom',instructionType:'UNSUPPORTED_MANEUVER'});
+ assert.equal(nodes.get('rzGuideText').textContent,'Confirma a próxima indicação no mapa.');
+ assert.equal(nodes.get('rzRoadName').textContent,'');
+ assert.equal(nodes.get('rzRoadLine').hidden,true);
+ assert.equal(nodes.get('rzNextDistance').textContent,'—');
+});
