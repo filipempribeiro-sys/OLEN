@@ -273,17 +273,25 @@ function updateInstruction(pos){
  const remaining=Math.max(0,route.distanceMeters-progress*scale);
  const step=stepFor(nearest.idx);
  const text=remaining<25?'Chegaste ao destino.':
-   step?.instruction||'Continua no percurso apresentado.';
+   step?.instruction||'Confirma a próxima indicação no percurso.';
  const road=step?.road||'Percurso confirmado';
  const node=$('rzGuideText'),roadNode=$('rzRoadName'),next=$('rzNextDistance'),status=$('rzStatus');
  const nextMeters=step?.pointIndex!=null&&curve[step.pointIndex]?
    Math.max(0,curve[step.pointIndex].meters-progress):remaining;
  const displayDistance=formatDistance(nextMeters);
- const instructionKey=(step?.pointIndex??-1)+'|'+(step?.type??-1)+'|'+text;
+ const resolvedType=remaining<25?'finish':(step?.provider?step.type:maneuverType(step?.type));
+ const instructionKey=(step?.pointIndex??-1)+'|'+String(resolvedType)+'|'+
+   (step?.exitNumber??step?.exit??'')+'|'+text;
  if(window.OLENNavigationGuide?.set){
    if(lastManeuverKey!==instructionKey){
-     window.OLENNavigationGuide.set({type:remaining<25?'finish':maneuverType(step?.type),
-       instruction:text,road:remaining<25?'':road,distance:displayDistance});
+     const payload=step?{...step}:{};
+     // Preserve provider metadata (exit, modifier, driving side and lanes).
+     // Numeric Valhalla types are translated to the canonical OLEN type.
+     payload.type=resolvedType;
+     payload.instruction=text;
+     payload.road=remaining<25?'':(step?.road||'');
+     payload.distance=displayDistance;
+     window.OLENNavigationGuide.set(payload);
      lastManeuverKey=instructionKey;
    }else if(next)next.textContent=displayDistance;
  }else{
