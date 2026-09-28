@@ -37,3 +37,21 @@ test('explicit straight modifier remains valid without suppressing unknown state
  assert.equal(direction({type:'turn',modifier:'straight'})[0],'straight');
  assert.equal(direction({type:'notification'})[0],'unknown');
 });
+
+test('roundabouts 1–12 keep their verified exit without inventing missing PNGs',()=>{
+ for(let exit=1;exit<=12;exit++){
+  const step={maneuver:{type:'roundabout',exit,location:[-9.125,38.725]},
+   driving_side:'right',name:'Rotunda do Jardim',distance:150,
+   intersections:[{lanes:[{valid:true,active:true,indications:['straight']}]}]};
+  const result=fromRoute({...route,legs:[{steps:[step]}]},'car','OSRM road');
+  assert.equal(result.maneuvers[0].exitNumber,exit);
+  assert.equal(result.maneuvers[0].drivingSide,'right');
+  assert.equal(result.maneuvers[0].lanes[0].active,true);
+  assert.match(result.maneuvers[0].instruction,new RegExp(''+exit+'\\.ª saída'));
+ }
+});
+test('unknown roundabout exit is never invented',()=>{
+ const result=fromRoute({...route,legs:[{steps:[{maneuver:{type:'roundabout',location:[-9.125,38.725]},distance:200}]}]},'walk','OSM');
+ assert.equal(result.maneuvers[0].exitNumber,undefined);
+ assert.equal(result.maneuvers[0].instruction,'Entra na rotunda');
+});
