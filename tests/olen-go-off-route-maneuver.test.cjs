@@ -4,7 +4,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const routing=fs.readFileSync(path.join(__dirname,'../js/olen-map-routing.js'),'utf8');
 function harness(){
- const a=routing.indexOf('function updateLaneCue(step){');
+ const a=routing.indexOf('function laneDirectionLabel(lane){');
  const b=routing.indexOf('function updatePosition(c){',a);
  assert.ok(a>=0&&b>a,'routing instruction implementation exists');
  const hint={innerHTML:'até à próxima<br>indicação',textContent:'',dataset:{},
