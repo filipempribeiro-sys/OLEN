@@ -241,8 +241,8 @@ function stepFor(positionIndex){
  const steps=Array.isArray(route?.maneuvers)?route.maneuvers:[];
  return steps.find(s=>Number.isSafeInteger(s.pointIndex)&&s.pointIndex>=positionIndex)||null;
 }
-/* Translate Valhalla's documented maneuver types into OLEN's real icon library.
-   Unknown types deliberately display straight rather than claim an invented turn. */
+/* Translate known route types into OLEN's icon library.
+   Unknown types must remain neutral; never invent a straight-ahead instruction. */
 function maneuverType(type){
  if(typeof type==='string'&&new Set(['start','finish','straight','slight-right','turn-right',
    'sharp-right','uturn','sharp-left','turn-left','slight-left','merge','roundabout','ferry']).has(type))return type;
@@ -259,7 +259,7 @@ function maneuverType(type){
  if([25].includes(n))return 'merge';
  if([26,27].includes(n))return 'roundabout';
  if([28,29].includes(n))return 'ferry';
- return 'straight';
+ return 'unknown';
 }
 function updateInstruction(pos){
  if(!active||!route||!curve.length)return;
