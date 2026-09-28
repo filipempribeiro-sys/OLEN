@@ -261,6 +261,26 @@ function maneuverType(type){
  if([28,29].includes(n))return 'ferry';
  return 'unknown';
 }
+function updateLaneCue(step){
+ const hint=$('rzNextDistance')?.parentElement?.querySelector('small');
+ if(!hint)return;
+ if(hint.dataset.olenDefaultHtml===undefined)hint.dataset.olenDefaultHtml=hint.innerHTML;
+ const lanes=Array.isArray(step?.lanes)?step.lanes:[];
+ const valid=lanes.map((lane,i)=>({lane,index:i+1})).filter(item=>item.lane?.valid===true);
+ const active=valid.filter(item=>item.lane.active===true);
+ const chosen=active.length?active:valid;
+ if(!chosen.length||!lanes.length){
+  if(hint.dataset.olenLaneCue==='1')hint.innerHTML=hint.dataset.olenDefaultHtml;
+  hint.dataset.olenLaneCue='0';hint.removeAttribute('title');
+  hint.removeAttribute('aria-label');return;
+ }
+ const ids=chosen.map(item=>item.index);
+ const label=(ids.length===1?'Faixa ':'Faixas ')+ids.join(', ')+'/'+lanes.length;
+ hint.textContent=label;
+ hint.dataset.olenLaneCue='1';
+ hint.title=label+' · da esquerda para a direita';
+ hint.setAttribute('aria-label',hint.title);
+}
 function updateInstruction(pos){
  if(!active||!route||!curve.length)return;
  const nearest=getNearest(pos);
@@ -299,6 +319,7 @@ function updateInstruction(pos){
    if(roadNode)roadNode.textContent=road;
    if(next)next.textContent=displayDistance;
  }
+ updateLaneCue(remaining<25?null:step);
  if(status)status.textContent='GO ativo · '+destination.name+' · '+(mode==='walk'?'A pé':mode==='bike'?'Bicicleta':mode==='car'?'Carro':mode==='moto'?'Moto':'Trotineta');
  const trip=$('rzBottom')?.querySelector('.rz-trip'),labels=trip?.querySelectorAll('span b');
  if(labels?.[0])labels[0].textContent=new Date(Date.now()+remaining/Math.max(route.distanceMeters,1)*route.durationSeconds*1000).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
