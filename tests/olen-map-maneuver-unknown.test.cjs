@@ -30,3 +30,8 @@ test('documented Valhalla continue/stay maneuvers map without inventing ramp tur
  assert.equal(classify(19),'unknown');
  assert.equal(classify(21),'unknown');
 });
+
+test('Valhalla preserves left/right U-turn direction for the dedicated OLEN assets',()=>{
+ assert.equal(classify(12),'uturn-right');
+ assert.equal(classify(13),'uturn-left');
+});
