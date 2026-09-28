@@ -30,9 +30,17 @@ function beginSession(routeState,trailMode=false,{resume=false,free=false}={}){
  show("rzGuide",true);show("rzLive",true);show("rzWarn",false);show("rzDot",false);
  navigationHeader(true);
  if(trailMode){
-   const label=$("rzGuideText"),road=$("rzRoadName");
-   if(label)label.textContent='Segue o trilho GPX selecionado.';
-   if(road)road.textContent='Percurso importado · não homologado';
+   // Trail GO follows the GPX geometry, not car-turn steps. Clear any previous
+   // turn icon before the first GPS fix to avoid a stale, unsafe instruction.
+   if(window.OLENNavigationGuide?.set)window.OLENNavigationGuide.set({
+     type:'unknown',instruction:'Segue o trilho GPX selecionado.',
+     road:'Percurso importado · homologação por verificar',distance:'—'
+   });
+   else{
+     const label=$("rzGuideText"),road=$("rzRoadName");
+     if(label)label.textContent='Segue o trilho GPX selecionado.';
+     if(road)road.textContent='Percurso importado · homologação por verificar';
+   }
  }else if(!free){
    // The router owns live turn instructions once GPS guidance starts. Do not
    // invent a straight arrow or show the first step at an unverified distance.
