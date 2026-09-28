@@ -129,3 +129,20 @@ test('a failed PNG remains hidden on repeated fixes but a different maneuver can
  img.onload();
  assert.equal(img.hidden,false);
 });
+
+test('full Google RouteLegStep navigationInstruction resolves without pre-flattening',()=>{
+ const {api}=load();
+ const item=api.resolve({provider:'google',navigationInstruction:{maneuver:'TURN_LEFT',instructions:'Turn left'}});
+ assert.equal(item.id,3);
+});
+test('full Mapbox step maneuver object preserves type, modifier and roundabout exit',()=>{
+ const {api}=load();
+ assert.equal(api.resolve({provider:'mapbox',maneuver:{type:'turn',modifier:'right'}}).id,2);
+ assert.equal(api.resolve({provider:'mapbox',maneuver:{type:'roundabout',exit:3}}).id,48);
+});
+test('HERE action plus direction and TomTom instructionType use safe provider fields',()=>{
+ const {api}=load();
+ assert.equal(api.resolve({provider:'here',action:'turn',direction:'left'}).id,3);
+ assert.equal(api.resolve({provider:'here',action:'keep',direction:'right'}).id,12);
+ assert.equal(api.resolve({provider:'tomtom',instructionType:'TURN_RIGHT'}).id,2);
+});
