@@ -274,7 +274,7 @@ function stepFor(positionIndex){
    Unknown types must remain neutral; never invent a straight-ahead instruction. */
 function maneuverType(type){
  if(typeof type==='string'&&new Set(['start','finish','straight','slight-right','turn-right',
-   'sharp-right','uturn','sharp-left','turn-left','slight-left','merge','keep-right','keep-left',
+   'sharp-right','uturn','uturn-right','uturn-left','sharp-left','turn-left','slight-left','merge','keep-right','keep-left',
    'exit-right','roundabout','ferry','unknown']).has(type))return type;
  const n=Number(type);
  // Valhalla ManeuverType: keep safe one-to-one semantics. Ramp directions are
@@ -285,7 +285,8 @@ function maneuverType(type){
  if(n===9)return 'slight-right';
  if(n===10)return 'turn-right';
  if(n===11)return 'sharp-right';
- if([12,13].includes(n))return 'uturn';
+ if(n===12)return 'uturn-right';
+ if(n===13)return 'uturn-left';
  if(n===14)return 'sharp-left';
  if(n===15)return 'turn-left';
  if(n===16)return 'slight-left';
