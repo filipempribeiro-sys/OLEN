@@ -65,7 +65,9 @@
       .find(value=>Array.isArray(value.lanes)&&value.lanes.length);
     const lanes=(intersection?.lanes||[]).slice(0,12).map(lane=>({
       valid:lane.valid===true,active:lane.active===true,
-      indications:Array.isArray(lane.indications)?lane.indications.filter(x=>typeof x==='string').slice(0,5):[]
+      indications:Array.isArray(lane.indications)?lane.indications.filter(x=>typeof x==='string').slice(0,5):[],
+      ...((typeof lane.valid_indication==='string'||typeof lane.validIndication==='string')
+        ?{validIndication:String(lane.valid_indication??lane.validIndication)}:{})
     }));
     maneuvers.push({type,pointIndex:best,instruction,road,
       ...(exitNumber===null?{}:{exitNumber}),
