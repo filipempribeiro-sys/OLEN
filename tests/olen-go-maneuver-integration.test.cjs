@@ -5,7 +5,7 @@ const path=require('node:path');
 const routing=fs.readFileSync(path.join(__dirname,'../js/olen-map-routing.js'),'utf8');
 const runtime=fs.readFileSync(path.join(__dirname,'../js/olen-go-runtime.js'),'utf8');
 function driver(step){
- const start=routing.indexOf('function updateLaneCue(step){');
+ const start=routing.indexOf('function laneDirectionLabel(lane){');
  const end=routing.indexOf('function updatePosition(c){',start);
  assert.ok(start>=0&&end>start);
  const nodes=new Map();
@@ -80,4 +80,14 @@ test('switching from road GO to Trail GO explicitly clears the previous turn ima
  assert.equal(calls[0].type,'unknown');
  assert.equal(calls[0].road,'Percurso importado · homologação por verificar');
  assert.equal(calls[0].distance,'—');
+});
+
+test('verified lane direction is shown only when selected lanes agree',()=>{
+ const step={type:'turn-right',instruction:'Vira à direita',pointIndex:1,
+  lanes:[{valid:false,active:false,indications:['left']},
+   {valid:true,active:true,validIndication:'right',indications:['straight','right']},
+   {valid:true,active:false,indications:['straight']}]};
+ const {hint}=driver(step);
+ assert.equal(hint.textContent,'Faixa 2/3 · direita');
+ assert.match(hint.title,/contagem da esquerda para a direita/);
 });
