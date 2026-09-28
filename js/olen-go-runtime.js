@@ -33,11 +33,12 @@ function beginSession(routeState,trailMode=false,{resume=false,free=false}={}){
    const label=$("rzGuideText"),road=$("rzRoadName");
    if(label)label.textContent='Segue o trilho GPX selecionado.';
    if(road)road.textContent='Percurso importado · não homologado';
- }else{
-   const first=routeState.route?.maneuvers?.[0];
-   if(first?.instruction&&window.OLENNavigationGuide)
-     window.OLENNavigationGuide.set({type:"straight",instruction:first.instruction,
-       road:first.road||"",distance:window.OLENMapRouting.formatDistance(first.distanceMeters||0)});
+ }else if(!free){
+   // The router owns live turn instructions once GPS guidance starts. Do not
+   // invent a straight arrow or show the first step at an unverified distance.
+   window.OLENNavigationGuide?.set?.({type:'unknown',
+     instruction:'A confirmar a próxima indicação no percurso.',
+     road:'',distance:'—'});
  }
  t0=recovered?.startedAt||Date.now();total=recovered?.distanceMeters||0;
  last=recovered?.points?.at(-1)||null;rating=0;
