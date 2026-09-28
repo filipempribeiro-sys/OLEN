@@ -80,8 +80,14 @@ function providerKey(input){
  return raw;
 }
 function resolve(input){if(typeof input==="number"&&registry[input])return registry[input];if(input&&typeof input==="object"){if(Number.isInteger(input.id)&&registry[input.id])return registry[input.id];input=providerKey(input)}var key=normalize(input),id=aliases[key];if(!id){for(var i=1;i<=96;i++)if(registry[i]&&registry[i].key===key){id=i;break}}return registry[id]||UNKNOWN}
-function ensureImage(){var oldSvg=document.getElementById("rzManeuverPath"),host=oldSvg&&oldSvg.closest("svg");if(!host)host=document.querySelector("#rzGuide svg");if(!host)return null;var img=document.getElementById("olenManeuverIcon");if(!img){img=document.createElement("img");img.id="olenManeuverIcon";img.alt="";img.setAttribute("aria-hidden","true");img.style.cssText="width:64px;height:64px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(65,255,222,.18));";host.insertAdjacentElement("afterend",img)}img.onerror=function(){img.hidden=true};host.style.display="none";return img}
-function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img){if(!item.asset){img.hidden=true;img.removeAttribute("src")}else{img.hidden=false;if(img.getAttribute("src")!==item.asset)img.setAttribute("src",item.asset)}}return item}
+function ensureImage(){var oldSvg=document.getElementById("rzManeuverPath"),host=oldSvg&&oldSvg.closest("svg");if(!host)host=document.querySelector("#rzGuide svg");if(!host)return null;var img=document.getElementById("olenManeuverIcon");if(!img){img=document.createElement("img");img.id="olenManeuverIcon";img.alt="";img.setAttribute("aria-hidden","true");img.style.cssText="width:64px;height:64px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(65,255,222,.18));";host.insertAdjacentElement("afterend",img)}img.onerror=function(){img.dataset.olenFailedAsset=img.getAttribute("src")||"";img.hidden=true};
+img.onload=function(){img.dataset.olenFailedAsset="";img.hidden=false};
+host.style.display="none";return img}
+function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img){
+ if(!item.asset){img.hidden=true;img.removeAttribute("src")}
+ else if(img.dataset.olenFailedAsset===item.asset){img.hidden=true}
+ else{img.hidden=false;if(img.getAttribute("src")!==item.asset)img.setAttribute("src",item.asset)}
+}return item}
 function set(data){data=data||{};var item=render(data),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");if(t&&data.instruction!=null)t.textContent=data.instruction;else if(t&&item.id===0)t.textContent="Confirma a próxima indicação no mapa.";if(r&&data.road!=null)r.textContent=data.road;if(line)line.hidden=data.road===false||data.road==="";if(d&&data.distance!=null)d.textContent=data.distance;return item}
 var api=Object.freeze({version:VERSION,registry:registry,aliases:aliases,asset:asset,providerKey:providerKey,resolve:resolve,render:render,set:set});
 global.OLENManeuvers=api;
