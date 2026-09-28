@@ -97,3 +97,11 @@ test('unknown roundabout exit does not default to first exit',()=>{
  assert.equal(api.resolve({provider:'mapbox',type:'roundabout'}).id,40);
  assert.equal(api.resolve({provider:'mapbox',type:'roundabout',exitNumber:99}).id,40);
 });
+
+test('camelCase and SCREAMING_SNAKE_CASE provider variants are equivalent',()=>{
+ const {api}=load();
+ assert.equal(api.resolve({provider:'here',type:'rightTurn'}).id,2);
+ assert.equal(api.resolve({provider:'tomtom',type:'turnRight'}).id,2);
+ assert.equal(api.resolve({provider:'google',type:'TURN_RIGHT'}).id,2);
+ assert.equal(api.resolve({provider:'mapbox',type:'roundaboutTurn',exitNumber:2}).id,47);
+});
