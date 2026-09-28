@@ -55,3 +55,14 @@ test('unknown roundabout exit is never invented',()=>{
  assert.equal(result.maneuvers[0].exitNumber,undefined);
  assert.equal(result.maneuvers[0].instruction,'Entra na rotunda');
 });
+
+test('lane indices never combine different OSRM intersections',()=>{
+ const step={maneuver:{type:'turn',modifier:'right',location:[-9.125,38.725]},
+  intersections:[
+   {lanes:[{valid:false},{valid:true,active:true}]},
+   {lanes:[{valid:true},{valid:false},{valid:true}]}
+  ]};
+ const result=fromRoute({...route,legs:[{steps:[step]}]},'car','OSRM road');
+ assert.equal(result.maneuvers[0].lanes.length,2);
+ assert.equal(result.maneuvers[0].lanes[1].active,true);
+});
