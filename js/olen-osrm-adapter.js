@@ -54,7 +54,7 @@
     }
     if(best<0||meters>150)continue;
     const [type,baseInstruction]=direction(step.maneuver);
-    const exit=Number(step.maneuver?.exit);
+    const exit=Number(step.maneuver?.exit??step.exit);
     const exitNumber=Number.isInteger(exit)&&exit>=1&&exit<=12?exit:null;
     const instruction=type==='roundabout'&&exitNumber!==null
       ?'Na rotunda, segue pela '+exitNumber+'.ª saída.':baseInstruction;
@@ -69,7 +69,7 @@
       ...((typeof lane.valid_indication==='string'||typeof lane.validIndication==='string')
         ?{validIndication:String(lane.valid_indication??lane.validIndication)}:{})
     }));
-    maneuvers.push({type,pointIndex:best,instruction,road,
+    maneuvers.push({provider:'osrm',type,pointIndex:best,instruction,road,
       ...(exitNumber===null?{}:{exitNumber}),
       ...(step.driving_side==='left'||step.driving_side==='right'?{drivingSide:step.driving_side}:{}),
       ...(lanes.length?{lanes}:{}),
