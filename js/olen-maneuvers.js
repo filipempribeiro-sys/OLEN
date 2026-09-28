@@ -96,7 +96,17 @@ function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img){
  else if(img.dataset.olenFailedAsset===item.asset){img.hidden=true}
  else{img.hidden=false;if(img.getAttribute("src")!==item.asset)img.setAttribute("src",item.asset)}
 }return item}
-function set(data){data=data||{};var item=render(data),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");if(t&&data.instruction!=null)t.textContent=data.instruction;else if(t&&item.id===0)t.textContent="Confirma a próxima indicação no mapa.";if(r&&data.road!=null)r.textContent=data.road;if(line)line.hidden=data.road===false||data.road==="";if(d&&data.distance!=null)d.textContent=data.distance;return item}
+function distanceText(value){var n=Number(value);if(!Number.isFinite(n)||n<0)return null;return n>=1000?(n/1000).toFixed(1).replace(".",",")+" km":Math.round(n)+" m"}
+function set(data){data=data||{};var item=render(data),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");
+ var nav=data.navigationInstruction&&typeof data.navigationInstruction==="object"?data.navigationInstruction:null;
+ var instruction=data.instruction??data.instructions??nav?.instructions??data.message;
+ var road=data.road??data.name??data.street??data.streetName??"";
+ var distance=data.distance??distanceText(data.distanceMeters);
+ if(t&&instruction!=null)t.textContent=instruction;else if(t&&item.id===0)t.textContent="Confirma a próxima indicação no mapa.";
+ if(r)r.textContent=road===false?"":String(road||"");
+ if(line)line.hidden=road===false||road==="";
+ if(d&&distance!=null)d.textContent=String(distance);else if(d&&item.id===0)d.textContent="—";
+ return item}
 var api=Object.freeze({version:VERSION,registry:registry,aliases:aliases,asset:asset,providerKey:providerKey,resolve:resolve,render:render,set:set});
 global.OLENManeuvers=api;
 var previous=global.OLENNavigationGuide||{};
