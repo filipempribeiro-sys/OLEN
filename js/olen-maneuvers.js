@@ -11,6 +11,10 @@ function asset(n){return BASE+"olen-maneuver-"+pad(n)+".png"}
 var visualKeys=["straight","turn-right","turn-left","slight-right","slight-left","sharp-left","sharp-right","curve-right","fork-left","fork-right","merge","keep-right","uturn","fork","split","straight-or-right","straight-or-left","keep-right-branch","keep-left-branch","curve-right-alt","straight-or-right-alt","motorway","exit-right","lane-straight","motorway-crossing","motorway-end","bend-right","keep-right-lane","keep-left-lane","branch-left","turn-right-alt","branch-right","turn-left-alt","branch-left-alt","fork-left-alt","turn-right-sharp-alt","keep-left-alt","uturn-right","uturn-left","roundabout","roundabout-alt","roundabout-four-way","roundabout-three-way","roundabout-exit","roundabout-more","roundabout-exit-1","roundabout-exit-2","roundabout-exit-3","roundabout-exit-4","roundabout-exit-5","roundabout-exit-5-alt","roundabout-exit-6","finish","start","location-pin","turn-right-marker","waypoint","information","warning","roadworks","incident","slippery-road","car","pedestrian","walking","ferry","ferry-alt","carpool","car-alt","fuel","motorway-junction","tunnel","mountain","cycle-crossing","lane-narrowing","car-front","road","waypoint-marker","truck","ferry-service","road-label","fuel-alt","motorway-alt","uturn-alt","mountain-alt","snow","camper","fuel-station","cafe","parking","lane-guidance"];
 var registry=Object.create(null);
 var UNKNOWN=Object.freeze({id:0,key:"unknown",asset:null,layer:"guidance",label:"Manobra não reconhecida"});
+var DERIVED=Object.freeze({
+ "exit-left":Object.freeze({id:23,key:"exit-left",asset:asset(23),layer:"guidance",mirror:true,derivedFrom:23,label:"Saída à esquerda"}),
+ "keep-left":Object.freeze({id:12,key:"keep-left",asset:asset(12),layer:"guidance",mirror:true,derivedFrom:12,label:"Mantém-te à esquerda"})
+});
 visualKeys.forEach(function(key,index){var id=index+1;registry[id]=Object.freeze({id:id,key:key,asset:asset(id),layer:id<=52?"guidance":"context"})});
 registry[74]=Object.freeze({id:74,key:"camper",asset:asset(74),layer:"mobility",label:"Autocaravana"});
 [[92,"plane","Avião"],[93,"motorcycle","Mota"],[94,"scooter","Trotineta"],[95,"bicycle","Bicicleta"],[96,"helicopter","Helicóptero"]].forEach(function(x){registry[x[0]]=Object.freeze({id:x[0],key:x[1],asset:asset(x[0]),layer:"mobility",label:x[2]})});
@@ -83,14 +87,14 @@ function providerKey(input){
  if(key==="merge"||key==="ferry"||key==="uturn"||key==="u-turn")return key;
  return raw;
 }
-function resolve(input){if(typeof input==="number"&&registry[input])return registry[input];if(input&&typeof input==="object"){if(Number.isInteger(input.id)&&registry[input.id])return registry[input.id];input=providerKey(input)}var key=normalize(input),id=aliases[key];if(!id){for(var i=1;i<=96;i++)if(registry[i]&&registry[i].key===key){id=i;break}}return registry[id]||UNKNOWN}
+function resolve(input){if(typeof input==="number"&&registry[input])return registry[input];if(input&&typeof input==="object"){if(Number.isInteger(input.id)&&registry[input.id])return registry[input.id];input=providerKey(input)}var key=normalize(input);if(DERIVED[key])return DERIVED[key];var id=aliases[key];if(!id){for(var i=1;i<=96;i++)if(registry[i]&&registry[i].key===key){id=i;break}}return registry[id]||UNKNOWN}
 function ensureImage(){var oldSvg=document.getElementById("rzManeuverPath"),host=oldSvg&&oldSvg.closest("svg");if(!host)host=document.querySelector("#rzGuide svg");if(!host)return null;var img=document.getElementById("olenManeuverIcon");if(!img){img=document.createElement("img");img.id="olenManeuverIcon";img.alt="";img.setAttribute("aria-hidden","true");img.style.cssText="width:64px;height:64px;object-fit:contain;display:block;filter:drop-shadow(0 0 8px rgba(65,255,222,.18));";host.insertAdjacentElement("afterend",img)}img.onerror=function(){img.dataset.olenFailedAsset=img.getAttribute("src")||"";img.hidden=true};
 img.onload=function(){img.dataset.olenFailedAsset="";img.hidden=false};
 host.style.display="none";return img}
 function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img){
  var side=normalize(maneuver&&typeof maneuver==="object"?(maneuver.drivingSide||maneuver.driving_side||""):"");
  var isRoundabout=item.key==="roundabout"||item.key.indexOf("roundabout-exit-")===0;
- img.style.transform=isRoundabout&&side==="left"?"scaleX(-1)":"";
+ img.style.transform=(item.mirror===true||(isRoundabout&&side==="left"))?"scaleX(-1)":"";
  img.style.transformOrigin="50% 50%";
  if(!item.asset){img.hidden=true;img.removeAttribute("src")}
  else if(img.dataset.olenFailedAsset===item.asset){img.hidden=true}
