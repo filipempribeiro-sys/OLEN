@@ -14,12 +14,12 @@
 5. `index.html`: apenas versões de cache atualizadas para os quatro scripts. Dependências mantidas na ordem adaptador OSRM → router → biblioteca → GO. Não foi refeito o HTML da aplicação.
 
 ## Evidências automatizadas
-- `tests/olen-maneuvers.test.cjs`: 12 casos de registry, neutralidade, render, quatro providers, camelCase, saídas e erro de imagem.
+- `tests/olen-maneuvers.test.cjs`: 13 casos de registry, neutralidade, render, quatro providers, camelCase, saídas, rampas não verificadas e erro de imagem.
 - `tests/olen-osrm-adapter.test.cjs`: 8 casos, incluindo saídas 1–12 e metadados de faixas.
 - `tests/olen-map-maneuver-unknown.test.cjs`: 2 casos.
 - `tests/olen-go-maneuver-integration.test.cjs`: 4 casos da etapa de rota real ao HUD e ausência de demonstração.
 - `tests/olen-map-routing-regression.test.cjs`: 3 casos do fallback de geocodificação e rotas alternativas.
-- Total **29 casos** aprovados com execução JavaScript isolada de fontes lidas do GitHub. Sintaxe dos quatro módulos verificada; dependências e hashes verificados. Estes resultados NÃO equivalem a execução Node nativa, browser visual, GPS físico, CORS real ou navegação na estrada.
+- Total **30 casos** aprovados com execução JavaScript isolada de fontes lidas do GitHub. Sintaxe dos quatro módulos verificada; dependências e hashes verificados. Estes resultados NÃO equivalem a execução Node nativa, browser visual, GPS físico, CORS real ou navegação na estrada.
 
 ## Ainda não certificado
 - A identidade visual dos 96 PNGs não foi auditada imagem a imagem nesta execução. O utilizador já tinha aprovado a biblioteca; não trocar IDs sem inspeção.
@@ -29,3 +29,10 @@
 
 ## Aceitação manual OLEN
 No URL habitual `https://olen-chat-teste.pages.dev/`, após deployment do commit, preparar rota real com manobras diferentes (direita, esquerda, rotunda), iniciar GO em local seguro, observar mudança da imagem e do texto à medida que o GPS avança, confirmar o número da saída quando presente e fazer STOP. Verificar que o HUD desaparece, GO/Reportar voltam a ficar visíveis, e que o restante Mapa/GO e outras abas não regrediram. Não testar manobras ou ecrã durante a condução.
+
+## Verificação documental dos providers
+- Google Routes enum de manobras: https://developers.google.com/maps/documentation/routes/reference/rpc/google.maps.routing.v2
+- Mapbox Directions v5: tipos/modificadores, `exit` nas rotundas e faixas: https://docs.mapbox.com/api/navigation/directions/
+- HERE Routing v8: `turnByTurnActions` tem `action` e `direction`; o conjunto de ações é extensível: https://docs.here.com/routing/docs/routing-v8-action
+- TomTom Android Navigation SDK: instrução `ExitRoundaboutGuidanceInstruction` fornece `exitNumber` e `drivingSide`: https://developer.tomtom.com/assets/downloads/tomtom-sdks/android/api-reference/1.25.6/navigation/navigation/com.tomtom.sdk.navigation.guidance.instruction/index.html
+- Não são pedidos de navegação efetuados a estes quatro serviços: são mapeamentos determinísticos de dados de origem externa. Rampas/saídas sem semântica direcional comprovada usam ícone neutro, não uma seta de viragem.
