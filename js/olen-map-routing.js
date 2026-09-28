@@ -7,7 +7,7 @@ const API='https://olen-alpha-ai.filipe-m-p-ribeiro.workers.dev';
 const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
 let library=null,map=null,tile=null,routeLine=null,trackLine=null,trailLine=null,destinationMarker=null,userMarker=null,reportMarkers=[];
-let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='';
+let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='',offRoute=false;
 let following=true,trackVisible=true,trailVisible=true,routeVisible=true,reportsVisible=true,trail=null,trailGuide=null,trailActive=false;
 function $(id){return document.getElementById(id)}
 function coord(v){
@@ -286,8 +286,15 @@ function updateInstruction(pos){
  const nearest=getNearest(pos);
  if(nearest.delta>130){
    notice('Estás fora do percurso confirmado. Pára o GO e prepara novamente a rota para recalcular.',true);
+   if(!offRoute){
+     offRoute=true;lastManeuverKey='';
+     window.OLENNavigationGuide?.set?.({type:'unknown',
+       instruction:'Fora do percurso. Confirma a posição no mapa.',road:'',distance:'—'});
+     updateLaneCue(null);
+   }
    return;
  }
+ if(offRoute){offRoute=false;lastManeuverKey=''}
  notice('');
  const progress=curve[nearest.idx].meters,scale=curve.at(-1).meters?route.distanceMeters/curve.at(-1).meters:1;
  const remaining=Math.max(0,route.distanceMeters-progress*scale);
@@ -375,11 +382,11 @@ function beginGuidance(){
  if(!route||!last||!destination)return false;
  following=true;refreshTrack();
  document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
- active=true;updateInstruction(last);
+ active=true;offRoute=false;lastManeuverKey='';updateInstruction(last);
  return true;
 }
 function stopGuidance(){
- active=false;lastManeuverKey='';notice('Navegação terminada. O percurso mantém-se no mapa.');
+ active=false;offRoute=false;lastManeuverKey='';notice('Navegação terminada. O percurso mantém-se no mapa.');
  return true;
 }
 async function open(place,{navigate=false,travelMode='walk'}={}){
@@ -387,7 +394,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
  if(!target){notice('Este local não tem coordenadas confirmadas.',true);return false}
  const current=++serial;
  destination={...target,name:String(place.name||'Destino').slice(0,105)};
- route=null;curve=[];active=false;trail=null;trailGuide=null;trailActive=false;last=null;mode=travelMode;lastManeuverKey='';
+ route=null;curve=[];active=false;trail=null;trailGuide=null;trailActive=false;last=null;mode=travelMode;lastManeuverKey='';offRoute=false;
  // Preview from "Mapa" shows only the real route; "Ir" owns GPS navigation.
  document.querySelector('.screen[data-screen="map"]')?.classList.toggle('olen-map-preview',!navigate);
  window.OLENPlaceExperience?.close?.();
