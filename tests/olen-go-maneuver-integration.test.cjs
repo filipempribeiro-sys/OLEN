@@ -21,7 +21,7 @@ function driver(step){
   following:false,map:null,window,$:node,notice(){},getNearest:()=>({idx:0,delta:3}),
   stepFor:()=>step||null,formatDistance:m=>Math.round(m)+' m',
   maneuverType:type=>type==='turn-right'?'turn-right':'unknown'};
- const make=new Function('context','const {active,route,curve,destination,mode,last,following,map,window,$,notice,getNearest,stepFor,formatDistance,maneuverType}=context;let lastManeuverKey="";'+routing.slice(start,end)+';return updateInstruction;');
+ const make=new Function('context','const {active,route,curve,destination,mode,last,following,map,window,$,notice,getNearest,stepFor,formatDistance,maneuverType}=context;let lastManeuverKey="",offRoute=false;'+routing.slice(start,end)+';return updateInstruction;');
  make(context)({lat:38,lon:-9});
  return {calls,nodes,hint};
 }
