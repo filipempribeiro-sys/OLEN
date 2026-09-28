@@ -25,10 +25,15 @@ test('unmatched OSRM maneuver coordinates cannot generate fictitious instruction
 });
 test('unknown maneuver does not claim a turning direction',()=>{
  const [type,instruction]=direction({type:'notification'});
- assert.equal(type,'straight');assert.equal(instruction,'Continua no percurso indicado');
+ assert.equal(type,'unknown');assert.equal(instruction,'Confirma a próxima indicação no mapa');
 });
 test('roundabouts, slight turns and u-turns are mapped to OLEN icons',()=>{
  assert.equal(direction({type:'roundabout'})[0],'roundabout');
  assert.equal(direction({type:'turn',modifier:'slight left'})[0],'slight-left');
  assert.equal(direction({type:'turn',modifier:'uturn'})[0],'uturn');
+});
+
+test('explicit straight modifier remains valid without suppressing unknown state',()=>{
+ assert.equal(direction({type:'turn',modifier:'straight'})[0],'straight');
+ assert.equal(direction({type:'notification'})[0],'unknown');
 });
