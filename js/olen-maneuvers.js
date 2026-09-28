@@ -25,7 +25,7 @@ function providerKey(input){
  var google={
   "turn-slight-left":"slight-left","turn-sharp-left":"sharp-left","uturn-left":"uturn-left","turn-left":"left",
   "turn-slight-right":"slight-right","turn-sharp-right":"sharp-right","uturn-right":"uturn-right","turn-right":"right",
-  "straight":"straight","ramp-left":"left","ramp-right":"right","merge":"merge","fork-left":"fork-left","fork-right":"fork-right",
+  "straight":"straight","ramp-left":"unknown","ramp-right":"unknown","merge":"merge","fork-left":"fork-left","fork-right":"fork-right",
   "ferry":"ferry","ferry-train":"ferry","roundabout-left":"roundabout","roundabout-right":"roundabout","depart":"start","name-change":"straight"
  };
  if(p.indexOf("google")>=0&&google[key])return google[key]==="roundabout"?roundaboutKey(input):google[key];
@@ -38,7 +38,7 @@ function providerKey(input){
    if(key==="merge")return "merge";
    if(key==="fork")return mod==="left"?"fork-left":mod==="right"?"fork-right":"unknown";
    if(key==="end-of-road")return mod||"unknown";
-   if(key==="on-ramp"||key==="off-ramp")return mod||"unknown";
+   if(key==="on-ramp"||key==="off-ramp")return "unknown";
    if(key==="roundabout"||key==="rotary"||key==="exit-roundabout"||key==="exit-rotary"){
      return roundaboutKey(input);
    }
@@ -60,10 +60,10 @@ function providerKey(input){
   "bear-left":"slight-left","turn-slight-left":"slight-left","turn-left":"left","sharp-left":"sharp-left","turn-sharp-left":"sharp-left",
   "make-uturn":"uturn","make-u-turn":"uturn","try-make-uturn":"uturn",
   "enter-motorway":"motorway","enter-freeway":"motorway","enter-highway":"motorway",
-  "take-exit":"exit-right","motorway-exit-left":"left","exit-motorway-left":"left","motorway-exit-right":"exit-right","exit-motorway-right":"exit-right",
+  "take-exit":"unknown","motorway-exit-left":"unknown","exit-motorway-left":"unknown","motorway-exit-right":"exit-right","exit-motorway-right":"exit-right",
   "take-ferry":"ferry","take-ship-ferry":"ferry","roundabout-cross":"roundabout","roundabout-straight":"roundabout",
   "roundabout-right":"roundabout","roundabout-left":"roundabout","roundabout-back":"roundabout",
-  "entrance-ramp":"straight","waypoint-left":"waypoint","waypoint-right":"waypoint","waypoint-reached":"waypoint"
+  "entrance-ramp":"unknown","waypoint-left":"waypoint","waypoint-right":"waypoint","waypoint-reached":"waypoint"
  };
  if(p.indexOf("tomtom")>=0&&tomtom[key]){
    if(key.indexOf("roundabout")===0)return roundaboutKey(input);
@@ -75,7 +75,7 @@ function providerKey(input){
  if(key==="arrive"||key==="arrival"||key==="destination")return "arrive";
  if(key==="depart"||key==="departure")return "start";
  if(key==="continue"||key==="new-name"||key==="name-change")return "straight";
- if(key==="on-ramp"||key==="off-ramp"||key==="ramp")return mod||"unknown";
+ if(key==="on-ramp"||key==="off-ramp"||key==="ramp")return "unknown";
  if(key==="merge"||key==="ferry"||key==="uturn"||key==="u-turn")return key;
  return raw;
 }
