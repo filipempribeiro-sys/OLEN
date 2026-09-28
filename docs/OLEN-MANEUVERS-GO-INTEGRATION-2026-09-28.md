@@ -52,3 +52,38 @@ O ramo inicial de trabalho e o ramo que alimenta o Cloudflare estavam ambos em `
 - Critérios de validação no URL habitual: deployment Cloudflare do commit efetivamente publicado, troca sucessiva direita/esquerda/rotunda com saída numerada, ausência de seta fictícia quando não há dados, modo Trail GO sem seta rodoviária herdada, saída da rota com indicação neutra e recuperação depois do regresso, STOP limpa o HUD, GO/Reportar visíveis fora do GO. Os testes de terreno são do utilizador em contexto seguro e nunca manipulando o ecrã durante a condução.
 
 O objetivo desta publicação é **pronto para validação manual**, não certificação de navegação em produção ou Android Auto.
+
+
+## Fecho final da integração Maneuvers — 28/09/2026
+
+Esta secção substitui os totais de testes e limitações dos checkpoints anteriores quando houver divergência.
+
+### Compatibilidade real do motor ativo
+- O retorno do Worker/Valhalla é normalizado antes de entrar no GO: `begin_shape_index`/`beginShapeIndex` → `pointIndex`; `street_names`/`begin_street_names` → `road`; `roundabout_exit_count` e variantes → `exitNumber` (1–12). O objeto original é preservado.
+- Os tipos Valhalla documentados usados pela navegação foram revistos: continue/becomes/stay-straight, viragens, U-turn esquerda/direita, stay-right/stay-left, merge, rotunda, ferry e saída direita/esquerda. Rampas sem identidade visual auditada permanecem neutras em vez de fingirem uma viragem.
+- O fallback OSRM conserva `provider:'osrm'`, saídas de rotunda, `driving_side` e lanes da mesma interseção. Forks esquerda/direita são reconhecidos; on/off-ramp sem visual certificado ficam neutros.
+- O renderer aceita diretamente formas provider-native relevantes: Google `navigationInstruction`, Mapbox `maneuver` aninhado, HERE `action/direction` e TomTom `instructionType`, além do modelo canónico OLEN.
+- Texto, rua e distância deixam de herdar valores da manobra anterior: valores provider-native atualizam o HUD e um estado desconhecido limpa rua/distância antigas.
+- Rotundas 1–6 continuam com PNGs dedicados; 7–12 usam rotunda genérica com número real no texto. Quando `drivingSide=left`, o visual da rotunda é espelhado sem criar novos assets.
+- `keep-left` e `exit-left` usam versões espelhadas, em runtime, dos assets aprovados de direita. Nenhum PNG 97+ foi inventado e o ID 74 permanece reservado à AUTOCARAVANA.
+- Lane guidance mantém índice esquerda→direita e, quando a lane selecionada fornece `validIndication`/indicação inequívoca, acrescenta a direção ao texto (ex.: `Faixa 2/3 · direita`). Sem metadata verificável, mostra apenas o índice ou o texto padrão.
+
+### Auditoria visual dos assets utilizados pela navegação
+Foram inspecionados diretamente a partir dos blobs GitHub os principais grupos de manobra 01–60 e o lane-guidance 91, além dos extras 92–96. Os grupos confirmam a identidade dos recursos usados para straight, viragens, forks, merge/keep, motorway/exit, rotundas, start/finish e lane guidance. O asset 74 é protegido pelo requisito histórico AUTOCARAVANA e não foi substituído nem reinterpretado.
+
+### Evidência de testes final
+Foram executados **63/63 casos** de lógica/integração com as fontes atuais do ramo:
+- `tests/olen-maneuvers.test.cjs`: 26/26
+- `tests/olen-osrm-adapter.test.cjs`: 11/11
+- `tests/olen-map-maneuver-unknown.test.cjs`: 4/4
+- `tests/olen-go-maneuver-integration.test.cjs`: 8/8
+- `tests/olen-go-off-route-maneuver.test.cjs`: 3/3
+- `tests/olen-map-routing-regression.test.cjs`: 3/3
+- `tests/olen-valhalla-maneuver-normalization.test.cjs`: 4/4
+- `tests/olen-valhalla-to-hud-integration.test.cjs`: 2/2
+- `tests/olen-osrm-to-hud-integration.test.cjs`: 2/2
+
+Os dois testes de ponta a ponta isolados provam o encadeamento de **payload raw Valhalla/OSRM → normalização/adaptador → OLENNavigationGuide → PNG/texto real do HUD**. A sintaxe dos quatro módulos principais foi novamente validada.
+
+### Limites de aceitação
+Estes testes não são GPS físico, navegador real, Android Auto ou percurso rodoviário. Google/HERE/TomTom continuam a ser compatibilidade de input, não providers live ligados nesta instalação. A aceitação final desta frente é, portanto, o teste do utilizador no URL habitual da OLEN após o deployment Cloudflare do commit publicado.
