@@ -216,3 +216,11 @@ test('Mapbox numeric step distance is formatted as metres for the HUD',()=>{
  guide.set({provider:'mapbox',maneuver:{type:'turn',modifier:'right'},instruction:'Vira à direita',name:'Rua B',distance:236.9});
  assert.equal(nodes.get('rzNextDistance').textContent,'237 m');
 });
+
+test('full Mapbox step uses nested maneuver instruction in the HUD',()=>{
+ const {guide,nodes}=load();
+ guide.set({provider:'mapbox',maneuver:{type:'turn',modifier:'left',instruction:'Vira à esquerda'},name:'Rua C',distance:90});
+ assert.equal(nodes.get('rzGuideText').textContent,'Vira à esquerda');
+ assert.equal(nodes.get('rzRoadName').textContent,'Rua C');
+ assert.equal(nodes.get('rzNextDistance').textContent,'90 m');
+});
