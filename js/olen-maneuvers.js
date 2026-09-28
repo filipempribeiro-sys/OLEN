@@ -101,7 +101,7 @@ function set(data){data=data||{};var item=render(data),t=document.getElementById
  var nav=data.navigationInstruction&&typeof data.navigationInstruction==="object"?data.navigationInstruction:null;
  var instruction=data.instruction??data.instructions??nav?.instructions??data.message;
  var road=data.road??data.name??data.street??data.streetName??"";
- var distance=data.distance??distanceText(data.distanceMeters);
+ var distance=typeof data.distance==="number"?distanceText(data.distance):(data.distance??distanceText(data.distanceMeters));
  if(t&&instruction!=null)t.textContent=instruction;else if(t&&item.id===0)t.textContent="Confirma a próxima indicação no mapa.";
  if(r)r.textContent=road===false?"":String(road||"");
  if(line)line.hidden=road===false||road==="";
