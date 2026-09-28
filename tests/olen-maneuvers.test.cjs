@@ -224,3 +224,22 @@ test('full Mapbox step uses nested maneuver instruction in the HUD',()=>{
  assert.equal(nodes.get('rzRoadName').textContent,'Rua C');
  assert.equal(nodes.get('rzNextDistance').textContent,'90 m');
 });
+
+test('derived keep-left mirrors approved keep-right asset and resets on keep-right',()=>{
+ const {guide,img}=load();
+ guide.set({type:'keep-left',instruction:'Mantém-te à esquerda'});
+ assert.equal(img.attrs.src,'assets/maneuvers/olen-maneuver-12.png');
+ assert.equal(img.style.transform,'scaleX(-1)');
+ guide.set({type:'keep-right',instruction:'Mantém-te à direita'});
+ assert.equal(img.attrs.src,'assets/maneuvers/olen-maneuver-12.png');
+ assert.equal(img.style.transform,'');
+});
+test('derived exit-left mirrors approved exit-right asset without inventing a new PNG',()=>{
+ const {guide,img}=load();
+ guide.set({type:'exit-left',instruction:'Segue pela saída à esquerda'});
+ assert.equal(img.attrs.src,'assets/maneuvers/olen-maneuver-23.png');
+ assert.equal(img.style.transform,'scaleX(-1)');
+ guide.set({type:'exit-right',instruction:'Segue pela saída à direita'});
+ assert.equal(img.attrs.src,'assets/maneuvers/olen-maneuver-23.png');
+ assert.equal(img.style.transform,'');
+});
