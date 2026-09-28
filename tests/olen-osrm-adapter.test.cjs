@@ -74,3 +74,11 @@ test('OSRM fork directions map safely while ramps remain neutral until audited',
  assert.equal(direction({type:'on ramp',modifier:'right'})[0],'unknown');
  assert.equal(direction({type:'off ramp',modifier:'left'})[0],'unknown');
 });
+
+test('OSRM adapter preserves provider identity and accepts roundabout exit on route step',()=>{
+ const step={maneuver:{type:'roundabout',location:[-9.125,38.725]},exit:4,distance:150};
+ const result=fromRoute({...route,legs:[{steps:[step]}]},'car','OSRM road');
+ assert.equal(result.maneuvers[0].provider,'osrm');
+ assert.equal(result.maneuvers[0].exitNumber,4);
+ assert.match(result.maneuvers[0].instruction,/4\\.ª saída/);
+});
