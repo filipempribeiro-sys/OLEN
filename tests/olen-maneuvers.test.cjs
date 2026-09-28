@@ -180,3 +180,13 @@ test('Mapbox documented maneuver types resolve safely, including numbered rounda
  ];
  for(const [input,id] of samples)assert.equal(api.resolve(input).id,id,JSON.stringify(input));
 });
+
+test('left-hand roundabout mirrors only the roundabout asset and resets afterwards',()=>{
+ const {guide,img}=load();
+ guide.set({provider:'mapbox',type:'roundabout',exitNumber:2,drivingSide:'left',instruction:'Segunda saída'});
+ assert.equal(img.style.transform,'scaleX(-1)');
+ guide.set({provider:'mapbox',type:'roundabout',exitNumber:2,drivingSide:'right',instruction:'Segunda saída'});
+ assert.equal(img.style.transform,'');
+ guide.set({type:'turn-right',drivingSide:'left',instruction:'Vira à direita'});
+ assert.equal(img.style.transform,'');
+});
