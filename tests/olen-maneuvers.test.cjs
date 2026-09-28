@@ -70,3 +70,30 @@ test('unchanged approved mobility icons retain their identities',()=>{
  assert.equal(api.resolve('mota').id,93);
  assert.equal(api.resolve('bicicleta').id,95);
 });
+
+
+test('Google, Mapbox, HERE and TomTom return the same safe canonical right turn',()=>{
+ const {api}=load();
+ const samples=[
+  {provider:'google',type:'TURN_RIGHT'},
+  {provider:'mapbox',type:'turn',modifier:'right'},
+  {provider:'here',type:'right-turn'},
+  {provider:'tomtom',type:'TURN_RIGHT'}
+ ];
+ for(const input of samples)assert.equal(api.resolve(input).id,2);
+});
+test('verified roundabout exits map only to the six approved dedicated PNGs',()=>{
+ const {api}=load();
+ for(const provider of ['google','mapbox','here','tomtom']){
+  const type=provider==='google'?'ROUNDABOUT_RIGHT':
+   provider==='here'?'roundabout-exit':
+   provider==='tomtom'?'roundabout-right':'roundabout';
+  assert.equal(api.resolve({provider,type,exitNumber:2}).id,47);
+  assert.equal(api.resolve({provider,type,exitNumber:8}).id,40);
+ }
+});
+test('unknown roundabout exit does not default to first exit',()=>{
+ const {api}=load();
+ assert.equal(api.resolve({provider:'mapbox',type:'roundabout'}).id,40);
+ assert.equal(api.resolve({provider:'mapbox',type:'roundabout',exitNumber:99}).id,40);
+});
