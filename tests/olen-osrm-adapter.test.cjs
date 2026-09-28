@@ -80,5 +80,5 @@ test('OSRM adapter preserves provider identity and accepts roundabout exit on ro
  const result=fromRoute({...route,legs:[{steps:[step]}]},'car','OSRM road');
  assert.equal(result.maneuvers[0].provider,'osrm');
  assert.equal(result.maneuvers[0].exitNumber,4);
- assert.match(result.maneuvers[0].instruction,/4\\.ª saída/);
+ assert.match(result.maneuvers[0].instruction,/4\.ª saída/);
 });
