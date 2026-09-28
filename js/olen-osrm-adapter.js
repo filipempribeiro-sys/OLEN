@@ -15,13 +15,19 @@
  const valid=c=>Array.isArray(c)&&c.length>=2&&Number.isFinite(c[0])&&Number.isFinite(c[1])&&
   Math.abs(c[0])<=180&&Math.abs(c[1])<=90;
  function direction(m){
-  const type=String(m?.type||''),modifier=String(m?.modifier||'');
+  const type=String(m?.type||'').trim().toLowerCase(),modifier=String(m?.modifier||'').trim().toLowerCase();
+  const normalized=modifier.replace(/\s+/g,'-');
   if(type==='depart')return ['start','Inicia o percurso'];
   if(type==='arrive')return ['finish','Chegaste ao destino'];
-  if(type==='roundabout'||type==='rotary')return ['roundabout','Entra na rotunda'];
+  if(['roundabout','rotary','roundabout turn','exit roundabout','exit rotary'].includes(type))
+    return ['roundabout','Entra na rotunda'];
   if(type==='merge')return ['merge','Entra na via indicada'];
-  if(type==='on ramp'||type==='off ramp')return ['merge','Segue a ligação indicada'];
-  const normalized=modifier.replace(/\s+/g,'-');
+  if(type==='fork'){
+    if(normalized==='left'||normalized==='slight-left')return ['fork-left','Mantém-te à esquerda na bifurcação'];
+    if(normalized==='right'||normalized==='slight-right')return ['fork-right','Mantém-te à direita na bifurcação'];
+    return ['unknown','Confirma a bifurcação no mapa'];
+  }
+  if(type==='on ramp'||type==='off ramp')return ['unknown','Segue a ligação indicada no mapa'];
   if(normalized==='straight'||type==='continue'||type==='new name')return ['straight','Continua no percurso indicado'];
   if(normalized==='right')return ['turn-right','Vira à direita'];
   if(normalized==='left')return ['turn-left','Vira à esquerda'];
