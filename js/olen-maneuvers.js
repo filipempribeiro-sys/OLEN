@@ -99,7 +99,8 @@ function render(maneuver){var item=resolve(maneuver),img=ensureImage();if(img){
 function distanceText(value){var n=Number(value);if(!Number.isFinite(n)||n<0)return null;return n>=1000?(n/1000).toFixed(1).replace(".",",")+" km":Math.round(n)+" m"}
 function set(data){data=data||{};var item=render(data),t=document.getElementById("rzGuideText"),r=document.getElementById("rzRoadName"),d=document.getElementById("rzNextDistance"),line=document.getElementById("rzRoadLine");
  var nav=data.navigationInstruction&&typeof data.navigationInstruction==="object"?data.navigationInstruction:null;
- var instruction=data.instruction??data.instructions??nav?.instructions??data.message;
+ var nested=data.maneuver&&typeof data.maneuver==="object"?data.maneuver:null;
+ var instruction=data.instruction??data.instructions??nav?.instructions??nested?.instruction??data.message;
  var road=data.road??data.name??data.street??data.streetName??"";
  var distance=typeof data.distance==="number"?distanceText(data.distance):(data.distance??distanceText(data.distanceMeters));
  if(t&&instruction!=null)t.textContent=instruction;else if(t&&item.id===0)t.textContent="Confirma a próxima indicação no mapa.";
