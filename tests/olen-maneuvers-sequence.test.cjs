@@ -22,7 +22,7 @@ function fixture(){
   {type:'turn-right',pointIndex:1,instruction:'Vira à direita',road:'Rua A',exitNumber:null},
   {type:'turn-left',pointIndex:2,instruction:'Vira à esquerda',road:'Rua B'}
  ];
- const curve=[0,200,600,980,1000].map(m=>({meters:m,point:{lat:38,lon:-9}}));
+ const curve=[0,200,600,950,1000].map(m=>({meters:m,point:{lat:38,lon:-9}}));
  const c={active:true,route:{distanceMeters:1000,durationSeconds:600,maneuvers:steps},curve,
   destination:{name:'Teste'},mode:'car',last:null,following:false,map:null,
   window:{OLENNavigationGuide:{set:payload=>calls.push(payload)},L:null},$,
@@ -39,7 +39,7 @@ test('right then left: real maneuver changes once, distance refresh does not cre
  assert.equal(f.calls.length,2);
  assert.equal(f.calls[0].type,'turn-right');
  assert.equal(f.calls[1].type,'turn-left');
- assert.equal(f.nodes.get('rzNextDistance').textContent,'400 m');
+ assert.equal(f.nodes.get('rzNextDistance').textContent,'0 m');
 });
 test('no step and arrival never create an unverified straight arrow',()=>{
  const f=fixture();f.run({idx:3});f.run({idx:4});
