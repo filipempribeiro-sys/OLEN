@@ -10,7 +10,7 @@ function dist(a,b){const p=Math.PI/180,R=6371000,x=(b.latitude-a.latitude)*p,y=(
 function elapsed(){return t0?Math.max(0,Math.floor((Date.now()-t0)/1000)):0}
 function fmt(n){return [Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,"0")).join(":")}
 function tick(){const e=$("rzTime");if(e)e.textContent=fmt(elapsed())}
-function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude,accuracy:c.accuracy,timestamp:p.timestamp,heading:typeof c.heading==='number'&&Number.isFinite(c.heading)&&c.heading>=0?c.heading:undefined};
+function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude,accuracy:c.accuracy,timestamp:p.timestamp};
  const fix=track?.ingest(p);if(!fix?.accepted)return;
  total=fix.state.distanceMeters;last=n;
  $("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";
