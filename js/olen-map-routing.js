@@ -7,6 +7,7 @@ const API='https://olen-alpha-ai.filipe-m-p-ribeiro.workers.dev';
 const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
 let library=null,map=null,tile=null,routeLine=null,trackLine=null,trailLine=null,destinationMarker=null,userMarker=null,reportMarkers=[];
+let userMarkerKind='',directionHeading=null,directionSource='';
 let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='',offRoute=false;
 let following=true,trackVisible=true,trailVisible=true,routeVisible=true,reportsVisible=true,trail=null,trailGuide=null,trailActive=false;
 function $(id){return document.getElementById(id)}
@@ -74,42 +75,86 @@ async function ensureMap(){
        }).addTo(map);
    L.control.zoom({position:'bottomright'}).addTo(map);
    map.setView([38.7223,-9.1393],11);
+   map.on('dragstart',()=>{following=false});
  }
  requestAnimationFrame(()=>requestAnimationFrame(()=>map?.invalidateSize()));
  return map;
+}
+function bearing(a,b){
+ const rad=Math.PI/180,lat1=a.lat*rad,lat2=b.lat*rad,dl=(b.lon-a.lon)*rad;
+ return (Math.atan2(Math.sin(dl)*Math.cos(lat2),
+  Math.cos(lat1)*Math.sin(lat2)-Math.sin(lat1)*Math.cos(lat2)*Math.cos(dl))/rad+360)%360;
+}
+function routeBearing(){
+ if(!last||!curve.length)return null;
+ const nearest=getNearest(last);
+ if(nearest.delta>130)return null;
+ for(let i=nearest.idx+1;i<curve.length;i++){
+  if(meters(last,curve[i].point)>3)return bearing(curve[nearest.idx].point,curve[i].point);
+ }
+ return null;
+}
+function navigationZoom(){return mode==='walk'?18:17}
+function focusNavigation(start=false){
+ if(!map||!last||!following)return;
+ if(start)map.setView([last.lat,last.lon],navigationZoom(),{animate:false});
+ else map.panTo([last.lat,last.lon],{animate:false});
+}
+function updateUserMarker(){
+ if(!map||!last||!window.L)return;
+ const L=window.L,navigating=active||trailActive;
+ const routeDirection=active?routeBearing():null;
+ const angle=directionHeading??routeDirection;
+ const arrow=navigating&&Number.isFinite(angle);
+ const kind=arrow?'navigation':'position';
+ if(userMarker&&userMarkerKind!==kind){map.removeLayer(userMarker);userMarker=null}
+ const label=directionHeading!==null?'Posição GPS · direção de deslocação':
+  'Posição GPS · direção do percurso';
+ if(!userMarker){
+  if(arrow){
+   userMarker=L.marker([last.lat,last.lon],{interactive:false,zIndexOffset:1000,
+    icon:L.divIcon({className:'olen-navigation-marker',iconSize:[44,44],iconAnchor:[22,22],
+     html:'<span class="olen-navigation-pointer" style="transform:rotate('+angle+'deg)" role="img" aria-label="'+label+'"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 4 37 38 22 30 7 38Z"/></svg></span>'})}).addTo(map);
+  }else{
+   userMarker=L.circleMarker([last.lat,last.lon],{
+    radius:7,color:'#fff',fillColor:'#5ba8ff',fillOpacity:1,weight:3
+   }).addTo(map);
+  }
+  userMarkerKind=kind;
+ }else userMarker.setLatLng([last.lat,last.lon]);
+ if(arrow){
+  const pointer=userMarker.getElement()?.querySelector('.olen-navigation-pointer');
+  if(pointer){pointer.style.transform='rotate('+angle+'deg)';pointer.setAttribute('aria-label',label)}
+ }
 }
 function draw(){
  if(!map||!window.L)return;
  const L=window.L;
  if(routeLine){map.removeLayer(routeLine);routeLine=null}
  if(destinationMarker){map.removeLayer(destinationMarker);destinationMarker=null}
- if(userMarker){map.removeLayer(userMarker);userMarker=null}
  if(destination){
    destinationMarker=L.circleMarker([destination.lat,destination.lon],{
      radius:9,color:'#eafff7',fillColor:'#59edb6',fillOpacity:1,weight:3
    }).addTo(map);
  }
- if(last){
-   userMarker=L.circleMarker([last.lat,last.lon],{
-     radius:7,color:'#fff',fillColor:'#5ba8ff',fillOpacity:1,weight:3
-   }).addTo(map);
- }
+ updateUserMarker();
  if(trailLine){map.removeLayer(trailLine);trailLine=null}
  if(trail?.segments?.length){
    const paths=trail.segments.map(seg=>seg.map(p=>[p.latitude,p.longitude])).filter(seg=>seg.length>1);
    if(paths.length){trailLine=L.polyline(paths,{color:'#f4c96a',weight:5,opacity:.95,interactive:false}).addTo(map);
      if(!trailVisible)map.removeLayer(trailLine);
-     if(!route){const area=trailLine.getBounds();if(area.isValid())map.fitBounds(area.pad(.15),{animate:false,maxZoom:16})}
+     if(!route&&!trailActive){const area=trailLine.getBounds();if(area.isValid())map.fitBounds(area.pad(.15),{animate:false,maxZoom:16})}
    }
  }
  if(route?.geometry?.type==='LineString'&&route.geometry.coordinates.length>=2){
    routeLine=L.geoJSON(route.geometry,{style:{color:'#4ce6bb',weight:5,opacity:.94,lineCap:'round'}}).addTo(map);
    if(!routeVisible)map.removeLayer(routeLine);
    const bounds=routeLine.getBounds();
-   if(bounds.isValid())map.fitBounds(bounds.pad(.18),{animate:false,maxZoom:16});
+   if(bounds.isValid()&&!active)map.fitBounds(bounds.pad(.18),{animate:false,maxZoom:16});
  }else if(destination){
    map.setView([destination.lat,destination.lon],15,{animate:false});
  }
+ if(active||trailActive)focusNavigation();
  refreshTrack();refreshReports();
  requestAnimationFrame(()=>map?.invalidateSize());
 }
@@ -156,7 +201,7 @@ function findPosition(){
    navigator.geolocation.getCurrentPosition(p=>{
      const c=coord(p.coords);
      if(!c)return reject(new Error('A localização devolvida não é válida.'));
-     resolve({...c,accuracy:Number(p.coords.accuracy)||null});
+     resolve({...c,accuracy:Number(p.coords.accuracy)||null,heading:p.coords.heading,speed:p.coords.speed,timestamp:p.timestamp});
    },e=>reject(new Error(e?.code===1?
      'Autoriza a localização para calcular o percurso real dentro da OLEN.':
      'Não foi possível obter a localização atual. Verifica o GPS e tenta novamente.')),
@@ -334,21 +379,21 @@ function updateInstruction(pos){
  const trip=$('rzBottom')?.querySelector('.rz-trip'),labels=trip?.querySelectorAll('span b');
  if(labels?.[0])labels[0].textContent=new Date(Date.now()+remaining/Math.max(route.distanceMeters,1)*route.durationSeconds*1000).toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'});
  if(labels?.[1])labels[1].textContent=formatDistance(remaining);
- if(following&&map&&last&&window.L&&map.getZoom()>11)map.panTo([pos.lat,pos.lon],{animate:false});
 }
 function updatePosition(c){
  const pos=coord(c);if(!pos)return false;
- last={...pos,accuracy:Number(c?.accuracy)||null,timestamp:Number(c?.timestamp)||Date.now()};
- if(map&&window.L){
-   if(!userMarker)userMarker=window.L.circleMarker([pos.lat,pos.lon],{
-     radius:7,color:'#fff',fillColor:'#5ba8ff',fillOpacity:1,weight:3
-   }).addTo(map);
-   else userMarker.setLatLng([pos.lat,pos.lon]);
+ const previous=last,accuracy=Number(c?.accuracy),speed=c?.speed;
+ if(typeof c?.heading==='number'&&Number.isFinite(c.heading)&&c.heading>=0&&c.heading<360&&speed!==0){
+  directionHeading=c.heading;directionSource='gps';
+ }else if(previous&&Number.isFinite(accuracy)&&accuracy<=65&&meters(previous,pos)>Math.max(5,accuracy/2)){
+  directionHeading=bearing(previous,pos);directionSource='movement';
  }
+ last={...pos,accuracy:Number.isFinite(accuracy)?accuracy:null,timestamp:Number(c?.timestamp)||Date.now()};
+ updateUserMarker();
  refreshTrack();
- if(active)updateInstruction(pos);
+ if(active){focusNavigation();updateInstruction(pos)}
  if(trailActive&&trailGuide){
-   if(following&&map&&map.getZoom()>11)map.panTo([pos.lat,pos.lon],{animate:false});
+   focusNavigation();
    const state=trailGuide.locate(pos);
    if(state.offTrail)notice('Estás a mais de 100 m do trilho selecionado. Confirma o percurso antes de prosseguir.',true);
    else {notice('');const label=$('rzGuideText'),next=$('rzNextDistance');
@@ -361,6 +406,7 @@ function updatePosition(c){
 function beginTrailGuidance(){
  if(!trailGuide)return false;
  active=false;trailActive=true;following=true;
+ updateUserMarker();focusNavigation(true);
  document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
  const label=$('rzGuideText'),road=$('rzRoadName');
  if(label)label.textContent='Segue o trilho GPX selecionado.';
@@ -368,7 +414,7 @@ function beginTrailGuidance(){
  const status=$('rzStatus');if(status)status.textContent='GO ativo · '+trail.name+' · A pé';
  return true;
 }
-function stopTrailGuidance(){trailActive=false;return true}
+function stopTrailGuidance(){trailActive=false;updateUserMarker();return true}
 async function previewTrail(parsed){
  if(!parsed?.segments?.length||!window.OLENTrailGuide)throw new Error('GPX sem percurso utilizável.');
  const nextGuide=window.OLENTrailGuide.build(parsed.segments);
@@ -385,11 +431,12 @@ function beginGuidance(){
  if(!route||!last||!destination)return false;
  following=true;refreshTrack();
  document.querySelector('.screen[data-screen="map"]')?.classList.remove('olen-map-preview');
- active=true;offRoute=false;lastManeuverKey='';updateInstruction(last);
+ active=true;offRoute=false;lastManeuverKey='';
+ updateUserMarker();focusNavigation(true);updateInstruction(last);
  return true;
 }
 function stopGuidance(){
- active=false;offRoute=false;lastManeuverKey='';notice('Navegação terminada. O percurso mantém-se no mapa.');
+ active=false;offRoute=false;lastManeuverKey='';updateUserMarker();notice('Navegação terminada. O percurso mantém-se no mapa.');
  return true;
 }
 async function open(place,{navigate=false,travelMode='walk'}={}){
@@ -397,7 +444,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
  if(!target){notice('Este local não tem coordenadas confirmadas.',true);return false}
  const current=++serial;
  destination={...target,name:String(place.name||'Destino').slice(0,105)};
- route=null;curve=[];active=false;trail=null;trailGuide=null;trailActive=false;last=null;mode=travelMode;lastManeuverKey='';offRoute=false;
+ route=null;curve=[];active=false;trail=null;trailGuide=null;trailActive=false;last=null;directionHeading=null;directionSource='';mode=travelMode;lastManeuverKey='';offRoute=false;
  // Preview from "Mapa" shows only the real route; "Ir" owns GPS navigation.
  document.querySelector('.screen[data-screen="map"]')?.classList.toggle('olen-map-preview',!navigate);
  window.OLENPlaceExperience?.close?.();
@@ -422,7 +469,7 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
    notice('A obter a tua localização para calcular um percurso real…');
    const position=await findPosition();
    if(current!==serial)return false;
-   last=position;draw();
+   updatePosition(position);draw();
    notice('A calcular o percurso confirmado…');
    const candidate=await resolveRoute(position,target,mode);
    if(current!==serial)return false;
@@ -436,13 +483,13 @@ async function open(place,{navigate=false,travelMode='walk'}={}){
        throw new Error('A navegação em tempo real necessita de GPS contínuo disponível.');
      if(window.OLENLegacyGo.startRoute(destination.name,mode)!==true)
        throw new Error('Não foi possível iniciar a navegação GPS da OLEN.');
-     if(!beginGuidance())throw new Error('Não foi possível ligar a navegação ao percurso confirmado.');
+     if(!active&&!beginGuidance())throw new Error('Não foi possível ligar a navegação ao percurso confirmado.');
      notice('');
    }
    return true;
  }catch(e){
    if(current!==serial)return false;
-   route=null;curve=[];active=false;draw();
+   route=null;curve=[];active=false;updateUserMarker();draw();
    notice(routeError(e),true);
    return false;
  }
@@ -563,13 +610,14 @@ async function controlMap(action){
   }
   if(action==='Direção'){
    following=!following;
-   if(following&&last)map.panTo([last.lat,last.lon],{animate:false});
+   if(following&&last){if(active||trailActive)focusNavigation(true);else map.panTo([last.lat,last.lon],{animate:false})}
    notice(following?'A acompanhar a posição GPS.':'Acompanhamento do mapa desativado.');return true;
   }
   if(action==='Recentrar'){
    const pos=last&&Number.isFinite(last.timestamp)&&Date.now()-last.timestamp<10000?last:await findPosition();
-   if(!active)updatePosition(pos);
-   map.setView([pos.lat,pos.lon],Math.max(map.getZoom(),15),{animate:false});
+   updatePosition(pos);following=true;
+   if(active||trailActive)focusNavigation(true);
+   else map.setView([pos.lat,pos.lon],Math.max(map.getZoom(),15),{animate:false});
    notice('Mapa centrado na tua localização.');return true;
   }
   if(action==='Pesquisar'){
@@ -577,6 +625,7 @@ async function controlMap(action){
    panel.hidden=false;$('rzDestination')?.focus();return true;
   }
   if(action==='OLEN'){
+   following=false;
    if(routeLine?.getBounds()?.isValid())map.fitBounds(routeLine.getBounds().pad(.18),{animate:false,maxZoom:16});
    else if(trackLine?.getBounds()?.isValid())map.fitBounds(trackLine.getBounds().pad(.18),{animate:false,maxZoom:16});
    else map.setView([38.7223,-9.1393],11,{animate:false});

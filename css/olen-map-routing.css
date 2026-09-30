@@ -84,3 +84,9 @@
 .screen[data-screen="map"] #rzIdle:not([hidden]) > #rzReportIdle{
   border-color:rgba(82,246,220,.5)!important;
 }
+
+/* Real GPS position; rotation stays inside Leaflet's positioned marker. */
+.olen-navigation-marker{background:transparent;border:0}
+.olen-navigation-pointer{display:block;width:44px;height:44px;transform-origin:50% 50%;filter:drop-shadow(0 2px 4px rgba(0,0,0,.4))}
+.olen-navigation-pointer svg{display:block;width:100%;height:100%;overflow:visible}
+.olen-navigation-pointer path{fill:#238de5;stroke:#fff;stroke-width:3;stroke-linejoin:round}

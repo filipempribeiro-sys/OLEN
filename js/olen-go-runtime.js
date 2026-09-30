@@ -10,8 +10,10 @@ function dist(a,b){const p=Math.PI/180,R=6371000,x=(b.latitude-a.latitude)*p,y=(
 function elapsed(){return t0?Math.max(0,Math.floor((Date.now()-t0)/1000)):0}
 function fmt(n){return [Math.floor(n/3600),Math.floor(n%3600/60),n%60].map(x=>String(x).padStart(2,"0")).join(":")}
 function tick(){const e=$("rzTime");if(e)e.textContent=fmt(elapsed())}
-function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude,accuracy:c.accuracy,timestamp:p.timestamp};
- const fix=track?.ingest(p);if(!fix?.accepted)return;
+function gps(p){const c=p.coords,n={latitude:c.latitude,longitude:c.longitude,accuracy:c.accuracy,heading:c.heading,speed:c.speed,timestamp:p.timestamp};
+ const fix=track?.ingest(p);
+ // A stationary fix can update direction/location without adding track distance.
+ if(!fix?.accepted){if(fix?.reason==='jitter')window.OLENMapRouting?.updatePosition?.(n);return;}
  total=fix.state.distanceMeters;last=n;
  $("rzDone").textContent=total<1000?Math.round(total)+" m":(total/1000).toFixed(1)+" km";
  const points=fix.state.points,previous=points.at(-2),current=points.at(-1);
@@ -63,8 +65,8 @@ function beginSession(routeState,trailMode=false,{resume=false,free=false}={}){
  catch(error){stop();window.OLENMapRouting?.reportGpsError?.(error);return false}
  if(watch===null){stop();window.OLENMapRouting?.reportGpsError?.({code:1});return false}
  if(free){show("rzGuide",false);const status=$("rzStatus");if(status)status.textContent="Tracking ativo · A pé"}
- else if(trailMode)window.OLENMapRouting?.beginTrailGuidance?.();
- else window.OLENMapRouting?.beginGuidance?.();
+ else if(trailMode){if(window.OLENMapRouting?.beginTrailGuidance?.()!==true){stop();return false}}
+ else if(window.OLENMapRouting?.beginGuidance?.()!==true){stop();return false}
  return true;
 }
 function start(){

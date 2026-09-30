@@ -13,6 +13,8 @@
   function settleChallenge(error,token){
     const yes=accept,no=reject;
     clearChallenge();
+    const target=document.getElementById('olen-chat-turnstile');
+    if(target){target.hidden=true;target.style.display='none'}
     if(error){if(no)no(error)}else if(yes)yes(token);
   }
   function loadTurnstile(){
@@ -46,6 +48,8 @@
       });
       if(widget===undefined||widget===null)throw new Error('Não foi possível iniciar a verificação de segurança.');
     }
+    const target=document.getElementById('olen-chat-turnstile');
+    if(target){target.hidden=false;target.style.display=''}
     turnstile.reset(widget);
     return new Promise((resolve,rejectToken)=>{
       accept=resolve;reject=rejectToken;
