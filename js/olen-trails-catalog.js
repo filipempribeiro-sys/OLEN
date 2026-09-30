@@ -35,6 +35,8 @@
    operator:String(tags.operator||'').slice(0,160),distanceTag:String(tags.distance||'').slice(0,50),
    elevationGainTag:String(tags.ascent||'').slice(0,50),elevationLossTag:String(tags.descent||'').slice(0,50),
    durationTag:String(tags.duration||'').slice(0,50),roundtrip:String(tags.roundtrip||'').slice(0,12),
+   difficultyTag:String(tags.sac_scale||tags.difficulty||'').slice(0,80),
+   accessTag:String(tags.access||'').slice(0,50),
    description:String(tags.description||'').slice(0,800),from:String(tags.from||'').slice(0,130),
    to:String(tags.to||'').slice(0,130),surveyDate:String(tags['survey:date']||'').slice(0,30),
    center,metersFromSearch:distance(origin,center),segments,

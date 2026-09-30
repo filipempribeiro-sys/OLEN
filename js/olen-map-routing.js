@@ -545,6 +545,11 @@ async function prepareManual(name,travelMode='walk'){
  if(q.length<2){notice('Indica primeiro o destino.',true);return false}
  if(!VALID_MODES.has(travelMode)){notice('Este modo ainda não tem um motor de navegação confirmado.',true);return false}
  try{
+   if(window.OLENDestinationSearch){
+    const chosen=window.OLENDestinationSearch.selected||await window.OLENDestinationSearch.search();
+    if(!chosen)return false;
+    return open(chosen,{navigate:true,travelMode});
+   }
    notice('A confirmar o destino no mapa…');
    const list=await lookupDestination(q);
    if(!list.length)throw new Error('Não foi possível confirmar este destino. Escolhe outro local.');

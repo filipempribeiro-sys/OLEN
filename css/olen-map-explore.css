@@ -1,5 +1,29 @@
 /* ALPHA exploration tools adapted to OLEN's approved full-screen Map/GO.
    Isolated to the new Explore entry/modal; no global mobile or footer overrides. */
+/* GO planning uses OLEN inline suggestions and the shared Chat card styles. */
+#rzGoPop .rz-sheet{max-height:calc(100dvh - 32px)!important;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}
+#rzGoPop .rz-sheet::-webkit-scrollbar{display:none;width:0}
+#rzGoPop .rz-sheet>header{position:sticky;top:0;z-index:2;background:#0c2825;padding-bottom:10px}
+#rzGoPop .olen-go-destination{display:flex;align-items:center;gap:8px;min-width:0}
+#rzGoPop .olen-go-destination input{min-width:0;flex:1}
+#rzGoPop #rzSearchDestination{flex:0 0 auto;min-height:44px;border:1px solid rgba(82,246,220,.35);border-radius:14px;padding:8px 11px;background:#12392f;color:#fff;font:inherit;font-size:12px}
+#rzGoPop .olen-go-help{margin:7px 0;font-size:11px;line-height:1.4;color:#bed5cc}
+#rzGoPop .olen-go-help[hidden],#rzGoPop #rzNearbyTrails[hidden],#rzGoPop .olen-go-suggestions[hidden]{display:none!important}
+#rzGoPop .olen-go-suggestions{display:grid;gap:0;margin:6px 0;border:1px solid rgba(82,246,220,.3);border-radius:16px;background:#092620;overflow:hidden;max-height:240px;overflow-y:auto}
+#rzGoPop .olen-go-suggestions button{display:flex;align-items:center;gap:10px;text-align:left;background:transparent;color:#f2fff9;border:0;border-bottom:1px solid rgba(82,246,220,.12);padding:10px 12px;min-height:52px;width:100%;font:inherit}
+#rzGoPop .olen-go-suggestions button[aria-selected=true],#rzGoPop .olen-go-suggestions button:hover{background:#17483b}
+#rzGoPop .olen-go-suggestions img{width:29px;height:29px;object-fit:contain}
+#rzGoPop .olen-go-suggestions span{display:grid;gap:4px;min-width:0}
+#rzGoPop .olen-go-suggestions strong{font-size:13px}#rzGoPop .olen-go-suggestions small{font-size:11px;color:#bad4c9}
+#rzGoPop #rzModes i{background:none!important;-webkit-text-fill-color:initial!important;display:grid;place-items:center}
+#rzGoPop #rzModes i img{width:44px;height:44px;object-fit:contain;display:block;filter:drop-shadow(0 0 5px rgba(82,246,220,.2))}
+#rzGoPop #rzModes{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:6px!important}
+#rzGoPop #rzModes button{min-height:58px!important}
+#rzGoPop #rzNearbyTrails{margin:12px 0;min-width:0;max-width:100%}
+#rzGoPop #rzNearbyTrails h3{font-size:15px;margin:8px 0}
+#rzGoPop .olen-trail-shape{display:block;width:100%;height:90px;background:linear-gradient(135deg,#133f36,#102e2b)}
+#rzGoPop .olen-trail-shape polyline{fill:none;stroke:#52f6dc;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+#rzGoPop .olen-trail-report{font-size:10px;line-height:1.4;margin:8px 0;color:#bddbd0}
 .screen[data-screen="map"] .rz-idle>.rz-explore-entry{grid-column:1/-1;height:34px!important;min-height:34px!important;border:0;background:rgba(3,27,25,.72);color:#9cf1d7;font-size:12px!important;font-weight:650;border-radius:17px!important;letter-spacing:.02em}
 .olen-explore-overlay[hidden]{display:none!important}
 .olen-explore-overlay .olen-explore-sheet{width:min(440px,calc(100vw - 36px));max-height:min(680px,calc(100dvh - 42px));display:flex;flex-direction:column;gap:12px;background:#0c2825;border-color:rgba(95,235,191,.21);padding:20px}

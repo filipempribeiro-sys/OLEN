@@ -102,11 +102,10 @@
   body.replaceChildren();
   if(tab==='trails'){
    body.appendChild(node('h3','Trilhos e caminhos próximos'));
-   info('Procura trilhos reais na zona do destino ou na área visível do mapa. A homologação é sempre apresentada como não verificada.');
+   info('Escolhe uma localidade para procurar nessa zona. Sem destino, procura perto da tua posição GPS.');
    body.appendChild(action('Descobrir trilhos no mapa',()=>{
     goSheet();$('rzDiscoverTrails')?.click();
    },true));
-   body.appendChild(action('Importar trilho GPX',()=>{goSheet();$('rzImportGPX')?.click()}));
    body.appendChild(action('Camadas do mapa',async()=>{
     closeModal();await window.OLENMapRouting?.controlMap?.('Camadas');
    }));
