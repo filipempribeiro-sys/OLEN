@@ -21,7 +21,7 @@
       "id": "background",
       "type": "background",
       "paint": {
-        "background-color": "#f2f3ef"
+        "background-color": "#f5f7f7"
       }
     },
     {
@@ -30,20 +30,7 @@
       "source": "ne2_shaded",
       "maxzoom": 7,
       "paint": {
-        "raster-opacity": [
-          "interpolate",
-          [
-            "exponential",
-            1.5
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0.6,
-          6,
-          0.1
-        ],
+        "raster-opacity": 0,
         "raster-saturation": -0.45,
         "raster-contrast": -0.12,
         "raster-brightness-min": 0.82,
@@ -56,9 +43,10 @@
       "source": "openmaptiles",
       "source-layer": "park",
       "paint": {
-        "fill-color": "#d1e8d2",
-        "fill-opacity": 0.7,
-        "fill-outline-color": "#abcdb2"
+        "fill-color": "#c6e9d8",
+        "fill-opacity": 0.9,
+        "fill-outline-color": "#c6e9d8",
+        "fill-antialias": true
       }
     },
     {
@@ -67,11 +55,12 @@
       "source": "openmaptiles",
       "source-layer": "park",
       "paint": {
-        "line-color": "#aac9b0",
+        "line-color": "#9bc5b0",
         "line-dasharray": [
           1,
           1.5
-        ]
+        ],
+        "line-opacity": 0.15
       }
     },
     {
@@ -89,7 +78,8 @@
         "residential"
       ],
       "paint": {
-        "fill-color": "#e9ece8"
+        "fill-color": "#eef1f2",
+        "fill-antialias": true
       }
     },
     {
@@ -106,9 +96,9 @@
         "wood"
       ],
       "paint": {
-        "fill-antialias": false,
-        "fill-color": "#c9dfca",
-        "fill-opacity": 0.4
+        "fill-antialias": true,
+        "fill-color": "#c4dfcc",
+        "fill-opacity": 0.7
       }
     },
     {
@@ -125,9 +115,9 @@
         "grass"
       ],
       "paint": {
-        "fill-antialias": false,
-        "fill-color": "#dcead7",
-        "fill-opacity": 0.3
+        "fill-antialias": true,
+        "fill-color": "#dfeddd",
+        "fill-opacity": 0.6
       }
     },
     {
@@ -144,8 +134,8 @@
         "ice"
       ],
       "paint": {
-        "fill-antialias": false,
-        "fill-color": "#edf5f5",
+        "fill-antialias": true,
+        "fill-color": "#eff6f7",
         "fill-opacity": 0.8
       }
     },
@@ -166,9 +156,8 @@
       "paint": {
         "fill-antialias": true,
         "fill-opacity": 0.8,
-        "fill-pattern": "wetland_bg_11",
         "fill-translate-anchor": "map",
-        "fill-color": "#d9e6dd"
+        "fill-color": "#d3e9df"
       }
     },
     {
@@ -185,7 +174,8 @@
         "pitch"
       ],
       "paint": {
-        "fill-color": "#d4e7d8"
+        "fill-color": "#c9e4d7",
+        "fill-antialias": true
       }
     },
     {
@@ -202,7 +192,8 @@
         "track"
       ],
       "paint": {
-        "fill-color": "#e8e3d5"
+        "fill-color": "#e4e8dd",
+        "fill-antialias": true
       }
     },
     {
@@ -219,7 +210,8 @@
         "cemetery"
       ],
       "paint": {
-        "fill-color": "#dce6da"
+        "fill-color": "#dce9dc",
+        "fill-antialias": true
       }
     },
     {
@@ -236,7 +228,8 @@
         "hospital"
       ],
       "paint": {
-        "fill-color": "#f1e3e0"
+        "fill-color": "#f8e5e9",
+        "fill-antialias": true
       }
     },
     {
@@ -253,7 +246,8 @@
         "school"
       ],
       "paint": {
-        "fill-color": "#eee8d9"
+        "fill-color": "#eee9f5",
+        "fill-antialias": true
       }
     },
     {
@@ -270,7 +264,7 @@
         "tunnel"
       ],
       "paint": {
-        "line-color": "#86c5d6",
+        "line-color": "#91cfdd",
         "line-dasharray": [
           3,
           3
@@ -333,7 +327,7 @@
         "line-cap": "round"
       },
       "paint": {
-        "line-color": "#86c5d6",
+        "line-color": "#91cfdd",
         "line-width": [
           "interpolate",
           [
@@ -378,7 +372,7 @@
         "line-cap": "round"
       },
       "paint": {
-        "line-color": "#86c5d6",
+        "line-color": "#91cfdd",
         "line-width": [
           "interpolate",
           [
@@ -409,7 +403,8 @@
         "tunnel"
       ],
       "paint": {
-        "fill-color": "#b9deea"
+        "fill-color": "#9bd9e4",
+        "fill-antialias": true
       }
     },
     {
@@ -426,7 +421,8 @@
         "sand"
       ],
       "paint": {
-        "fill-color": "#eadfc7"
+        "fill-color": "#f4ecd8",
+        "fill-antialias": true
       }
     },
     {
@@ -448,8 +444,9 @@
         false
       ],
       "paint": {
-        "fill-color": "#e2e6e4",
-        "fill-opacity": 0.7
+        "fill-color": "#e5e9ef",
+        "fill-opacity": 0.7,
+        "fill-antialias": true
       }
     },
     {
@@ -482,7 +479,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#cfd5d2",
+        "line-color": "#cfd6e1",
         "line-width": [
           "interpolate",
           [
@@ -529,7 +526,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#cfd5d2",
+        "line-color": "#cfd6e1",
         "line-width": [
           "interpolate",
           [
@@ -543,6 +540,32 @@
           0.5,
           20,
           6
+        ]
+      }
+    },
+    {
+      "id": "building",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "building",
+      "minzoom": 14,
+      "paint": {
+        "fill-color": "#e3e7e9",
+        "fill-outline-color": "#d5dce0",
+        "fill-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          14,
+          0.45,
+          16,
+          0.85,
+          18,
+          1
         ]
       }
     },
@@ -582,7 +605,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#8e9eb6",
         "line-dasharray": [
           0.5,
           0.25
@@ -590,20 +613,25 @@
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12,
-          1,
-          13,
-          3,
+          5,
+          1.4500000000000002,
+          8,
+          2.15,
+          11,
+          3.55,
           14,
-          4,
+          5.65,
+          16,
+          8.1,
+          18,
+          12.999999999999998,
           20,
-          15
+          20.7
         ]
       }
     },
@@ -640,7 +668,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e1e5e6",
         "line-dasharray": [
           0.5,
           0.25
@@ -648,18 +676,21 @@
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
+          14,
+          0,
           15,
-          1,
+          1.6,
           16,
-          4,
+          3.3,
+          18,
+          6.8,
           20,
-          11
+          11.8
         ]
       }
     },
@@ -691,24 +722,42 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e0e5e9",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           12,
-          1,
+          0,
           13,
-          3,
+          1.3599999999999999,
           14,
-          4,
+          2.34,
+          16,
+          4.3,
+          18,
+          8.5,
           20,
-          15
+          15.5
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -745,7 +794,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e0e5e9",
         "line-opacity": [
           "interpolate",
           [
@@ -756,26 +805,31 @@
           ],
           12,
           0,
-          12.5,
+          13,
+          0.6,
+          14,
           1
         ],
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           12,
-          0.5,
+          0,
           13,
-          1,
+          1.6,
           14,
-          4,
+          3,
+          16,
+          5.8,
+          18,
+          11.8,
           20,
-          15
+          21.8
         ]
       }
     },
@@ -812,20 +866,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#d5dce5",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          8,
-          1.5,
+          7,
+          1.1,
+          10,
+          1.55,
+          12,
+          2.6,
+          14,
+          4.8,
+          16,
+          7.8,
+          18,
+          13.8,
           20,
-          17
+          23.8
         ]
       }
     },
@@ -862,24 +925,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#a6b2c6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0.4,
-          6,
-          0.7,
-          7,
-          1.75,
+          1.15,
+          8,
+          1.7000000000000002,
+          11,
+          3.2,
+          14,
+          5.8,
+          16,
+          8.8,
+          18,
+          15.8,
           20,
-          22
+          25.8
         ]
       }
     },
@@ -919,7 +987,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#8e9eb6",
         "line-dasharray": [
           0.5,
           0.25
@@ -927,20 +995,25 @@
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0.4,
-          6,
-          0.7,
-          7,
-          1.75,
+          1.6,
+          8,
+          2.6,
+          11,
+          4.6,
+          14,
+          7.6,
+          16,
+          11.1,
+          18,
+          18.1,
           20,
-          22
+          29.1
         ]
       }
     },
@@ -986,24 +1059,27 @@
         ]
       ],
       "paint": {
-        "line-color": "#dfddd5",
+        "line-color": "#bdc8c5",
         "line-dasharray": [
           1,
-          0.75
+          1.6
         ],
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           14,
-          0.5,
+          0.4,
+          16,
+          1,
+          18,
+          2.3,
           20,
-          10
+          4
         ]
       }
     },
@@ -1043,24 +1119,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#e9c37e",
+        "line-color": "#a9b8ce",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12.5,
-          0,
-          13,
-          1.5,
+          5,
+          0.35,
+          8,
+          1.0499999999999998,
+          11,
+          2.4499999999999997,
           14,
-          2.5,
+          4.55,
+          16,
+          7,
+          18,
+          11.899999999999999,
           20,
-          11.5
+          19.599999999999998
         ]
       }
     },
@@ -1097,22 +1178,25 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#f7f7f2",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          15.5,
+          14,
           0,
+          15,
+          0.8,
           16,
-          2,
+          2.5,
+          18,
+          6,
           20,
-          7.5
+          11
         ]
       }
     },
@@ -1144,24 +1228,42 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#eee0bf",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12.5,
+          12,
           0,
           13,
-          1.5,
+          0.5599999999999999,
           14,
-          2.5,
+          1.54,
+          16,
+          3.5,
+          18,
+          7.699999999999999,
           20,
-          11.5
+          14.7
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -1201,18 +1303,38 @@
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          13.5,
+          12,
           0,
+          13,
+          0.8,
           14,
-          2.5,
+          2.2,
+          16,
+          5,
+          18,
+          11,
           20,
-          11.5
+          21
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -1249,22 +1371,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#f4e1bb",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          6.5,
-          0,
           7,
-          0.5,
+          0.3,
+          10,
+          0.75,
+          12,
+          1.8,
+          14,
+          4,
+          16,
+          7,
+          18,
+          13,
           20,
-          10
+          23
         ]
       }
     },
@@ -1301,22 +1430,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#efd09a",
+        "line-color": "#bfcbdd",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0,
-          7,
-          1,
+          0.35,
+          8,
+          0.9,
+          11,
+          2.4,
+          14,
+          5,
+          16,
+          8,
+          18,
+          15,
           20,
-          18
+          25
         ]
       }
     },
@@ -1356,22 +1492,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#e9c37e",
+        "line-color": "#a9b8ce",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0,
-          7,
-          1,
+          0.5,
+          8,
+          1.5,
+          11,
+          3.5,
+          14,
+          6.5,
+          16,
+          10,
+          18,
+          17,
           20,
-          18
+          28
         ]
       }
     },
@@ -1404,7 +1547,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa6a5",
+        "line-color": "#bac4cc",
         "line-width": [
           "interpolate",
           [
@@ -1420,7 +1563,8 @@
           0.75,
           20,
           2
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -1448,7 +1592,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#d8dddb",
+        "line-color": "#edf0f2",
         "line-dasharray": [
           0.2,
           8
@@ -1468,7 +1612,8 @@
           3,
           20,
           8
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -1500,7 +1645,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa6a5",
+        "line-color": "#bac4cc",
         "line-width": [
           "interpolate",
           [
@@ -1516,7 +1661,8 @@
           0.75,
           20,
           2
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -1544,7 +1690,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#d8dddb",
+        "line-color": "#edf0f2",
         "line-dasharray": [
           0.2,
           8
@@ -1564,7 +1710,8 @@
           3,
           20,
           8
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -1585,8 +1732,8 @@
         false
       ],
       "paint": {
-        "fill-pattern": "pedestrian_polygon",
-        "fill-color": "#f8f8f4"
+        "fill-color": "#edf0ed",
+        "fill-antialias": true
       }
     },
     {
@@ -1632,24 +1779,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#8e9eb6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12,
-          1,
-          13,
-          3,
+          5,
+          1.4500000000000002,
+          8,
+          2.15,
+          11,
+          3.55,
           14,
-          4,
+          5.65,
+          16,
+          8.1,
+          18,
+          12.999999999999998,
           20,
-          15
+          20.7
         ]
       }
     },
@@ -1692,22 +1844,25 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e1e5e6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
+          14,
+          0,
           15,
-          1,
+          1.6,
           16,
-          4,
+          3.3,
+          18,
+          6.8,
           20,
-          11
+          11.8
         ]
       }
     },
@@ -1762,24 +1917,42 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e0e5e9",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           12,
-          1,
+          0,
           13,
-          3,
+          1.3599999999999999,
           14,
-          4,
+          2.34,
+          16,
+          4.3,
+          18,
+          8.5,
           20,
-          15
+          15.5
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -1841,7 +2014,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e0e5e9",
         "line-opacity": [
           "interpolate",
           [
@@ -1852,26 +2025,31 @@
           ],
           12,
           0,
-          12.5,
+          13,
+          0.6,
+          14,
           1
         ],
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           12,
-          0.5,
+          0,
           13,
-          1,
+          1.6,
           14,
-          4,
+          3,
+          16,
+          5.8,
+          18,
+          11.8,
           20,
-          20
+          21.8
         ]
       }
     },
@@ -1922,20 +2100,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#d5dce5",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          8,
-          1.5,
+          7,
+          1.1,
+          10,
+          1.55,
+          12,
+          2.6,
+          14,
+          4.8,
+          16,
+          7.8,
+          18,
+          13.8,
           20,
-          17
+          23.8
         ]
       }
     },
@@ -1977,24 +2164,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#a6b2c6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0.4,
-          6,
-          0.7,
-          7,
-          1.75,
+          1.15,
+          8,
+          1.7000000000000002,
+          11,
+          3.2,
+          14,
+          5.8,
+          16,
+          8.8,
+          18,
+          15.8,
           20,
-          22
+          25.8
         ]
       }
     },
@@ -2041,24 +2233,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#8e9eb6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0.4,
-          6,
-          0.7,
-          7,
-          1.75,
+          1.6,
+          8,
+          2.6,
+          11,
+          4.6,
+          14,
+          7.6,
+          16,
+          11.1,
+          18,
+          18.1,
           20,
-          22
+          29.1
         ]
       }
     },
@@ -2113,24 +2310,27 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#dfddd5",
+        "line-color": "#bdc8c5",
         "line-dasharray": [
           1,
-          0.7
+          1.6
         ],
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           14,
+          0.4,
+          16,
           1,
+          18,
+          2.3,
           20,
-          10
+          4
         ]
       }
     },
@@ -2177,24 +2377,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#e9c37e",
+        "line-color": "#a9b8ce",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12.5,
-          0,
-          13,
-          1.5,
+          5,
+          0.35,
+          8,
+          1.0499999999999998,
+          11,
+          2.4499999999999997,
           14,
-          2.5,
+          4.55,
+          16,
+          7,
+          18,
+          11.899999999999999,
           20,
-          11.5
+          19.599999999999998
         ]
       }
     },
@@ -2237,22 +2442,25 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#f7f7f2",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          15.5,
+          14,
           0,
+          15,
+          0.8,
           16,
-          2,
+          2.5,
+          18,
+          6,
           20,
-          7.5
+          11
         ]
       }
     },
@@ -2307,24 +2515,42 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#eee0bf",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12.5,
+          12,
           0,
           13,
-          1.5,
+          0.5599999999999999,
           14,
-          2.5,
+          1.54,
+          16,
+          3.5,
+          18,
+          7.699999999999999,
           20,
-          11.5
+          14.7
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -2382,18 +2608,38 @@
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          13.5,
+          12,
           0,
+          13,
+          0.8,
           14,
-          2.5,
+          2.2,
+          16,
+          5,
+          18,
+          11,
           20,
-          18
+          21
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -2436,22 +2682,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#f4e1bb",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          6.5,
-          0,
-          8,
-          0.5,
+          7,
+          0.3,
+          10,
+          0.75,
+          12,
+          1.8,
+          14,
+          4,
+          16,
+          7,
+          18,
+          13,
           20,
-          13
+          23
         ]
       }
     },
@@ -2493,22 +2746,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#efd09a",
+        "line-color": "#bfcbdd",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0,
-          7,
-          1,
+          0.35,
+          8,
+          0.9,
+          11,
+          2.4,
+          14,
+          5,
+          16,
+          8,
+          18,
+          15,
           20,
-          18
+          25
         ]
       }
     },
@@ -2555,22 +2815,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#e9c37e",
+        "line-color": "#a9b8ce",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0,
-          7,
-          1,
+          0.5,
+          8,
+          1.5,
+          11,
+          3.5,
+          14,
+          6.5,
+          16,
+          10,
+          18,
+          17,
           20,
-          18
+          28
         ]
       }
     },
@@ -2604,7 +2871,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa6a5",
+        "line-color": "#bac4cc",
         "line-width": [
           "interpolate",
           [
@@ -2620,7 +2887,8 @@
           0.75,
           20,
           2
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -2653,7 +2921,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#d8dddb",
+        "line-color": "#edf0f2",
         "line-dasharray": [
           0.2,
           8
@@ -2673,7 +2941,8 @@
           3,
           20,
           8
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -2706,7 +2975,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa6a5",
+        "line-color": "#bac4cc",
         "line-width": [
           "interpolate",
           [
@@ -2722,7 +2991,8 @@
           0.75,
           20,
           2
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -2755,7 +3025,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#d8dddb",
+        "line-color": "#edf0f2",
         "line-dasharray": [
           0.2,
           8
@@ -2775,7 +3045,8 @@
           3,
           20,
           8
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -2853,24 +3124,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#8e9eb6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12,
-          1,
-          13,
-          3,
+          5,
+          1.4500000000000002,
+          8,
+          2.15,
+          11,
+          3.55,
           14,
-          4,
+          5.65,
+          16,
+          8.1,
+          18,
+          12.999999999999998,
           20,
-          15
+          20.7
         ]
       }
     },
@@ -2907,22 +3183,25 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e1e5e6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
+          14,
+          0,
           15,
-          1,
+          1.6,
           16,
-          4,
+          3.3,
+          18,
+          6.8,
           20,
-          11
+          11.8
         ]
       }
     },
@@ -2954,24 +3233,42 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e0e5e9",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           12,
-          1,
+          0,
           13,
-          3,
+          1.3599999999999999,
           14,
-          4,
+          2.34,
+          16,
+          4.3,
+          18,
+          8.5,
           20,
-          15
+          15.5
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -3008,7 +3305,7 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#e0e5e9",
         "line-opacity": [
           "interpolate",
           [
@@ -3019,26 +3316,31 @@
           ],
           12,
           0,
-          12.5,
+          13,
+          0.6,
+          14,
           1
         ],
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           12,
-          0.5,
+          0,
           13,
-          1,
+          1.6,
           14,
-          4,
+          3,
+          16,
+          5.8,
+          18,
+          11.8,
           20,
-          25
+          21.8
         ]
       }
     },
@@ -3084,24 +3386,27 @@
         ]
       ],
       "paint": {
-        "line-color": "#dfddd5",
+        "line-color": "#bdc8c5",
         "line-dasharray": [
           1,
-          0
+          1.6
         ],
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           14,
-          1.5,
+          1.2000000000000002,
+          16,
+          1.8,
+          18,
+          3.0999999999999996,
           20,
-          18
+          4.8
         ]
       }
     },
@@ -3138,20 +3443,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8ceca",
+        "line-color": "#d5dce5",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          8,
-          1.5,
+          7,
+          1.1,
+          10,
+          1.55,
+          12,
+          2.6,
+          14,
+          4.8,
+          16,
+          7.8,
+          18,
+          13.8,
           20,
-          17
+          23.8
         ]
       }
     },
@@ -3188,24 +3502,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#a6b2c6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0.4,
-          6,
-          0.7,
-          7,
-          1.75,
+          1.15,
+          8,
+          1.7000000000000002,
+          11,
+          3.2,
+          14,
+          5.8,
+          16,
+          8.8,
+          18,
+          15.8,
           20,
-          22
+          25.8
         ]
       }
     },
@@ -3245,24 +3564,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#c8c4b7",
+        "line-color": "#8e9eb6",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0.4,
-          6,
-          0.7,
-          7,
-          1.75,
+          1.6,
+          8,
+          2.6,
+          11,
+          4.6,
+          14,
+          7.6,
+          16,
+          11.1,
+          18,
+          18.1,
           20,
-          22
+          29.1
         ]
       }
     },
@@ -3308,24 +3632,27 @@
         ]
       ],
       "paint": {
-        "line-color": "#dfddd5",
+        "line-color": "#bdc8c5",
         "line-dasharray": [
           1,
-          0.3
+          1.6
         ],
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           14,
-          0.5,
+          0.4,
+          16,
+          1,
+          18,
+          2.3,
           20,
-          10
+          4
         ]
       }
     },
@@ -3365,24 +3692,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#e9c37e",
+        "line-color": "#a9b8ce",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12.5,
-          0,
-          13,
-          1.5,
+          5,
+          0.35,
+          8,
+          1.0499999999999998,
+          11,
+          2.4499999999999997,
           14,
-          2.5,
+          4.55,
+          16,
+          7,
+          18,
+          11.899999999999999,
           20,
-          11.5
+          19.599999999999998
         ]
       }
     },
@@ -3419,22 +3751,25 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#f7f7f2",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          15.5,
+          14,
           0,
+          15,
+          0.8,
           16,
-          2,
+          2.5,
+          18,
+          6,
           20,
-          7.5
+          11
         ]
       }
     },
@@ -3466,24 +3801,42 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#eee0bf",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          12.5,
+          12,
           0,
           13,
-          1.5,
+          0.5599999999999999,
           14,
-          2.5,
+          1.54,
+          16,
+          3.5,
+          18,
+          7.699999999999999,
           20,
-          11.5
+          14.7
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -3523,18 +3876,38 @@
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          13.5,
+          12,
           0,
+          13,
+          0.8,
           14,
-          2.5,
+          2.2,
+          16,
+          5,
+          18,
+          11,
           20,
-          18
+          21
+        ],
+        "line-opacity": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          12,
+          0,
+          13,
+          0.6,
+          14,
+          1
         ]
       }
     },
@@ -3571,22 +3944,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#f4e1bb",
+        "line-color": "#ffffff",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          6.5,
-          0,
           7,
-          0.5,
+          0.3,
+          10,
+          0.75,
+          12,
+          1.8,
+          14,
+          4,
+          16,
+          7,
+          18,
+          13,
           20,
-          10
+          23
         ]
       }
     },
@@ -3623,22 +4003,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#efd09a",
+        "line-color": "#bfcbdd",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0,
-          7,
-          1,
+          0.35,
+          8,
+          0.9,
+          11,
+          2.4,
+          14,
+          5,
+          16,
+          8,
+          18,
+          15,
           20,
-          18
+          25
         ]
       }
     },
@@ -3678,22 +4065,29 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#e9c37e",
+        "line-color": "#a9b8ce",
         "line-width": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           5,
-          0,
-          7,
-          1,
+          0.5,
+          8,
+          1.5,
+          11,
+          3.5,
+          14,
+          6.5,
+          16,
+          10,
+          18,
+          17,
           20,
-          18
+          28
         ]
       }
     },
@@ -3722,7 +4116,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa6a5",
+        "line-color": "#bac4cc",
         "line-width": [
           "interpolate",
           [
@@ -3738,7 +4132,8 @@
           0.75,
           20,
           2
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -3766,7 +4161,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#d8dddb",
+        "line-color": "#edf0f2",
         "line-dasharray": [
           0.2,
           8
@@ -3786,7 +4181,8 @@
           3,
           20,
           8
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -3814,7 +4210,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa6a5",
+        "line-color": "#bac4cc",
         "line-width": [
           "interpolate",
           [
@@ -3830,7 +4226,8 @@
           0.75,
           20,
           2
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -3858,7 +4255,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#d8dddb",
+        "line-color": "#edf0f2",
         "line-dasharray": [
           0.2,
           8
@@ -3878,31 +4275,8 @@
           3,
           20,
           8
-        ]
-      }
-    },
-    {
-      "id": "building",
-      "type": "fill",
-      "source": "openmaptiles",
-      "source-layer": "building",
-      "minzoom": 13,
-      "maxzoom": 14,
-      "paint": {
-        "fill-color": "#d8dcd8",
-        "fill-outline-color": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          13,
-          "hsla(35,6%,79%,0.32)",
-          14,
-          "hsl(35,6%,79%)"
-        ]
+        ],
+        "line-opacity": 0.65
       }
     },
     {
@@ -3922,6 +4296,9 @@
           "render_height"
         ],
         "fill-extrusion-opacity": 0.8
+      },
+      "layout": {
+        "visibility": "none"
       }
     },
     {
@@ -3984,7 +4361,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa8a6",
+        "line-color": "#aeb8bd",
         "line-dasharray": [
           1,
           1
@@ -3992,17 +4369,19 @@
         "line-width": [
           "interpolate",
           [
-            "linear",
-            1
+            "linear"
           ],
           [
             "zoom"
           ],
-          7,
+          3,
+          0.6,
+          8,
           1,
-          11,
-          2
-        ]
+          12,
+          1.4
+        ],
+        "line-opacity": 0.5
       }
     },
     {
@@ -4049,20 +4428,8 @@
         "line-join": "round"
       },
       "paint": {
-        "line-color": "#9aa8a6",
-        "line-opacity": [
-          "interpolate",
-          [
-            "linear"
-          ],
-          [
-            "zoom"
-          ],
-          0,
-          0.4,
-          4,
-          1
-        ],
+        "line-color": "#aeb8bd",
+        "line-opacity": 0.5,
         "line-width": [
           "interpolate",
           [
@@ -4072,11 +4439,11 @@
             "zoom"
           ],
           3,
+          0.6,
+          8,
           1,
-          5,
-          1.2,
           12,
-          3
+          1.4
         ]
       }
     },
@@ -4105,7 +4472,7 @@
         ]
       ],
       "paint": {
-        "line-color": "#9aa8a6",
+        "line-color": "#aeb8bd",
         "line-dasharray": [
           1,
           2
@@ -4119,12 +4486,13 @@
             "zoom"
           ],
           3,
+          0.6,
+          8,
           1,
-          5,
-          1.2,
           12,
-          3
-        ]
+          1.4
+        ],
+        "line-opacity": 0.5
       }
     },
     {
@@ -4147,48 +4515,55 @@
       ],
       "layout": {
         "symbol-placement": "line",
-        "symbol-spacing": 350,
+        "symbol-spacing": 500,
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            " ",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-letter-spacing": 0.2,
+        "text-letter-spacing": 0.01,
         "text-max-width": 5,
-        "text-size": 14
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          8,
+          10,
+          12,
+          12,
+          16,
+          13
+        ],
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1.5
+        "text-color": "#4e8a9a",
+        "text-halo-color": "#a9dfe8",
+        "text-halo-width": 0.8,
+        "text-halo-blur": 0.4
       }
     },
     {
@@ -4210,39 +4585,29 @@
       ],
       "layout": {
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-letter-spacing": 0.2,
+        "text-letter-spacing": 0.01,
         "text-max-width": 5,
         "text-size": [
           "interpolate",
@@ -4252,16 +4617,21 @@
           [
             "zoom"
           ],
-          0,
-          10,
           8,
-          14
-        ]
+          10,
+          12,
+          12,
+          16,
+          13
+        ],
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1.5
+        "text-color": "#4e8a9a",
+        "text-halo-color": "#a9dfe8",
+        "text-halo-width": 0.8,
+        "text-halo-blur": 0.4
       }
     },
     {
@@ -4283,145 +4653,505 @@
       ],
       "layout": {
         "symbol-placement": "line",
-        "symbol-spacing": 350,
+        "symbol-spacing": 500,
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            " ",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
+          [
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
+        ],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-letter-spacing": 0.01,
+        "text-max-width": 5,
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          8,
+          10,
+          12,
+          12,
+          16,
+          13
+        ],
+        "text-padding": 3,
+        "text-allow-overlap": false
+      },
+      "paint": {
+        "text-color": "#4e8a9a",
+        "text-halo-color": "#a9dfe8",
+        "text-halo-width": 0.8,
+        "text-halo-blur": 0.4
+      }
+    },
+    {
+      "id": "olen_park_label",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "park",
+      "minzoom": 11,
+      "filter": [
+        "all",
+        [
+          "==",
+          [
+            "geometry-type"
+          ],
+          "Point"
+        ],
+        [
+          "<=",
           [
             "coalesce",
             [
               "get",
-              "name_en"
+              "rank"
             ],
+            1
+          ],
+          3
+        ],
+        [
+          "!=",
+          [
+            "coalesce",
             [
               "get",
               "name"
-            ]
-          ]
+            ],
+            ""
+          ],
+          ""
+        ]
+      ],
+      "layout": {
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:pt"
+          ],
+          [
+            "get",
+            "name"
+          ],
+          [
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-letter-spacing": 0.2,
-        "text-max-width": 5,
-        "text-size": 14
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          11,
+          11,
+          14,
+          12,
+          17,
+          13
+        ],
+        "text-max-width": 7,
+        "text-padding": 20,
+        "text-allow-overlap": false,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          1
+        ]
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1.5
+        "text-color": "#4b886d",
+        "text-halo-color": "#e3f3e9",
+        "text-halo-width": 1
       }
+    },
+    {
+      "id": "olen_landmarks",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "poi",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        [
+          "<",
+          [
+            "get",
+            "rank"
+          ],
+          7
+        ],
+        [
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          [
+            "museum",
+            "attraction",
+            "castle",
+            "monument",
+            "park",
+            "stadium",
+            "zoo"
+          ],
+          true,
+          false
+        ]
+      ],
+      "layout": {
+        "icon-image": [
+          "coalesce",
+          [
+            "image",
+            [
+              "match",
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "florist",
+                "furniture"
+              ],
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "get",
+                "class"
+              ]
+            ]
+          ],
+          [
+            "image",
+            "circle_11_black"
+          ]
+        ],
+        "text-anchor": "top",
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:pt"
+          ],
+          [
+            "get",
+            "name"
+          ],
+          [
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
+        ],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-max-width": 7,
+        "text-offset": [
+          0,
+          0.6
+        ],
+        "text-size": 11.5,
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "text-optional": false,
+        "icon-size": 0.85,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          100
+        ],
+        "icon-optional": true
+      },
+      "paint": {
+        "text-color": [
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          [
+            "park",
+            "stadium",
+            "golf",
+            "zoo"
+          ],
+          "#42886b",
+          [
+            "museum",
+            "attraction",
+            "castle",
+            "monument",
+            "art_gallery"
+          ],
+          "#8b6ea9",
+          [
+            "hospital",
+            "pharmacy"
+          ],
+          "#b45c72",
+          [
+            "restaurant",
+            "cafe",
+            "bar",
+            "fast_food"
+          ],
+          "#ad7a43",
+          [
+            "shop",
+            "grocery",
+            "mall"
+          ],
+          "#6386a2",
+          [
+            "rail",
+            "bus",
+            "airport"
+          ],
+          "#5b84a6",
+          "#667d7d"
+        ],
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "maxzoom": 14
     },
     {
       "id": "poi_r20",
       "type": "symbol",
       "source": "openmaptiles",
       "source-layer": "poi",
-      "minzoom": 17,
+      "minzoom": 17.5,
       "filter": [
         "all",
         [
-          "match",
+          "all",
           [
-            "geometry-type"
+            "match",
+            [
+              "geometry-type"
+            ],
+            [
+              "MultiPoint",
+              "Point"
+            ],
+            true,
+            false
           ],
           [
-            "MultiPoint",
-            "Point"
-          ],
-          true,
-          false
+            ">=",
+            [
+              "get",
+              "rank"
+            ],
+            20
+          ]
         ],
         [
-          ">=",
+          "match",
           [
             "get",
-            "rank"
+            "class"
           ],
-          20
+          [
+            "bus",
+            "rail",
+            "railway",
+            "airport"
+          ],
+          false,
+          true
         ]
       ],
       "layout": {
         "icon-image": [
-          "match",
+          "coalesce",
           [
-            "get",
-            "subclass"
+            "image",
+            [
+              "match",
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "florist",
+                "furniture"
+              ],
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "get",
+                "class"
+              ]
+            ]
           ],
           [
-            "florist",
-            "furniture"
-          ],
-          [
-            "get",
-            "subclass"
-          ],
-          [
-            "get",
-            "class"
+            "image",
+            "circle_11_black"
           ]
         ],
         "text-anchor": "top",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-max-width": 9,
+        "text-max-width": 7,
         "text-offset": [
           0,
           0.6
         ],
-        "text-size": 12
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          11,
+          16,
+          12,
+          18,
+          13
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "text-optional": false,
+        "icon-size": 0.85,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          100
+        ],
+        "icon-optional": true
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": [
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          [
+            "park",
+            "stadium",
+            "golf",
+            "zoo"
+          ],
+          "#42886b",
+          [
+            "museum",
+            "attraction",
+            "castle",
+            "monument",
+            "art_gallery"
+          ],
+          "#8b6ea9",
+          [
+            "hospital",
+            "pharmacy"
+          ],
+          "#b45c72",
+          [
+            "restaurant",
+            "cafe",
+            "bar",
+            "fast_food"
+          ],
+          "#ad7a43",
+          [
+            "shop",
+            "grocery",
+            "mall"
+          ],
+          "#6386a2",
+          [
+            "rail",
+            "bus",
+            "airport"
+          ],
+          "#5b84a6",
+          "#667d7d"
+        ],
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
     },
     {
@@ -4433,100 +5163,192 @@
       "filter": [
         "all",
         [
+          "all",
+          [
+            "match",
+            [
+              "geometry-type"
+            ],
+            [
+              "MultiPoint",
+              "Point"
+            ],
+            true,
+            false
+          ],
+          [
+            ">=",
+            [
+              "get",
+              "rank"
+            ],
+            7
+          ],
+          [
+            "<",
+            [
+              "get",
+              "rank"
+            ],
+            20
+          ]
+        ],
+        [
           "match",
           [
-            "geometry-type"
-          ],
-          [
-            "MultiPoint",
-            "Point"
-          ],
-          true,
-          false
-        ],
-        [
-          ">=",
-          [
             "get",
-            "rank"
+            "class"
           ],
-          7
-        ],
-        [
-          "<",
           [
-            "get",
-            "rank"
+            "bus",
+            "rail",
+            "railway",
+            "airport"
           ],
-          20
+          false,
+          true
         ]
       ],
       "layout": {
         "icon-image": [
-          "match",
+          "coalesce",
           [
-            "get",
-            "subclass"
+            "image",
+            [
+              "match",
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "florist",
+                "furniture"
+              ],
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "get",
+                "class"
+              ]
+            ]
           ],
           [
-            "florist",
-            "furniture"
-          ],
-          [
-            "get",
-            "subclass"
-          ],
-          [
-            "get",
-            "class"
+            "image",
+            "circle_11_black"
           ]
         ],
         "text-anchor": "top",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-max-width": 9,
+        "text-max-width": 7,
         "text-offset": [
           0,
           0.6
         ],
-        "text-size": 12
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          11,
+          16,
+          12,
+          18,
+          13
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "text-optional": false,
+        "icon-size": 0.85,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          100
+        ],
+        "icon-optional": true
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": [
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          [
+            "park",
+            "stadium",
+            "golf",
+            "zoo"
+          ],
+          "#42886b",
+          [
+            "museum",
+            "attraction",
+            "castle",
+            "monument",
+            "art_gallery"
+          ],
+          "#8b6ea9",
+          [
+            "hospital",
+            "pharmacy"
+          ],
+          "#b45c72",
+          [
+            "restaurant",
+            "cafe",
+            "bar",
+            "fast_food"
+          ],
+          "#ad7a43",
+          [
+            "shop",
+            "grocery",
+            "mall"
+          ],
+          "#6386a2",
+          [
+            "rail",
+            "bus",
+            "airport"
+          ],
+          "#5b84a6",
+          "#667d7d"
+        ],
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
     },
     {
@@ -4534,105 +5356,281 @@
       "type": "symbol",
       "source": "openmaptiles",
       "source-layer": "poi",
-      "minzoom": 15,
+      "minzoom": 14,
       "filter": [
         "all",
         [
+          "all",
+          [
+            "match",
+            [
+              "geometry-type"
+            ],
+            [
+              "MultiPoint",
+              "Point"
+            ],
+            true,
+            false
+          ],
+          [
+            ">=",
+            [
+              "get",
+              "rank"
+            ],
+            1
+          ],
+          [
+            "<",
+            [
+              "get",
+              "rank"
+            ],
+            7
+          ]
+        ],
+        [
           "match",
           [
-            "geometry-type"
-          ],
-          [
-            "MultiPoint",
-            "Point"
-          ],
-          true,
-          false
-        ],
-        [
-          ">=",
-          [
             "get",
-            "rank"
+            "class"
           ],
-          1
-        ],
-        [
-          "<",
           [
-            "get",
-            "rank"
+            "bus",
+            "rail",
+            "railway",
+            "airport"
           ],
-          7
+          false,
+          true
         ]
       ],
       "layout": {
         "icon-image": [
-          "match",
+          "coalesce",
           [
-            "get",
-            "subclass"
+            "image",
+            [
+              "match",
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "florist",
+                "furniture"
+              ],
+              [
+                "get",
+                "subclass"
+              ],
+              [
+                "get",
+                "class"
+              ]
+            ]
           ],
           [
-            "florist",
-            "furniture"
-          ],
-          [
-            "get",
-            "subclass"
-          ],
-          [
-            "get",
-            "class"
+            "image",
+            "circle_11_black"
           ]
         ],
         "text-anchor": "top",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-max-width": 9,
+        "text-max-width": 7,
         "text-offset": [
           0,
           0.6
         ],
-        "text-size": 12
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          11,
+          16,
+          12,
+          18,
+          13
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "text-optional": false,
+        "icon-size": 0.85,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          100
+        ],
+        "icon-optional": true
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": [
+          "match",
+          [
+            "get",
+            "class"
+          ],
+          [
+            "park",
+            "stadium",
+            "golf",
+            "zoo"
+          ],
+          "#42886b",
+          [
+            "museum",
+            "attraction",
+            "castle",
+            "monument",
+            "art_gallery"
+          ],
+          "#8b6ea9",
+          [
+            "hospital",
+            "pharmacy"
+          ],
+          "#b45c72",
+          [
+            "restaurant",
+            "cafe",
+            "bar",
+            "fast_food"
+          ],
+          "#ad7a43",
+          [
+            "shop",
+            "grocery",
+            "mall"
+          ],
+          "#6386a2",
+          [
+            "rail",
+            "bus",
+            "airport"
+          ],
+          "#5b84a6",
+          "#667d7d"
+        ],
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
+    },
+    {
+      "id": "olen_bus_stops",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "poi",
+      "filter": [
+        "==",
+        [
+          "get",
+          "class"
+        ],
+        "bus"
+      ],
+      "layout": {
+        "icon-image": [
+          "coalesce",
+          [
+            "image",
+            [
+              "to-string",
+              [
+                "get",
+                "class"
+              ]
+            ]
+          ],
+          [
+            "image",
+            "circle_11_black"
+          ]
+        ],
+        "icon-size": 0.65,
+        "text-anchor": "left",
+        "text-field": [
+          "coalesce",
+          [
+            "get",
+            "name:pt"
+          ],
+          [
+            "get",
+            "name"
+          ],
+          [
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
+        ],
+        "text-font": [
+          "Noto Sans Regular"
+        ],
+        "text-max-width": 7,
+        "text-offset": [
+          0.9,
+          0
+        ],
+        "text-size": 11,
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "text-optional": false,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          100
+        ],
+        "icon-optional": true
+      },
+      "paint": {
+        "text-color": "#5b84a6",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "minzoom": 17
     },
     {
       "id": "poi_transit",
@@ -4647,75 +5645,103 @@
         ],
         [
           "airport",
-          "bus",
-          "rail"
+          "rail",
+          "railway"
         ],
         true,
         false
       ],
       "layout": {
         "icon-image": [
-          "to-string",
+          "coalesce",
           [
-            "get",
-            "class"
+            "image",
+            [
+              "to-string",
+              [
+                "get",
+                "class"
+              ]
+            ]
+          ],
+          [
+            "image",
+            "circle_11_black"
           ]
         ],
-        "icon-size": 0.7,
+        "icon-size": 0.85,
         "text-anchor": "left",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-max-width": 9,
+        "text-max-width": 7,
         "text-offset": [
           0.9,
           0
         ],
-        "text-size": 12
+        "text-size": [
+          "interpolate",
+          [
+            "linear"
+          ],
+          [
+            "zoom"
+          ],
+          13,
+          11,
+          16,
+          12,
+          18,
+          13
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "text-optional": false,
+        "symbol-sort-key": [
+          "coalesce",
+          [
+            "get",
+            "rank"
+          ],
+          100
+        ],
+        "icon-optional": true
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
-      }
+        "text-color": "#5b84a6",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "minzoom": 14
     },
     {
       "id": "highway-name-path",
       "type": "symbol",
       "source": "openmaptiles",
       "source-layer": "transportation_name",
-      "minzoom": 15.5,
+      "minzoom": 16,
       "filter": [
         "==",
         [
@@ -4727,34 +5753,24 @@
       "layout": {
         "symbol-placement": "line",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            " ",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Regular"
@@ -4768,16 +5784,23 @@
           [
             "zoom"
           ],
-          13,
           12,
-          14,
+          11,
+          15,
+          12,
+          18,
           13
-        ]
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "symbol-spacing": 350
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 0.5
+        "text-color": "#65727e",
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.5,
+        "text-halo-blur": 0.4
       }
     },
     {
@@ -4818,34 +5841,24 @@
       "layout": {
         "symbol-placement": "line",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            " ",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Regular"
@@ -4859,16 +5872,23 @@
           [
             "zoom"
           ],
-          13,
           12,
-          14,
+          11,
+          15,
+          12,
+          18,
           13
-        ]
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "symbol-spacing": 350
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 0.5,
-        "text-halo-width": 1
+        "text-color": "#65727e",
+        "text-halo-blur": 0.4,
+        "text-halo-width": 1.5,
+        "text-halo-color": "#ffffff"
       }
     },
     {
@@ -4895,34 +5915,24 @@
       "layout": {
         "symbol-placement": "line",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            " ",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Regular"
@@ -4936,16 +5946,23 @@
           [
             "zoom"
           ],
-          13,
           12,
-          14,
+          11,
+          15,
+          12,
+          18,
           13
-        ]
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false,
+        "symbol-spacing": 350
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 0.5,
-        "text-halo-width": 1
+        "text-color": "#65727e",
+        "text-halo-blur": 0.4,
+        "text-halo-width": 1.5,
+        "text-halo-color": "#ffffff"
       }
     },
     {
@@ -5011,7 +6028,7 @@
           11,
           "line"
         ],
-        "symbol-spacing": 200,
+        "symbol-spacing": 350,
         "text-field": [
           "to-string",
           [
@@ -5093,7 +6110,7 @@
           8,
           "line"
         ],
-        "symbol-spacing": 200,
+        "symbol-spacing": 350,
         "text-field": [
           "to-string",
           [
@@ -5174,7 +6191,7 @@
           11,
           "line"
         ],
-        "symbol-spacing": 200,
+        "symbol-spacing": 350,
         "text-field": [
           "to-string",
           [
@@ -5207,52 +6224,44 @@
         "icon-size": 1,
         "text-anchor": "top",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Regular"
         ],
-        "text-max-width": 9,
+        "text-max-width": 7,
         "text-offset": [
           0,
           0.6
         ],
         "text-optional": true,
-        "text-padding": 2,
-        "text-size": 12
+        "text-padding": 3,
+        "text-size": 12,
+        "text-letter-spacing": 0,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 0.5,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": "#5b84a6",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
     },
     {
@@ -5260,7 +6269,7 @@
       "type": "symbol",
       "source": "openmaptiles",
       "source-layer": "place",
-      "minzoom": 8,
+      "minzoom": 11,
       "filter": [
         "match",
         [
@@ -5280,39 +6289,29 @@
       ],
       "layout": {
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-letter-spacing": 0.1,
+        "text-letter-spacing": 0.04,
         "text-max-width": 9,
         "text-size": [
           "interpolate",
@@ -5322,19 +6321,24 @@
           [
             "zoom"
           ],
-          8,
-          9,
-          12,
-          10
+          11,
+          10,
+          14,
+          11,
+          16,
+          12
         ],
-        "text-transform": "uppercase"
+        "text-transform": "uppercase",
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
-      }
+        "text-color": "#7d898e",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "maxzoom": 17
     },
     {
       "id": "label_village",
@@ -5365,34 +6369,24 @@
         "icon-size": 0.2,
         "text-anchor": "bottom",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Regular"
@@ -5401,24 +6395,29 @@
         "text-size": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          7,
+          9,
           10,
-          11,
-          12
-        ]
+          12,
+          12,
+          14,
+          13
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
-      }
+        "text-color": "#43545a",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "maxzoom": 14.5
     },
     {
       "id": "label_town",
@@ -5449,34 +6448,24 @@
         "icon-size": 0.2,
         "text-anchor": "bottom",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Regular"
@@ -5485,24 +6474,29 @@
         "text-size": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
-          7,
-          12,
+          6,
           11,
-          14
-        ]
+          10,
+          13,
+          13,
+          15
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
-      }
+        "text-color": "#43545a",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "maxzoom": 14.5
     },
     {
       "id": "label_state",
@@ -5521,39 +6515,29 @@
       ],
       "layout": {
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Italic"
+          "Noto Sans Regular"
         ],
-        "text-letter-spacing": 0.2,
+        "text-letter-spacing": 0,
         "text-max-width": 9,
         "text-size": [
           "interpolate",
@@ -5568,13 +6552,15 @@
           8,
           14
         ],
-        "text-transform": "uppercase"
+        "text-transform": "uppercase",
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#445257",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": "#6e7f85",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
     },
     {
@@ -5617,37 +6603,27 @@
         "icon-size": 0.4,
         "text-anchor": "bottom",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
-          "Noto Sans Regular"
+          "Noto Sans Bold"
         ],
         "text-max-width": 8,
         "text-offset": [
@@ -5657,26 +6633,31 @@
         "text-size": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           4,
           11,
-          7,
-          13,
+          8,
+          14,
           11,
+          17,
+          13,
           18
-        ]
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#263b40",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
-      }
+        "text-color": "#43545a",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "maxzoom": 14.5
     },
     {
       "id": "label_city_capital",
@@ -5718,34 +6699,24 @@
         "icon-size": 0.5,
         "text-anchor": "bottom",
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Bold"
@@ -5758,26 +6729,31 @@
         "text-size": [
           "interpolate",
           [
-            "exponential",
-            1.2
+            "linear"
           ],
           [
             "zoom"
           ],
           4,
           12,
-          7,
-          14,
+          8,
+          15,
           11,
-          20
-        ]
+          18,
+          13,
+          19
+        ],
+        "text-letter-spacing": 0,
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#263b40",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
-      }
+        "text-color": "#43545a",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
+      },
+      "maxzoom": 14.5
     },
     {
       "id": "label_country_3",
@@ -5807,34 +6783,24 @@
       ],
       "layout": {
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Bold"
@@ -5852,13 +6818,16 @@
           9,
           7,
           17
-        ]
+        ],
+        "text-letter-spacing": 0.02,
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#26363b",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": "#53646a",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
     },
     {
@@ -5888,34 +6857,24 @@
       ],
       "layout": {
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Bold"
@@ -5933,13 +6892,16 @@
           9,
           5,
           17
-        ]
+        ],
+        "text-letter-spacing": 0.02,
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#26363b",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": "#53646a",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
     },
     {
@@ -5969,34 +6931,24 @@
       ],
       "layout": {
         "text-field": [
-          "case",
+          "coalesce",
           [
-            "has",
-            "name:nonlatin"
+            "get",
+            "name:pt"
           ],
           [
-            "concat",
-            [
-              "get",
-              "name:latin"
-            ],
-            "\n",
-            [
-              "get",
-              "name:nonlatin"
-            ]
+            "get",
+            "name"
           ],
           [
-            "coalesce",
-            [
-              "get",
-              "name_en"
-            ],
-            [
-              "get",
-              "name"
-            ]
-          ]
+            "get",
+            "name:latin"
+          ],
+          [
+            "get",
+            "name_en"
+          ],
+          ""
         ],
         "text-font": [
           "Noto Sans Bold"
@@ -6014,15 +6966,23 @@
           9,
           4,
           17
-        ]
+        ],
+        "text-letter-spacing": 0.02,
+        "text-padding": 3,
+        "text-allow-overlap": false
       },
       "paint": {
-        "text-color": "#26363b",
-        "text-halo-blur": 1,
-        "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1
+        "text-color": "#53646a",
+        "text-halo-blur": 0.4,
+        "text-halo-color": "#ffffff",
+        "text-halo-width": 1.2
       }
     }
   ],
-  "name": "OLEN Cartography"
+  "name": "OLEN · Cartografia clara",
+  "metadata": {
+    "olen:version": "1.1.0",
+    "olen:direction": "Google reference: road hierarchy, progressive labels, flat buildings; OLEN palette; OpenMapTiles data",
+    "olen:language": "pt"
+  }
 }

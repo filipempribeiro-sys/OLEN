@@ -5,7 +5,7 @@
 'use strict';
 const MAPLIBRE_VERSION='5.6.1';
 const ADAPTER_VERSION='0.1.3';
-const STYLE='./maps/olen-cartography.json?v=20260930-cartography-v2';
+const STYLE='./maps/olen-cartography.json?v=20260930-cartography-v3';
 const FALLBACK_TILES='https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 const ATTR='OpenFreeMap © OpenMapTiles · © OpenStreetMap contributors';
 let loading=null;
@@ -96,5 +96,5 @@ async function attach(map,L){
    return rasterFallback(map,L);
  }
 }
-global.OLENCartography=Object.freeze({attach,style:STYLE,version:'1.0.1'});
+global.OLENCartography=Object.freeze({attach,style:STYLE,version:'1.1.0'});
 })(window);
