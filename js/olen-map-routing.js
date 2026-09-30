@@ -65,10 +65,13 @@ async function ensureMap(){
  const L=await loadLeaflet();
  if(!map){
    map=L.map(node,{zoomControl:false,scrollWheelZoom:true,attributionControl:true,preferCanvas:true});
-   tile=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-     maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
-     updateWhenIdle:true,keepBuffer:1
-   }).addTo(map);
+   // Cartography-only seam: all Map/GO logic remains unchanged.
+   tile=window.OLENCartography?.attach
+     ? await window.OLENCartography.attach(map,L)
+     : L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+         maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
+         updateWhenIdle:true,keepBuffer:1
+       }).addTo(map);
    L.control.zoom({position:'bottomright'}).addTo(map);
    map.setView([38.7223,-9.1393],11);
  }
