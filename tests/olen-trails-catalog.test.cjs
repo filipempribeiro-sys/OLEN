@@ -29,6 +29,11 @@ test('HTTP failures do not fabricate trails',async()=>{
  await assert.rejects(()=>catalog.nearby(center));
 });
 
+test('a failed public endpoint falls back to a second real OSM provider',async()=>{
+ const urls=[],catalog=create({request:async url=>{urls.push(url);if(urls.length===1)throw new TypeError('Failed to fetch');return {ok:true,json:async()=>({elements:[relation]})}}});
+ const result=await catalog.nearby(center);assert.equal(result.trails[0].id,'osm:relation:123');assert.equal(urls.length,2);assert.match(urls[1],/overpass.private.coffee/);
+});
+
 test('cached ALPHA trail geometry survives a temporary Overpass outage',async()=>{
  const storage=memory(),catalog=create({storage,now:()=>1000,
    request:async()=>({ok:true,json:async()=>({elements:[relation]})})});

@@ -6,7 +6,7 @@
  if(root)root.OLENTrailsCatalog=api;
 })(typeof window!=='undefined'?window:null,function(){
  'use strict';
- const ENDPOINT='https://overpass-api.de/api/interpreter',TTL=6*60*60*1000,MAX_TRAILS=15;
+ const ENDPOINTS=['https://overpass-api.de/api/interpreter','https://overpass.private.coffee/api/interpreter'],TTL=6*60*60*1000,MAX_TRAILS=15;
  function point(v){
   const lat=Number(v?.lat??v?.latitude),lon=Number(v?.lon??v?.longitude);
   if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180)return null;
@@ -63,14 +63,19 @@
        return {trails:saved.trails,source:'cache',at:saved.at};
     }catch(_){}
    }
-   const controller=typeof AbortController==='function'?new AbortController():null;
-   const timeout=typeof setTimeout==='function'&&controller?setTimeout(()=>controller.abort(),28000):null;
    try{
-    const result=await fetcher(ENDPOINT+'?data='+encodeURIComponent(query(center,radius)),{
-      method:'GET',cache:'no-store',signal:controller?.signal});
-    if(!result?.ok)throw new Error('Pesquisa de trilhos temporariamente indisponível.');
-    const data=await result.json();
-    if(!Array.isArray(data?.elements))throw new Error('Dados de trilhos inválidos.');
+    let data=null;
+    for(const endpoint of ENDPOINTS){
+     const controller=typeof AbortController==='function'?new AbortController():null;
+     const timeout=typeof setTimeout==='function'&&controller?setTimeout(()=>controller.abort(),28000):null;
+     try{
+      const result=await fetcher(endpoint+'?data='+encodeURIComponent(query(center,radius)),{method:'GET',cache:'no-store',signal:controller?.signal});
+      if(!result?.ok)throw Error('Pesquisa indisponível.');
+      const body=await result.json();if(!Array.isArray(body?.elements))throw Error('Dados inválidos.');
+      data=body;break;
+     }catch(_){}finally{if(timeout!==null)clearTimeout(timeout)}
+    }
+    if(!data)throw new Error('Não foi possível consultar os trilhos agora. Verifica a ligação e volta a tentar.');
     const trails=data.elements.map(x=>normalizeRelation(x,center)).filter(Boolean)
       .sort((a,b)=>a.metersFromSearch-b.metersFromSearch).slice(0,MAX_TRAILS);
     const at=now();try{storage?.setItem(cacheKey,JSON.stringify({at,trails}))}catch(_){}
@@ -84,7 +89,7 @@
       return {trails:saved.trails,source:'stale-cache',at:saved.at};
     }catch(_){}
     throw error;
-   }finally{if(timeout!==null)clearTimeout(timeout)}
+   }
   }
   return Object.freeze({nearby});
  }
