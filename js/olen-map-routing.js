@@ -73,7 +73,7 @@ async function ensureMap(){
          maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap contributors</a>',
          updateWhenIdle:true,keepBuffer:1
        }).addTo(map);
-   L.control.zoom({position:'bottomright'}).addTo(map);
+   L.control.zoom({position:'bottomleft'}).addTo(map);
    map.setView([38.7223,-9.1393],11);
    map.on('dragstart',()=>{following=false});
  }
