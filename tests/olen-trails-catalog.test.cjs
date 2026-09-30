@@ -2,6 +2,14 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const {create,query,normalizeRelation}=require('../js/olen-trails-catalog.js');
 const center={lat:38.72,lon:-9.13};
+test('server timeout remarks never become an empty successful search',async()=>{
+ const catalog=create({request:async()=>({ok:true,json:async()=>({elements:[],remark:'runtime error: timeout'})})});
+ await assert.rejects(()=>catalog.nearby(center));
+});
+test('empty results are retried rather than cached for six hours',async()=>{
+ let calls=0;const catalog=create({storage:memory(),request:async()=>{calls++;return {ok:true,json:async()=>({elements:[]})}}});
+ await catalog.nearby(center);await catalog.nearby(center);assert.equal(calls,2);
+});
 const relation={type:'relation',id:123,tags:{name:'Trilho Teste',ref:'PR1'},members:[{geometry:[{lat:38.72,lon:-9.13},{lat:38.721,lon:-9.13}]}]};
 function memory(){const data=new Map();return {getItem:k=>data.get(k)||null,setItem:(k,v)=>data.set(k,v)}}
 test('query bounds search radius and rejects invalid coordinates',()=>{

@@ -56,10 +56,10 @@
   function key(center){return 'olen:trails:osm:v1:'+center.lat.toFixed(2)+':'+center.lon.toFixed(2)}
   async function nearby(location,{force=false,radius=30000}={}){
    const center=point(location);if(!center)throw new Error('Localização GPS inválida.');
-   const cacheKey=key(center);
+  const cacheKey=key(center)+':'+Math.round(radius)+':v2';
    if(!force&&storage){
     try{const saved=JSON.parse(storage.getItem(cacheKey)||'null');
-      if(saved?.at&&now()-saved.at>=0&&now()-saved.at<TTL&&Array.isArray(saved.trails))
+      if(saved?.at&&now()-saved.at>=0&&now()-saved.at<TTL&&Array.isArray(saved.trails)&&saved.trails.length)
        return {trails:saved.trails,source:'cache',at:saved.at};
     }catch(_){}
    }
@@ -67,18 +67,19 @@
     let data=null;
     for(const endpoint of ENDPOINTS){
      const controller=typeof AbortController==='function'?new AbortController():null;
-     const timeout=typeof setTimeout==='function'&&controller?setTimeout(()=>controller.abort(),28000):null;
+     const timeout=typeof setTimeout==='function'&&controller?setTimeout(()=>controller.abort(),18000):null;
      try{
       const result=await fetcher(endpoint+'?data='+encodeURIComponent(query(center,radius)),{method:'GET',cache:'no-store',signal:controller?.signal});
       if(!result?.ok)throw Error('Pesquisa indisponível.');
-      const body=await result.json();if(!Array.isArray(body?.elements))throw Error('Dados inválidos.');
+      const body=await result.json();if(!Array.isArray(body?.elements)||body.remark)throw Error('A fonte não concluiu a pesquisa.');
       data=body;break;
      }catch(_){}finally{if(timeout!==null)clearTimeout(timeout)}
     }
     if(!data)throw new Error('Não foi possível consultar os trilhos agora. Verifica a ligação e volta a tentar.');
     const trails=data.elements.map(x=>normalizeRelation(x,center)).filter(Boolean)
       .sort((a,b)=>a.metersFromSearch-b.metersFromSearch).slice(0,MAX_TRAILS);
-    const at=now();try{storage?.setItem(cacheKey,JSON.stringify({at,trails}))}catch(_){}
+    if(data.elements.length&&!trails.length)throw Error('A fonte devolveu percursos sem traçado utilizável. Tenta novamente.');
+    const at=now();try{if(trails.length)storage?.setItem(cacheKey,JSON.stringify({at,trails}))}catch(_){}
     return {trails,source:'openstreetmap',at};
    }catch(error){
     // ALPHA behavior: keep the last real OSM geometry when Overpass is down.

@@ -66,7 +66,7 @@
  function render(location,result){
   choices.replaceChildren();choices.hidden=false;choices.appendChild(node('h3','Trilhos perto de '+location.label));
   choices.appendChild(node('p',(result.source==='stale-cache'?'Resultados guardados · ':'')+'Até 30 km · percursos publicados no OpenStreetMap','olen-go-help'));
-  if(!found.length){choices.appendChild(node('p','Não encontrámos percursos publicados nesta zona. Experimenta outra localidade.','olen-go-help'));return}
+  if(!found.length){choices.appendChild(node('p','Esta fonte não devolveu percursos pedestres com traçado nesta pesquisa. Isso não confirma que não existem trilhos na zona. Podes repetir a pesquisa ou escolher outra localidade.','olen-go-help'));return}
   const track=node('div',null,'olen-place-track');
   found.forEach((t,i)=>{
    const card=node('article',null,'olen-place-card olen-px-card'),info=node('div',null,'olen-place-info');card.appendChild(thumbnail(t));
@@ -77,12 +77,12 @@
  }
  destination.addEventListener('input',()=>{choices.hidden=true;if(facts)facts.hidden=true;prepare.textContent='Preparar rota';if($('rzModes'))$('rzModes').hidden=false});
  button.addEventListener('click',async()=>{
-  if(busy)return;busy=true;button.disabled=true;const query=destination.value.trim();
+  if(busy)return;busy=true;button.disabled=true;const query=destination.value.trim(),caption=button.textContent;button.textContent='A procurar trilhos…';notice(query?'A resolver o local pesquisado…':'A obter a tua posição GPS…');destination.blur?.();
   try{const location=await center();if(!location)return;notice('A procurar trilhos perto de '+location.label+'…');
    const result=await catalog.nearby(location);if(destination.value.trim()!==query&&window.OLENDestinationSearch.selected?.name!==location.label)return;
-   found=result.trails;render(location,result);notice(found.length+' trilhos encontrados perto de '+location.label+'.');
+   found=result.trails;render(location,result);notice(found.length?found.length+' trilhos encontrados perto de '+location.label+'.':'A fonte consultada não devolveu percursos nesta pesquisa.');
   }catch(e){notice(e.code===1?'GPS não autorizado. Escolhe uma localidade para pesquisar.':e.message||'Não foi possível pesquisar trilhos.',true)}
-  finally{busy=false;button.disabled=false}
+  finally{busy=false;button.disabled=false;button.textContent=caption}
  });
  window.OLENTrailFacts=Object.freeze({show:showFacts,hide(){if(facts)facts.hidden=true}});
 })();

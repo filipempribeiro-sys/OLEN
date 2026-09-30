@@ -39,3 +39,8 @@ test('empty destination uses GPS; ambiguous text never silently chooses a locali
  const h=discovery();await h.node('rzDiscoverTrails').click();assert.equal(h.gps,1);assert.equal(h.origins[0].latitude,38.72);
  h.node('rzDestination').value='Porto';await h.node('rzDiscoverTrails').click();assert.equal(h.origins.length,1);assert.equal(h.gps,1);
 });
+
+test('only local reports near the actual geometry appear; public report coverage stays unknown',async()=>{
+ const h=discovery();h.window.OLENGoReports={create:()=>({list:()=>[{latitude:41.1505,longitude:-8.6105,at:1,description:'Obstáculo'},{latitude:40,longitude:-8,at:1,description:'Outro local'}]})};
+ await h.node('rzDiscoverTrails').click();assert.match(h.text(h.node('rzNearbyTrails')),/1 report local/);assert.match(h.text(h.node('rzNearbyTrails')),/reports públicos indisponíveis/);
+});
