@@ -4188,8 +4188,7 @@
       "paint": {
         "text-color": "#445257",
         "text-halo-color": "#f7f8f4",
-        "text-halo-width": 1.5,
-        "line-color": "#86c5d6"
+        "text-halo-width": 1.5
       }
     },
     {
