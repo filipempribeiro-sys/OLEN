@@ -9,27 +9,7 @@
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
     })[c]);
   }
-  // ALPHA's context-sensitive sequence, copied as behaviour rather than hard-coded fake API events.
-  function stepsFor(text,attachments=[]) {
-    const t=String(text||'').toLocaleLowerCase('pt-PT');
-    const steps=['A preparar o pedido'];
-    const hasPlaces=/\b(visitar|local|museu|aqu[aá]rio|restaurante|miradouro|parque|praia|monumento|passeio|onde|perto|estacionamento)\b/.test(t);
-    const hasWeather=/\b(hoje|amanh[aã]|tempo|meteorolog|chuva|vento|calor|frio|tarde|manh[aã])\b/.test(t);
-    const hasRoute=/\b(rota|percurso|caminho|ir para|como chegar|carro|conduzir|viagem|trail|trilho|caminhada|dia)\b/.test(t);
-    const hasStay=/\b(hotel|alojamento|dormir|estadia|airbnb)\b/.test(t);
-    const hasMusic=/\b(spotify|playlist|música|musica)\b/.test(t);
-    const hasShare=/\b(whatsapp|partilha|partilhar|envia|enviar)\b/.test(t);
-    const hasCalendar=/\b(calend[aá]rio|agenda|agendar|marca|marcar)\b/.test(t);
-    if(attachments.length)steps.push('A processar os anexos');
-    if(hasPlaces||hasWeather||hasRoute||hasStay)steps.push('A consultar dados relevantes');
-    if(hasRoute)steps.push('A montar a experiência');
-    if(hasMusic)steps.push('A preparar a componente Spotify');
-    if(hasShare)steps.push('A preparar a partilha');
-    if(hasCalendar)steps.push('A preparar o calendário');
-    steps.push('A compor a resposta');
-    steps.push('A finalizar');
-    return [...new Set(steps)].slice(0,7);
-  }
+  function stepsFor(){return ['A preparar o pedido'];}
   function formatTime(ms) {
     const total=Math.max(0,Math.floor(Number(ms||0)/1000));
     return String(Math.floor(total/60)).padStart(2,'0')+':'+
@@ -94,10 +74,7 @@
     pending.set(key,record);
     record.timer=setInterval(()=>{
       if(pending.get(key)!==record){clearInterval(record.timer);return}
-      const now=Date.now(),max=Math.max(0,record.steps.length-2);
-      if(record.index<max&&now-record.lastAdvanceAt>=3000){
-        record.index++;record.lastAdvanceAt=now;refresh(key,true);
-      }else refresh(key,false);
+      refresh(key,false);
     },1000);
     return record;
   }

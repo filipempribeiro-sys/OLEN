@@ -5,7 +5,7 @@
   const SITE_KEY='0x4AAAAAAFDJzZctEJACttl0';
   const ACTION='olen_chat';
   let loader=null,widget=null,accept=null,reject=null,tokenTimeout=null,controller=null,busy=false;
-  let backendReadyAt=0;
+  let backendReadyAt=0,cachedToken=null,warming=null;
   function clearChallenge(){
     if(tokenTimeout){clearTimeout(tokenTimeout);tokenTimeout=null}
     accept=null;reject=null;
@@ -30,7 +30,7 @@
     }).catch(e=>{loader=null;throw e});
     return loader;
   }
-  async function token(){
+  async function issueToken(){
     const turnstile=await loadTurnstile();
     if(widget===null){
       const target=document.createElement('div');
@@ -57,6 +57,17 @@
       try{turnstile.execute(widget)}catch(e){settleChallenge(e)}
     });
   }
+  async function token(){
+    if(cachedToken&&cachedToken.until>Date.now()){const value=cachedToken.value;cachedToken=null;return value;}
+    if(warming){const value=await warming;cachedToken=null;if(value)return value;}
+    return issueToken();
+  }
+  function warmToken(){
+    if(busy||warming||cachedToken?.until>Date.now())return;
+    warming=issueToken().then(value=>{cachedToken={value,until:Date.now()+240000};return value;}).catch(()=>null).finally(()=>{warming=null;});
+  }
+  document.addEventListener?.('focusin',event=>{if(event.target?.id==='olenCbxInput')warmToken();});
+  document.addEventListener?.('click',event=>{if(event.target.closest('.nav[data-view="chat"],.desk-nav[data-view="chat"]'))warmToken();});
   // Browser geolocation is requested only after the user explicitly asks to use
   // their own position. Never store GPS in conversation history or localStorage.
   function needsOwnLocation(message){
@@ -192,7 +203,7 @@
           }),
           signal:controller.signal
         });
-        const data=await window.OLENChatStream.read(response,request.onDelta);if(data?.metrics)data.metrics.clientPreparationMs=Math.round(clientPreparationMs);
+        const data=await window.OLENChatStream.read(response,request.onDelta,request.onStage);if(data?.metrics)data.metrics.clientPreparationMs=Math.round(clientPreparationMs);
         if(!response.ok||!data?.ok)
           throw Object.assign(new Error(String(data?.error||'Não foi possível obter resposta da OLEN.').slice(0,300)),{
             code:String(data?.code||'HTTP_'+response.status),status:response.status
@@ -211,9 +222,10 @@
         if(limitTimer)clearTimeout(limitTimer);
         controller=null;
         if(reject)settleChallenge(new Error('OLEN_STOPPED'));
-        try{if(widget!==null)window.turnstile?.reset(widget)}catch(_){}
+        try{if(widget!==null&&turnstileToken)window.turnstile?.reset(widget)}catch(_){}
         busy=false;
         request.onComplete?.();
+        if(document.querySelector('.screen[data-screen="chat"].active'))warmToken();
       }
     })();
     task.catch(()=>{busy=false;controller=null;request.onComplete?.()});
