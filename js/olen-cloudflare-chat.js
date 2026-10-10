@@ -135,8 +135,10 @@
     const recent=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&m.conversationState);
     const latest=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&Array.isArray(m.placeCards)&&m.placeCards.length);
     const partnerData=partnerContext(partner);
+    const lens=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.lensResult);
     const experiences=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&m.experiences?.length);
     return {...(deviceLocation?{userLocation:deviceLocation}:{}),...(partnerData?{partnerContext:partnerData}:{}),conversationMemory:{
+      ...(lens?{latestLensResult:lens.lensResult}:{}),
       ...(recent?.conversationState?{conversationState:recent.conversationState}:{}),
       ...(experiences?{latestExperiences:window.OLENExperienceModel.normalize(experiences.experiences)}:{}),
       ...(latest?{latestPlaceCards:latest.placeCards,places:latest.placeCards.map(p=>p.name).filter(Boolean)}:{})
@@ -171,13 +173,10 @@
         const basic=window.OLENBasicChat?.reply(request.text,request.images);
         if(basic){await Promise.resolve();request.onResponse?.({ok:true,answer:basic,placeCards:[],experiences:[],conversationState:context(request.previous,null,null).conversationMemory?.conversationState,responseMode:"local-basic",toolsUsed:[]});return;}
         // Start GPS lookup from the send gesture; never infer a location from IP.
-        const deviceLocation=await locationForRequest(request.text,controller.signal,request.onStage);
-        if(Date.now()-backendReadyAt>=90000){
-          request.onStage?.('A verificar ligação ao serviço');
-          await verifyBackend(controller.signal);
-        }
+        const preparationStarted=performance.now();const [deviceLocation,validatedToken]=await Promise.all([locationForRequest(request.text,controller.signal,request.onStage),token()]);
+        turnstileToken=validatedToken;const clientPreparationMs=performance.now()-preparationStarted;
         if(controller.signal.aborted)throw Object.assign(new Error('OLEN_STOPPED'),{name:'AbortError'});
-        turnstileToken=await token();
+
         if(controller.signal.aborted)throw Object.assign(new Error('OLEN_STOPPED'),{name:'AbortError'});
         const attachments=(Array.isArray(request.images)?request.images:[]).slice(0,3).map(i=>({
           name:String(i.name||'Imagem'),type:String(i.type||'image/png'),dataUrl:String(i.data||'')
@@ -186,14 +185,14 @@
         limitTimer=setTimeout(()=>{timedOut=true;controller?.abort()},360000);
         const response=await fetch(API+'/api/chat',{
           method:'POST',mode:'cors',credentials:'omit',
-          headers:{'Content-Type':'application/json'},
+          headers:{'Content-Type':'application/json',Accept:'text/event-stream'},
           body:JSON.stringify({
-            currentMessage:String(request.text||''),messages:history(request.previous),
+            stream:true,lensMode:request.lensMode,decoded:request.decoded,consultResource:request.consultResource,currentMessage:String(request.text||''),messages:history(request.previous),
             context:context(request.previous,deviceLocation,request.partnerContext||window.OLENPartnerContext||null),attachments,turnstileToken
           }),
           signal:controller.signal
         });
-        const data=await response.json().catch(()=>null);
+        const data=await window.OLENChatStream.read(response,request.onDelta);if(data?.metrics)data.metrics.clientPreparationMs=Math.round(clientPreparationMs);
         if(!response.ok||!data?.ok)
           throw Object.assign(new Error(String(data?.error||'Não foi possível obter resposta da OLEN.').slice(0,300)),{
             code:String(data?.code||'HTTP_'+response.status),status:response.status
