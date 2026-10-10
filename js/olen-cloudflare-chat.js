@@ -135,8 +135,10 @@
     const recent=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&m.conversationState);
     const latest=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&Array.isArray(m.placeCards)&&m.placeCards.length);
     const partnerData=partnerContext(partner);
+    const experiences=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&m.experiences?.length);
     return {...(deviceLocation?{userLocation:deviceLocation}:{}),...(partnerData?{partnerContext:partnerData}:{}),conversationMemory:{
       ...(recent?.conversationState?{conversationState:recent.conversationState}:{}),
+      ...(experiences?{latestExperiences:window.OLENExperienceModel.normalize(experiences.experiences)}:{}),
       ...(latest?{latestPlaceCards:latest.placeCards,places:latest.placeCards.map(p=>p.name).filter(Boolean)}:{})
     }};
   }
