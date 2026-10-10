@@ -169,7 +169,7 @@
       try{
         controller=new AbortController();
         const basic=window.OLENBasicChat?.reply(request.text,request.images);
-        if(basic){request.onResponse?.({ok:true,answer:basic,placeCards:[],experiences:[],conversationState:context(request.previous,null,null).conversationMemory?.conversationState,responseMode:"local-basic",toolsUsed:[]});return;}
+        if(basic){await Promise.resolve();request.onResponse?.({ok:true,answer:basic,placeCards:[],experiences:[],conversationState:context(request.previous,null,null).conversationMemory?.conversationState,responseMode:"local-basic",toolsUsed:[]});return;}
         // Start GPS lookup from the send gesture; never infer a location from IP.
         const deviceLocation=await locationForRequest(request.text,controller.signal,request.onStage);
         if(Date.now()-backendReadyAt>=90000){
