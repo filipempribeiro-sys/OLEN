@@ -102,10 +102,40 @@
       (m.role==='assistant'||m.role==='user')&&!m.kind&&typeof m.text==='string'&&m.text.trim()
     ).slice(-16).map(m=>({role:m.role,content:m.text.slice(0,9000)}));
   }
-  function context(previous,deviceLocation){
+  function partnerContext(value){
+    if(!value||typeof value!=='object'||Array.isArray(value))return null;
+    const catalog=Array.isArray(value.catalog)?value.catalog.slice(0,60).map(item=>({
+      id:String(item?.id||'').slice(0,120),
+      name:String(item?.name||'').slice(0,220),
+      category:String(item?.category||'').slice(0,120),
+      price:Number.isFinite(Number(item?.price))?Number(item.price):null,
+      currency:String(item?.currency||'EUR').slice(0,8),
+      inStock:typeof item?.inStock==='boolean'?item.inStock:null,
+      stock:Number.isFinite(Number(item?.stock))?Number(item.stock):null,
+      certifications:Array.isArray(item?.certifications)?item.certifications.map(String).slice(0,12):[],
+      allergens:Array.isArray(item?.allergens)?item.allergens.map(String).slice(0,16):[],
+      tags:Array.isArray(item?.tags)?item.tags.map(String).slice(0,20):[],
+      url:String(item?.url||'').slice(0,500)
+    })).filter(item=>item.name):[];
+    return {
+      id:String(value.id||value.partnerId||'').slice(0,120),
+      name:String(value.name||value.partnerName||'').slice(0,220),
+      type:String(value.type||'').slice(0,120),
+      location:value.location&&typeof value.location==='object'?{
+        name:String(value.location.name||'').slice(0,220),
+        latitude:Number.isFinite(Number(value.location.latitude))?Number(value.location.latitude):null,
+        longitude:Number.isFinite(Number(value.location.longitude))?Number(value.location.longitude):null
+      }:null,
+      services:Array.isArray(value.services)?value.services.map(String).slice(0,30):[],
+      catalogVersion:String(value.catalogVersion||'').slice(0,120),
+      catalog
+    };
+  }
+  function context(previous,deviceLocation,partner){
     const recent=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&m.conversationState);
     const latest=[...(Array.isArray(previous)?previous:[])].reverse().find(m=>m.role==='assistant'&&Array.isArray(m.placeCards)&&m.placeCards.length);
-    return {...(deviceLocation?{userLocation:deviceLocation}:{}),conversationMemory:{
+    const partnerData=partnerContext(partner);
+    return {...(deviceLocation?{userLocation:deviceLocation}:{}),...(partnerData?{partnerContext:partnerData}:{}),conversationMemory:{
       ...(recent?.conversationState?{conversationState:recent.conversationState}:{}),
       ...(latest?{latestPlaceCards:latest.placeCards,places:latest.placeCards.map(p=>p.name).filter(Boolean)}:{})
     }};
@@ -155,7 +185,7 @@
           headers:{'Content-Type':'application/json'},
           body:JSON.stringify({
             currentMessage:String(request.text||''),messages:history(request.previous),
-            context:context(request.previous,deviceLocation),attachments,turnstileToken
+            context:context(request.previous,deviceLocation,request.partnerContext||window.OLENPartnerContext||null),attachments,turnstileToken
           }),
           signal:controller.signal
         });
