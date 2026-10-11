@@ -10,7 +10,7 @@
   const ageMs=valid?Math.max(0,now-stamp):null;
   return {latitude:valid?v.latitude:null,longitude:valid?v.longitude:null,accuracyMeters:valid&&typeof v.accuracyMeters==='number'&&Number.isFinite(v.accuracyMeters)&&v.accuracyMeters>=0?v.accuracyMeters:null,capturedAt:valid?new Date(stamp).toISOString():null,source:['gps','network','browser','fused'].includes(v.source)?v.source:'unknown',permissionState,isFresh:valid&&ageMs<=FRESH_MS,ageMs};
  }
- function fromPlatform(p,source){const c=p?.coords;return normalize({latitude:c?.latitude,longitude:c?.longitude,accuracyMeters:c?.accuracy,capturedAt:typeof p?.timestamp==='number'?new Date(p.timestamp).toISOString():null,source,permissionState:'granted'});}
+ function fromPlatform(p,source){const c=p?.coords;return normalize({latitude:c?.latitude,longitude:c?.longitude,accuracyMeters:c?.accuracy,capturedAt:typeof p?.timestamp==='number'&&Number.isFinite(p.timestamp)?new Date(p.timestamp).toISOString():null,source,permissionState:'granted'});}
  function intent(text){const t=String(text||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   if(/google\s*maps/.test(t))return 'external';
   if(/(?:mostra|abre|ver|centra).*(?:nosso mapa|mapa\/go|no mapa|aqui.*mapa)/.test(t))return 'map';

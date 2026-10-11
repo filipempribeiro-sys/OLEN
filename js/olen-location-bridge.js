@@ -9,7 +9,11 @@
   if(cached){const fix=model.normalize(cached);if(fix.isFresh)return fix;}
   if(!router?.acquirePosition||!navigator.geolocation)return model.normalize({permissionState:'unavailable'});
   if(!inFlight)inFlight=router.acquirePosition().then(p=>model.normalize({latitude:p.lat,longitude:p.lon,accuracyMeters:p.accuracy,capturedAt:new Date(p.timestamp).toISOString(),source:'browser',permissionState:'granted'})).catch(async()=>{let state='unavailable';try{if((await navigator.permissions?.query({name:'geolocation'}))?.state==='denied')state='denied';}catch{}return model.normalize({permissionState:state});}).finally(()=>{inFlight=null;});
-  const fix=await inFlight;if(signal?.aborted)throw Object.assign(Error('Pedido interrompido.'),{name:'AbortError'});return fix;
+  // Browser permission prompts may outlive the Geolocation API timeout.
+  // Keep the underlying read shared until it settles; only bound this chat wait.
+  let timer;const timeout=new Promise(resolve=>{timer=setTimeout(()=>resolve(model.normalize({permissionState:permission==='prompt'?'prompt':'unavailable'})),15000);});
+  let fix;try{fix=await Promise.race([inFlight,timeout]);}finally{clearTimeout(timer);}
+  if(signal?.aborted)throw Object.assign(Error('Pedido interrompido.'),{name:'AbortError'});return fix;
  }
  async function execute(actions){for(const raw of Array.isArray(actions)?actions:[]){const action=window.OLENDeviceLocation.validateAction(raw);if(!action)continue;
   if(action.type==='OPEN_MAP_AT_CURRENT_LOCATION')await window.OLENMapRouting?.openCurrentLocation?.(action.deviceLocation);
