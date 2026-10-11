@@ -145,7 +145,7 @@
         const basic=window.OLENBasicChat?.reply(request.text,request.images);
         if(basic){await Promise.resolve();request.onResponse?.({ok:true,answer:basic,placeCards:[],experiences:[],conversationState:context(request.previous,null,null).conversationMemory?.conversationState,responseMode:"local-basic",toolsUsed:[]});return;}
         // Start GPS lookup from the send gesture; never infer a location from IP.
-        const preparationStarted=performance.now();const [deviceLocation,validatedToken]=await Promise.all([locationForRequest(request.text,controller.signal,request.onStage),token()]);
+        const preparationStarted=performance.now();const [deviceLocation,validatedToken]=await Promise.all([locationForRequest(request.text,controller.signal,request.onStage).then(value=>{request.onStage?.('A validar acesso ao serviço');return value;}),token()]);
         turnstileToken=validatedToken;const clientPreparationMs=performance.now()-preparationStarted;
         if(controller.signal.aborted)throw Object.assign(new Error('OLEN_STOPPED'),{name:'AbortError'});
 
