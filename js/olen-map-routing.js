@@ -8,6 +8,7 @@ const VALID_MODES=new Set(['walk','bike','car','moto','scooter']);
 const LIB='https://unpkg.com/leaflet@1.9.4/dist/';
 let library=null,map=null,tile=null,routeLine=null,trackLine=null,trailLine=null,destinationMarker=null,userMarker=null,reportMarkers=[];
 let userMarkerKind='',directionHeading=null,directionSource='';
+let deviceFix=null,positionRead=null;
 let last=null,route=null,destination=null,mode='walk',active=false,serial=0,curve=[],lastManeuverKey='',offRoute=false;
 let following=true,trackVisible=true,trailVisible=true,routeVisible=true,reportsVisible=true,trail=null,trailGuide=null,trailActive=false;
 function $(id){return document.getElementById(id)}
@@ -195,7 +196,8 @@ function setLayerVisible(layer,visible){
  if(layer==='reports'){reportsVisible=value;refreshReports()}
  return true;
 }
-function findPosition(){ 
+function findPosition(){if(positionRead)return positionRead;positionRead=readPlatformPosition().finally(()=>{positionRead=null;});return positionRead;}
+function readPlatformPosition(){ 
  if(!navigator.geolocation)return Promise.reject(new Error('Este dispositivo não disponibiliza localização GPS.'));
  return new Promise((resolve,reject)=>{
    navigator.geolocation.getCurrentPosition(p=>{
@@ -382,6 +384,7 @@ function updateInstruction(pos){
 }
 function updatePosition(c){
  const pos=coord(c);if(!pos)return false;
+ if(window.OLENDeviceLocation&&typeof c.timestamp==='number')deviceFix=window.OLENDeviceLocation.normalize({latitude:pos.lat,longitude:pos.lon,accuracyMeters:c.accuracy,capturedAt:new Date(c.timestamp).toISOString(),source:'browser',permissionState:'granted'});
  const previous=last,accuracy=Number(c?.accuracy),speed=c?.speed;
  if(typeof c?.heading==='number'&&Number.isFinite(c.heading)&&c.heading>=0&&c.heading<360&&speed!==0){
   directionHeading=c.heading;directionSource='gps';
@@ -644,6 +647,9 @@ $('rzDestination')?.addEventListener('input',()=>{
  if(choices){choices.hidden=true;choices.value='';choices.dataset.query=''}
 });
 window.OLENMapRouting=Object.freeze({
+ acquirePosition:findPosition,
+ devicePosition(){return deviceFix?window.OLENDeviceLocation?.normalize(deviceFix):null;},
+ async openCurrentLocation(value){const fix=window.OLENDeviceLocation?.normalize(value);if(!fix?.isFresh)return false;if(window.OLENOpenScreen?.('map','chat-current-location')!==true)return false;await ensureMap();updatePosition({latitude:fix.latitude,longitude:fix.longitude,accuracy:fix.accuracyMeters,timestamp:Date.parse(fix.capturedAt)});map.setView([fix.latitude,fix.longitude],Math.max(map.getZoom(),15),{animate:false});return true;},
  open,showBaseMap,lookupDestination,prepareManual,beginGuidance,stopGuidance,beginTrailGuidance,stopTrailGuidance,previewTrail,updatePosition,formatDistance,controlMap,reportGpsError,reportRouteError,setLayerVisible,refreshReports,
  searchCenter(){const c=destination||last||(map?.getCenter?.()||null);return c?{latitude:c.lat,longitude:c.lon??c.lng,name:destination?.name||null}:null},
  get state(){return {destination:destination?{...destination}:null,selectedTrail:trail?{id:trail.id||null,name:trail.name,pointCount:trail.pointCount||trail.segments.reduce((n,seg)=>n+seg.length,0),provenance:trail.provenance||{type:'user-import',official:false}}:null,trailReady:!!trailGuide,routeReady:!!route,
