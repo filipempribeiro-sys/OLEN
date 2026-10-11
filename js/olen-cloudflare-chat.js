@@ -145,7 +145,12 @@
         const basic=window.OLENBasicChat?.reply(request.text,request.images);
         if(basic){await Promise.resolve();request.onResponse?.({ok:true,answer:basic,placeCards:[],experiences:[],conversationState:context(request.previous,null,null).conversationMemory?.conversationState,responseMode:"local-basic",toolsUsed:[]});return;}
         // Start GPS lookup from the send gesture; never infer a location from IP.
-        const preparationStarted=performance.now();const [deviceLocation,validatedToken]=await Promise.all([locationForRequest(request.text,controller.signal,request.onStage).then(value=>{request.onStage?.('A validar acesso ao serviço');return value;}),token()]);
+        const preparationStarted=performance.now();const deviceLocation=await locationForRequest(request.text,controller.signal,request.onStage);
+        if(controller.signal.aborted)throw Object.assign(new Error('OLEN_STOPPED'),{name:'AbortError'});
+        // Device permission/fix status is local information, requiring no AI or protected API call.
+        const unavailable=!request.images?.length&&!request.lensMode&&window.OLENDeviceLocation?.localUnavailable(request.text,deviceLocation);
+        if(unavailable){request.onResponse?.({ok:true,answer:unavailable,placeCards:[],experiences:[],actions:[],conversationState:context(request.previous,null,null).conversationMemory?.conversationState,responseMode:'local-location-unavailable',toolsUsed:[]});return;}
+        request.onStage?.('A validar acesso ao serviço');const validatedToken=await token();
         turnstileToken=validatedToken;const clientPreparationMs=performance.now()-preparationStarted;
         if(controller.signal.aborted)throw Object.assign(new Error('OLEN_STOPPED'),{name:'AbortError'});
 

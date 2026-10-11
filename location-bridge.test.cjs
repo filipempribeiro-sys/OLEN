@@ -16,6 +16,12 @@ test('an unanswered permission prompt is bounded without starting another GPS re
  for(let i=0;i<2;i++){const request=window.OLENLocationBridge.get('onde estou');await new Promise(r=>setImmediate(r));timers.at(-1)();const result=await request;assert.equal(result.latitude,null);assert.equal(result.isFresh,false);assert.equal(result.permissionState,'prompt');}
  assert.equal(calls,1);
 });
+test('missing platform location answers locally without contacting a protected API or fabricating weather',async()=>{
+ let response;const window={OLENDeviceLocation:model,OLENLocationBridge:{get:async()=>model.normalize({permissionState:'denied'})}};
+ vm.runInNewContext(fs.readFileSync(__dirname+'/js/olen-cloudflare-chat.js','utf8'),{window,document:{addEventListener(){},querySelector:()=>null,getElementById:()=>null},navigator:{},Date,Error,Promise,setTimeout,clearTimeout,AbortController,performance,URL,fetch:()=>{throw Error('No API request is needed for permission status');}});
+ await new Promise((resolve,reject)=>window.OLENCloudflareChat.send({text:'Como está o tempo aqui?',previous:[],onResponse:value=>{response=value;},onFailure:reject,onComplete:resolve}));
+ assert.match(response.answer,/recusada/);assert.deepEqual(Array.from(response.actions),[]);assert.equal(response.responseMode,'local-location-unavailable');assert.equal(model.localUnavailable('Leva-me até Porto',null),null);assert.equal(model.localUnavailable('Bom dia',null),null);assert.equal(model.localUnavailable('tempo aqui',fix),null);
+});
 test('current-location action centers existing map/marker, never starts GO or calls a router',async()=>{
  const views=[],markers=[];let activeScreen='chat';const node={classList:{add(){},remove(){},toggle(){}},addEventListener(){},style:{},appendChild(){}};
  const map={setView:(p,z)=>views.push({p,z}),getZoom:()=>12,on(){},invalidateSize(){}};

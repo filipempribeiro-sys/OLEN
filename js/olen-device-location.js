@@ -23,6 +23,7 @@
  }
  function missing(v){if(v.permissionState==='denied')return 'A localização está recusada. Autoriza-a nas permissões da OLEN ou indica a tua localidade.';if(v.latitude!==null&&!v.isFresh)return 'A última localização já não é recente. Não a vou apresentar como a tua posição atual. Ativa a localização e tenta novamente, ou indica a tua localidade.';return 'Não tenho uma localização atual confirmada. Ativa a localização do dispositivo e autoriza a OLEN, ou indica a tua localidade.';}
  function action(type,v){const fix=normalize(v);return fix.isFresh&&['OPEN_MAP_AT_CURRENT_LOCATION','OPEN_EXTERNAL_MAP_AT_CURRENT_LOCATION'].includes(type)?{type,deviceLocation:fix}:null;}
+ function localUnavailable(text,v){const kind=intent(text),fix=normalize(v);return kind&&kind!=='destination'&&!fix.isFresh?missing(fix):null;}
  function validateAction(a,now=Date.now()){return a&&action(a.type,normalize(a.deviceLocation,now));}
- return {FRESH_MS,normalize,fromPlatform,intent,missing,action,validateAction};
+ return {FRESH_MS,normalize,fromPlatform,intent,missing,localUnavailable,action,validateAction};
 });
