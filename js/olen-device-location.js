@@ -13,8 +13,12 @@
  function fromPlatform(p,source){const c=p?.coords;return normalize({latitude:c?.latitude,longitude:c?.longitude,accuracyMeters:c?.accuracy,capturedAt:typeof p?.timestamp==='number'&&Number.isFinite(p.timestamp)?new Date(p.timestamp).toISOString():null,source,permissionState:'granted'});}
  function intent(text){const t=String(text||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
   if(/google\s*maps/.test(t))return 'external';
-  if(/(?:mostra|abre|ver|centra).*(?:nosso mapa|mapa\/go|no mapa|aqui.*mapa)/.test(t))return 'map';
+  if(/\b(?:morada|endereco|rua onde estou|em que rua)\b/.test(t)&&(/onde (?:eu )?estou|minha (?:morada|localizacao)|(?:morada|endereco) atual|aqui|rua onde estou|em que rua/.test(t)||/^(?:(?:qual e|diz.me|mostra.me) (?:a |o )?)?(?:morada|endereco)(?: (?:exata|exato|atual))?[?!.\s]*$/.test(t)))return 'address';
+  if(/coordenadas.*(?:minha|atuais|onde estou)|(?:minhas?|atuais).*coordenadas|^(?:coordenadas)(?: gps)?[?!.\s]*$/.test(t))return 'coordinates';
+  if(/(?:mostra|abre|ver|centra).*(?:nosso mapa|mapa\/go|no mapa|aqui.*mapa|minha localizacao|minha posicao)/.test(t))return 'map';
   if(/onde (?:eu )?estou|minha (?:localizacao|posicao)|localizacao exata|acede.*localizacao/.test(t))return /meteo|tempo|chuva|chover/.test(t)?'weather':'location';
+  // A named destination supplies the research location; it must not be blocked by local GPS permission.
+  if(/(?:tempo|meteorologia|meteo|chover|chuva).*\b(?:em|no|na|para)\s+[a-z]/.test(t)&&!/aqui|perto de mim|minha localizacao|minha posicao|onde estou|meu local|minha zona/.test(t))return '';
   if(/tempo (?:aqui|hoje|ai)|meteorologia|meteo|vai chover|estado do tempo/.test(t))return 'weather';
   if(/o que (?:sugeres|posso fazer|recomendas).*hoje|sugest.*hoje/.test(t))return 'today';
   if(/perto de mim|ao meu redor|proxim[oa].*de mim/.test(t))return 'nearby';
